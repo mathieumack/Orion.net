@@ -1,0 +1,27 @@
+{
+  "version": "1.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+
+      "library": "aspnet-signalr@1.1.4",
+      "destination": "wwwroot/lib/signalr/dist"
+    },
+    {
+      "library": "startbootstrap-sb-admin-2@3.3.7+1",
+      "destination": "wwwroot/lib/sbadmin2/dist"
+    },
+    {
+      "library": "font-awesome@5.11.2",
+      "destination": "wwwroot/lib/fontawesome/dist"
+    },
+    {
+      "library": "jquery@3.4.1",
+      "destination": "wwwroot/lib/jquery/dist"
+    },
+    {
+      "library": "kendo-ui-core@2014.1.416",
+      "destination": "wwwroot/lib/kendo/dist"
+    }
+  ]
+}
