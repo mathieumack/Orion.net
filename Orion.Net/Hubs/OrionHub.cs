@@ -6,7 +6,7 @@ using Orion.Net.Core.Scripts;
 
 namespace Orion.Net.Hubs
 {
-    public class CareCenterHub : Hub
+    public class OrionHub : Hub
     {
         #region New connections
 

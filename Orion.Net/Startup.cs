@@ -57,7 +57,7 @@ namespace Orion
 
             app.UseSignalR(hubs =>
             {
-                hubs.MapHub<CareCenterHub>("/carecenterhub");
+                hubs.MapHub<OrionHub>("/orionhub");
             });
         }
     }

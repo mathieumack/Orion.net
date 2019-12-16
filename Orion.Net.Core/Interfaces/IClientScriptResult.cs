@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net.Http;
 
 namespace Orion.Net.Core.Interfaces
 {
@@ -14,5 +15,11 @@ namespace Orion.Net.Core.Interfaces
         /// Type of the result
         /// </summary>
         public abstract ClientScriptResultType ResultType { get; set; }
+
+        /// <summary>
+        /// Internal method used by Script layer
+        /// </summary>
+        /// <returns></returns>
+        internal abstract HttpContent GenerateDataContent();
     }
 }

@@ -128,7 +128,7 @@
     var connectedUserDetailTemplate = kendo.template($("#connectedUserDetailTemplate").html());
     var tabStrip = $("#tabstrip");
 
-    var connection = new signalR.HubConnectionBuilder().withUrl("/carecenterhub").build();
+    var connection = new signalR.HubConnectionBuilder().withUrl("/orionhub").build();
 
     //connection.on("ReceiveMessage", function (user, message) {
     //    var msg = message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");

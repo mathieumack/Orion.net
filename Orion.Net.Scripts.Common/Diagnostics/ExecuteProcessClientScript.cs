@@ -4,6 +4,7 @@ using System.Linq;
 using Orion.Net.Client.Scripts;
 using System.Threading.Tasks;
 using Orion.Net.Core.Scripts;
+using Orion.Net.Client.Configuration;
 
 namespace Orion.Net.Scripts.Common.Diagnostics
 {
@@ -12,7 +13,8 @@ namespace Orion.Net.Scripts.Common.Diagnostics
     /// </summary>
     public class ExecuteProcessClientScript : BaseClientScript
     {
-        public ExecuteProcessClientScript()
+        public ExecuteProcessClientScript(Connector connector)
+            : base(connector)
         {
             identifier = Guid.NewGuid();
             AvailableParameters.Add(new ScriptParameter()
@@ -36,6 +38,9 @@ namespace Orion.Net.Scripts.Common.Diagnostics
             var parameter = paramItems.FirstOrDefault(e => e.ParameterName == "filePath");
             if (parameter == null)
             {
+                await SendStringContent("parameter invalid. filePath not found.");
+                await SendStringContent("parameter invalid. filePath not found.");
+                await SendStringContent("parameter invalid. filePath not found.");
                 await SendStringContent("parameter invalid. filePath not found.");
                 return;
             }

@@ -1,17 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR.Client;
+using Newtonsoft.Json;
+using Orion.Net.Client.Scripts;
 using Orion.Net.Core.Interfaces;
 using Orion.Net.Core.Scripts;
 
 namespace Orion.Net.Client.Configuration
 {
-    public class CareCenterConnector : IAsyncDisposable
+    public class Connector : IAsyncDisposable
     {
         private HubConnection hubConnection;
-        private readonly List<IClientScript> commands = new List<IClientScript>();
+        private string platformUri;
+        private readonly List<BaseClientScript> commands = new List<BaseClientScript>();
 
         public async ValueTask DisposeAsync()
         {
@@ -24,7 +28,7 @@ namespace Orion.Net.Client.Configuration
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="command"></param>
-        public void AddCommandService<T>(T command) where T : IClientScript
+        public void AddCommandService<T>(T command) where T : BaseClientScript
         {
             if (command == null)
                 throw new ArgumentNullException(nameof(command));
@@ -36,13 +40,15 @@ namespace Orion.Net.Client.Configuration
         /// Connect to the server.
         /// Do not forget to call AddCommandService<>() to register ICareCenterClientScript class
         /// </summary>
-        /// <param name="hubUrl"></param>
+        /// <param name="platformUri"></param>
         /// <param name="environmentLabel"></param>
         /// <returns></returns>
-        public async Task Connect(string hubUrl, string environmentLabel)
+        public async Task Connect(string platformUri, string environmentLabel)
         {
+            this.platformUri = platformUri.EndsWith("/") ? platformUri : platformUri + "/";
+
             hubConnection = new HubConnectionBuilder()
-                                        .WithUrl(hubUrl)
+                                        .WithUrl(platformUri + "orionhub")
                                         .Build();
 
             hubConnection.On("AskCommands", async () =>
@@ -60,8 +66,7 @@ namespace Orion.Net.Client.Configuration
             {
                 // Ask client for available commands :
                 var command = GetCommand(commandTitle);
-                var result = command.Execute(parameters);
-                await hubConnection.InvokeAsync("ExecuteCommandResult", result);
+                await command.Start(parameters);
             });
 
             await hubConnection.StartAsync();
@@ -73,9 +78,39 @@ namespace Orion.Net.Client.Configuration
         /// </summary>
         /// <param name="commandTitle"></param>
         /// <returns></returns>
-        private IClientScript GetCommand(string commandTitle)
+        private BaseClientScript GetCommand(string commandTitle)
         {
             return commands.FirstOrDefault(e => e.Title == commandTitle);
+        }
+
+        /// <summary>
+        /// Send a result object to the platform and call hub to force refresh
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="result"></param>
+        internal async Task SendResultCommand<T>(T result) where T : ClientScriptResult
+        {
+            // Send result object to the correct uri :
+            var dataUri = string.Empty;
+            HttpContent content = null;
+
+            switch(result.ResultType)
+            {
+                case ClientScriptResultType.ConsoleLog:
+                    dataUri = platformUri + "api/StringResultData";
+                    content = new StringContent(JsonConvert.SerializeObject(result));
+                    break;
+                default:
+                    return;
+            }
+
+            using(var client = new HttpClient())
+            {
+                await client.PostAsync(dataUri, content);
+            }
+
+            // Notify server client that a result has been sent :
+            await hubConnection.InvokeAsync("ResultCommandSent", result.ResultIdentifier);
         }
     }
 }

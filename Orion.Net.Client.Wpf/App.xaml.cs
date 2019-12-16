@@ -8,7 +8,7 @@ namespace Orion.Net.Client.Wpf
     /// </summary>
     public partial class App : Application
     {
-        public static CareCenterConnector careCenterConnector;
+        public static Connector careCenterConnector;
 
         public App()
         {
