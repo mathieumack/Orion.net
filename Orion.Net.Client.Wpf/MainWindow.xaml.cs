@@ -19,7 +19,7 @@ namespace Orion.Net.Client.Wpf
             App.careCenterConnector = new Connector();
             App.careCenterConnector.AddCommandService(new ExecuteProcessClientScript(App.careCenterConnector));
 
-            await App.careCenterConnector.Connect("https://supporttoolscarecenter20191127043415.azurewebsites.net/carecenterhub", MyName.Text);
+            await App.careCenterConnector.Connect("https://localhost:44351/", MyName.Text);
         }
     }
 }

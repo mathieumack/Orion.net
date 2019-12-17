@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Linq;
-using Orion.Net.Client.Scripts;
 using System.Threading.Tasks;
-using Orion.Net.Core.Scripts;
 using Orion.Net.Client.Configuration;
+using Orion.Net.Client.Scripts;
+using Orion.Net.Core.Scripts;
 
 namespace Orion.Net.Scripts.Common.Diagnostics
 {
@@ -49,14 +49,14 @@ namespace Orion.Net.Scripts.Common.Diagnostics
 
             try
             {
-                if(arguments == null)
+                if (arguments == null)
                     Process.Start(parameter.ParameterValue);
                 else
                     Process.Start(parameter.ParameterValue, arguments.ParameterValue);
 
                 await SendStringContent("File opened.");
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 await SendStringContent("An error occured : " + ex.Message);
             }

@@ -11,7 +11,7 @@ namespace Orion.Net.Client.Scripts
     public abstract class BaseClientScript : IClientScript
     {
         public abstract string Title { get; }
-        
+
         public abstract Guid Identifier { get; }
 
         protected List<ScriptParameter> AvailableParameters { get; } = new List<ScriptParameter>();
