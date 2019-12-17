@@ -23,6 +23,8 @@
     <link rel="stylesheet" href="~/lib/kendo/dist/styles/kendo.bootstrap.min.css" asp-append-version="true" />
     <script src="/lib/kendo/dist/js/kendo.ui.core.min.js"></script>
 
+    <script src="/js/OrionHub.js"></script>
+
     <link rel="stylesheet" href="~/lib/fontawesome/dist/css/all.css" asp-append-version="true" />
 
 
@@ -42,7 +44,7 @@
                 <div class="sidebar-brand-icon rotate-n-15">
                     <i class="fas fa-laugh-wink"></i>
                 </div>
-                <div class="sidebar-brand-text mx-3">CEA - TOOPII</div>
+                <div class="sidebar-brand-text mx-3">Orion</div>
             </div>
 
             <!--</a>-->
@@ -222,10 +224,10 @@
             </div>
             <!-- End of Main Content -->
             <!-- Footer -->
-            <footer class="sticky-footer bg-white">
+            <footer class="sticky-footer bg-white" id="testClick">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
-                        <small>&#169; CEA - TOOPII @(DateTime.Now.Year)</small>
+                        <small id="testFooter">&#169; Orion @(DateTime.Now.Year)</small>
                     </div>
                 </div>
             </footer>

@@ -128,6 +128,11 @@
     var connectedUserDetailTemplate = kendo.template($("#connectedUserDetailTemplate").html());
     var tabStrip = $("#tabstrip");
 
+    $("#testClick").click(function () {
+        var element = new OrionHub("fakeUri", $("#testFooter"));
+        element.Connect();
+    });
+
     var connection = new signalR.HubConnectionBuilder().withUrl("/orionhub").build();
 
     //connection.on("ReceiveMessage", function (user, message) {

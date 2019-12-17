@@ -34,7 +34,7 @@ namespace Orion.Net.Controllers
             return View();
         }
 
-        public IActionResult CareCenter()
+        public IActionResult Orion()
         {
             return View();
         }

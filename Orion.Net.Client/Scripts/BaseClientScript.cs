@@ -46,7 +46,7 @@ namespace Orion.Net.Client.Scripts
             };
 
             // Send result content to server :
-            connector.
+            await connector.SendResultCommand(result);
 
             // Notifiy server that result has been sent
 

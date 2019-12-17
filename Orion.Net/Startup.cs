@@ -6,7 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Orion.Net.Hubs;
 
-namespace Orion
+namespace Orion.Net
 {
     public class Startup
     {
