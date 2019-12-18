@@ -1,38 +1,70 @@
-﻿/// <reference path="../../node_modules/@types/jquery/JQuery.d.ts" />
+﻿/// <reference types="jquery" />
+/// <reference types="kendo-ui" />
+/// <reference types="signalr" />
+/// <reference types="node" />
 
-function sayHello() {
-    //var compiler = (document.getElementById("compiler") as HTMLInputElement).value;
-    //var framework = (document.getElementById("framework") as HTMLInputElement).value;
-    //return `Hello from ${compiler} and ${framework}!`;
-    alert("Hello");
-}
+import { OrionClient } from './OrionClient';
+import { HubConnection, HubConnectionBuilder } from '../../node_modules/@aspnet/signalr';
+import { Dictionary } from 'linq-collections/build/src/Collections';
 
-class OrionHub {
+export class OrionHub {
 
     hubUri: string;
     tabStrip: JQuery;
+    connection: HubConnection;
+    clients: Dictionary<string, OrionClient>;
 
+    connectedUserDetailTemplate: (data: any) => string;
+    
     constructor(uri: string, tabStripObject: JQuery) {
         this.hubUri = uri;
         this.tabStrip = tabStripObject;
+        this.clients = new Dictionary<string, OrionClient>();
+
+        this.connectedUserDetailTemplate = kendo.template($("#connectedUserDetailTemplate").html());
     }
 
-    Connect() {
-        this.tabStrip.html('bonjour');
-        //var connection = new signalR.HubConnectionBuilder().withUrl("/orionhub").build();
+    connect() {
+        this.connection = new HubConnectionBuilder().withUrl("/orionhub").build();
+        
+        this.connection.on("newClient", function (detail) {
+            // create a new client :
+            var newclient = new OrionClient(this, detail.UserName, detail.ConnectionId);
 
-        //connection.on("newClient", function (detail) {
-        //    tabStrip.append(connectedUserCardTemplate(detail));
-        //});
+            // Add it in the list of clients :
+            this.clients.setOrUpdate(detail.ConnectionId, newclient);
 
-        //connection.on("AnswerCommands", function (connectionId, commands) {
-        //    loadAvailableCommands(connectionId, commands);
-        //});
+            // Load client object :
+            newclient.initClient();
+        });
 
-        //connection.start().then(function () {
+        this.connection.on("AnswerCommands", function (connectionId, commands) {
+            var client = this.clients.get(connectionId);
+            client.loadAvailableCommands(commands);
+        });
 
-        //}).catch(function (err) {
-        //    return console.error(err.toString());
-        //});
+        this.connection.start().then(function () {
+
+        }).catch(function (err) {
+            return console.error(err.toString());
+        });
+    }
+
+    loadClient(connectionId: string) {
+        $(".currentConnectionDetail").each(function () {
+            $(this).hide();
+        });
+        $("div[identifier='detailElement_" + connectionId + "']").show();
+
+        if ($("div[identifier='detailElement_" + connectionId + "']").length == 0) {
+            var html = this.connectedUserDetailTemplate(this);
+            $("#blocCurrentConnection").append(html);
+
+            this.connection.invoke("AskCommands", connectionId).catch(function (err) {
+                return console.error(err.toString());
+            });
+
+            $("#sendAskCommandsId").attr("connectionId", connectionId);
+        }
     }
 }

@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="wwwroot\js\OrionHub.ts" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="jquery.TypeScript.DefinitelyTyped" Version="3.1.2" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.1.2" PrivateAssets="All" />
@@ -24,16 +20,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Orion.Net.Core\Orion.Net.Core.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <TypeScriptCompile Include="wwwroot\js\OrionHub.ts" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Update="Views\Home\Orion.cshtml">
-      <Pack>$(IncludeRazorContentInPack)</Pack>
-    </Content>
   </ItemGroup>
 
 </Project>

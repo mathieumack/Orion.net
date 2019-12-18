@@ -128,26 +128,6 @@
     var connectedUserDetailTemplate = kendo.template($("#connectedUserDetailTemplate").html());
     var tabStrip = $("#tabstrip");
 
-    $("#testClick").click(function () {
-        var element = new OrionHub("fakeUri", $("#testFooter"));
-        element.Connect();
-    });
-
-    var connection = new signalR.HubConnectionBuilder().withUrl("/orionhub").build();
-
-    //connection.on("ReceiveMessage", function (user, message) {
-    //    var msg = message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-    //    var encodedMsg = user + " says " + msg;
-    //    var li = document.createElement("li");
-    //    li.textContent = encodedMsg;
-    //    products.push({
-    //        ProductId: user,
-    //        ProductName: message,
-    //        UnitPrice: 12
-    //    });
-    //    $("#listView").data("kendoListView").dataSource.read();
-    //});
-    
     connection.on("newClient", function (detail) {
         tabStrip.append(connectedUserCardTemplate(detail));
     });
