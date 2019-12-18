@@ -4,7 +4,7 @@
 /// <reference types="node" />
 
 import { OrionClient } from './OrionClient';
-import { HubConnection, HubConnectionBuilder } from '../../node_modules/@aspnet/signalr';
+import { HubConnection, HubConnectionBuilder } from '@aspnet/signalr';
 import { Dictionary } from 'linq-collections/build/src/Collections';
 
 export class OrionHub {

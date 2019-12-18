@@ -1,5 +1,6 @@
-﻿/// <reference path="../../node_modules/@types/jquery/JQuery.d.ts" />
-/// <reference path="../../node_modules/@types/kendo-ui/index.d.ts" />
+﻿/// <reference types="jquery" />
+/// <reference types="kendo-ui" />
+
 import { OrionHub } from './OrionHub';
 
 export class OrionClient {
