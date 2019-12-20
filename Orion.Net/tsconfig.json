@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "noEmitOnError": true,
+    "noImplicitAny": false,
+    "sourceMap": true,
+    "moduleResolution": "Node",
+    "target": "es6"
+  },
+  "files": [
+    "./wwwroot/js/OrionHub.ts",
+    "./wwwroot/js/OrionClient.ts"
+  ],
+  "compileOnSave": true,
+  "exclude": [
+    "./node_modules/*"
+  ]
+}

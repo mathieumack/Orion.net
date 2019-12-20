@@ -4,11 +4,11 @@
 import { OrionHub } from './OrionHub';
 
 export class OrionClient {
-    connection: OrionHub;
+    connection: OrionHub; 
     userName: string;
     connectionId: string;
 
-    connectedUserCardTemplate: (data: any) => string;
+    connectedUserCardTemplate: (data: any) => string;  
 
     constructor(hubConnection: OrionHub,
                         userName: string,
@@ -26,7 +26,7 @@ export class OrionClient {
         $("#tabstrip").append(clientHtml);
     }
 
-    loadAvailableCommands(commands) {
+    loadAvailableCommands(commands: any) {
         // create DropDownList from input HTML element
         $("input[identifier = 'detailElement_commands_" + this.connectionId + "']").kendoDropDownList({
             dataTextField: "title",

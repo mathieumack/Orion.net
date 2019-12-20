@@ -4,18 +4,6 @@
 
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
     <h1 class="h3 mb-0 text-gray-800">Care center</h1>
-    <a class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm" href="#" id="sendMessageId">
-        <span class="icon text-white-50">
-            <i class="fas fa-check"></i>
-        </span>
-        <span class="text">Simulate new user</span>
-    </a>
-    <a class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm" href="#" id="sendAskCommandsId" connectionId="test">
-        <span class="icon text-white-50">
-            <i class="fas fa-check"></i>
-        </span>
-        <span class="text">Send ask command answers</span>
-    </a>
 </div>
 
 <div class="row">
@@ -98,48 +86,15 @@
         });
     }
 
-    $(document).ready(function () {
-        $("#sendMessageId").click(function () {
-            connection.invoke("SendMessage").catch(function (err) {
-                return console.error(err.toString());
-            });
-        });
-        $("#sendAskCommandsId").click(function () {
-            var commands = [
-                {
-                    title : "command 1"
-                },
-                {
-                    title : "command 2"
-                },
-                {
-                    title : "command 3"
-                }
-            ];
-            connection.invoke("AnswerCommands", commands).catch(function (err) {
-                return console.error(err.toString());
-            });
-        });
-    });
 </script>
 
 <script type="text/javascript">
-    var connectedUserCardTemplate = kendo.template($("#connectedUserCardTemplate").html());
-    var connectedUserDetailTemplate = kendo.template($("#connectedUserDetailTemplate").html());
-    var tabStrip = $("#tabstrip");
 
-    connection.on("newClient", function (detail) {
-        tabStrip.append(connectedUserCardTemplate(detail));
-    });
-    
-    connection.on("AnswerCommands", function (connectionId, commands) {
-        loadAvailableCommands(connectionId, commands);
-    });
-
-    connection.start().then(function () {
-        
-    }).catch(function (err) {
-        return console.error(err.toString());
+    $(document).ready(function () {
+        console.info("start orion client");
+        let orionClient = new OrionHub('/orionhub', "#tabstrip");
+        console.info("connect to hub");
+        orionClient.connect();
     });
 
     function loadClient(connId) {
@@ -160,16 +115,6 @@
 
             $("#sendAskCommandsId").attr("connectionId", connId);
         }
-    }
-
-    function loadAvailableCommands(connectionId, commands) {
-        // create DropDownList from input HTML element
-        $("input[identifier = 'detailElement_commands_" + connectionId + "']").kendoDropDownList({
-            dataTextField: "title",
-            dataValueField: "title",
-            dataSource: commands,
-            index: 0
-        });
     }
 
 </script>

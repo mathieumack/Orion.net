@@ -4,11 +4,11 @@
 /// <reference types="node" />
 
 import { OrionClient } from './OrionClient';
-import { HubConnection, HubConnectionBuilder } from '@aspnet/signalr';
-import { Dictionary } from 'linq-collections/build/src/Collections';
+import { HubConnection } from '../../node_modules/@aspnet/signalr/src/HubConnection';
+import { HubConnectionBuilder } from '../../node_modules/@aspnet/signalr/src/HubConnectionBuilder';
+import { Dictionary } from '../../node_modules/linq-collections/build/src/Collections';
 
-export class OrionHub {
-
+export class OrionHub {     
     hubUri: string;
     tabStrip: JQuery;
     connection: HubConnection;
@@ -16,18 +16,22 @@ export class OrionHub {
 
     connectedUserDetailTemplate: (data: any) => string;
     
-    constructor(uri: string, tabStripObject: JQuery) {
+    constructor(uri: string, tabStripSelector : string) {  
+        console.info("init orion hub");
         this.hubUri = uri;
-        this.tabStrip = tabStripObject;
+        this.tabStrip = $(tabStripSelector);
+
+        console.info("init orion clients");
         this.clients = new Dictionary<string, OrionClient>();
 
+        console.info("read connected user kendo template");
         this.connectedUserDetailTemplate = kendo.template($("#connectedUserDetailTemplate").html());
     }
 
     connect() {
-        this.connection = new HubConnectionBuilder().withUrl("/orionhub").build();
+        this.connection = new HubConnectionBuilder().withUrl(this.hubUri).build();
         
-        this.connection.on("newClient", function (detail) {
+        this.connection.on("newClient", function (detail: any) {
             // create a new client :
             var newclient = new OrionClient(this, detail.UserName, detail.ConnectionId);
 
@@ -38,15 +42,13 @@ export class OrionHub {
             newclient.initClient();
         });
 
-        this.connection.on("AnswerCommands", function (connectionId, commands) {
+        this.connection.on("AnswerCommands", function (connectionId: string, commands: any) {
             var client = this.clients.get(connectionId);
             client.loadAvailableCommands(commands);
         });
 
         this.connection.start().then(function () {
 
-        }).catch(function (err) {
-            return console.error(err.toString());
         });
     }
 
@@ -60,7 +62,7 @@ export class OrionHub {
             var html = this.connectedUserDetailTemplate(this);
             $("#blocCurrentConnection").append(html);
 
-            this.connection.invoke("AskCommands", connectionId).catch(function (err) {
+            this.connection.invoke("AskCommands", connectionId).catch(function (err: any) {
                 return console.error(err.toString());
             });
 
