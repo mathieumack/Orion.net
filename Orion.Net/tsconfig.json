@@ -1,17 +1,14 @@
 {
-  "compilerOptions": {
-    "noEmitOnError": true,
-    "noImplicitAny": false,
-    "sourceMap": true,
-    "moduleResolution": "Node",
-    "target": "es6"
-  },
-  "files": [
-    "./wwwroot/js/OrionHub.ts",
-    "./wwwroot/js/OrionClient.ts"
-  ],
   "compileOnSave": true,
+  "compilerOptions": {
+    "noImplicitAny": false,
+    "noEmitOnError": true,
+    "removeComments": false,
+    "sourceMap": true,
+    "target": "es6",
+    "module": "amd"
+  },
   "exclude": [
-    "./node_modules/*"
+    "node_modules"
   ]
 }

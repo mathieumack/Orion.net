@@ -12,7 +12,7 @@ namespace Orion.Net.Controllers
     {
         public IActionResult Index()
         {
-            return View();
+            return RedirectToAction("Orion");
         }
 
         public IActionResult About()

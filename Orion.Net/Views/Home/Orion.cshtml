@@ -21,7 +21,7 @@
             </div>
         </div>
 
-        <div class="card shadow mb-4" id="blocCurrentConnection">            
+        <div class="card shadow mb-4" id="blocCurrentConnection">
         </div>
     </div>
 </div>
@@ -77,13 +77,13 @@
     function sendCommand(connectionId) {
         var dropdownlist = $("input[identifier = 'detailElement_commands_" + connectionId + "']").data("kendoDropDownList");
         connection.invoke("SendCommandToClient",
-                        {
-                            ConnectionId : connectionId,
-                            CommandTitle: dropdownlist.text(),
-                            CommandParam: $("input[identifier='detailElement_commands_params_" + connectionId + "']").val()
-                        }).catch(function (err) {
-            return console.error(err.toString());
-        });
+            {
+                ConnectionId: connectionId,
+                CommandTitle: dropdownlist.text(),
+                CommandParam: $("input[identifier='detailElement_commands_params_" + connectionId + "']").val()
+            }).catch(function (err) {
+                return console.error(err.toString());
+            });
     }
 
 </script>
@@ -92,16 +92,25 @@
 
     $(document).ready(function () {
         console.info("start orion client");
-        let orionClient = new OrionHub('/orionhub', "#tabstrip");
+        var connection = new signalR.HubConnectionBuilder().withUrl("/orionhub").build();
+        var orionClient = new orionhub('/orionhub', "#tabstrip", connection);
+
         console.info("connect to hub");
-        orionClient.connect();
+        orionClient.configure();
+        
+        connection.start().then(function () {
+        
+        }).catch(function (err) {
+            return console.error(err.toString());
+        });
+
     });
 
     function loadClient(connId) {
         $(".currentConnectionDetail").each(function () {
             $(this).hide();
         });
-        $("div[identifier='detailElement_" + connId+"']").show();
+        $("div[identifier='detailElement_" + connId + "']").show();
 
         if ($("div[identifier='detailElement_" + connId + "']").length == 0) {
             var html = connectedUserDetailTemplate({
@@ -118,3 +127,9 @@
     }
 
 </script>
+
+@section scripts {
+<script>
+    require(["js/orionhub"]);
+</script>
+}

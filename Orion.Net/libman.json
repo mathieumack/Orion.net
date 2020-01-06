@@ -22,6 +22,10 @@
     {
       "library": "kendo-ui-core@2014.1.416",
       "destination": "wwwroot/lib/kendo/dist"
+    },
+    {
+      "library": "require.js@2.3.5",
+      "destination": "wwwroot/lib/require.js/dist"
     }
   ]
 }
