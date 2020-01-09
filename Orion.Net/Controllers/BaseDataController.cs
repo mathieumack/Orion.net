@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Orion.Net.Core.Interfaces;
+using Orion.Net.Core.Results;
 
 namespace Orion.Net.Controllers
 {
@@ -11,8 +12,8 @@ namespace Orion.Net.Controllers
     {
         // Temporary cache management for tests only.
         // TODO : replace with a  distributed cache management system
-        public static Dictionary<Guid, object> CacheManager { get; set; }
-        
+        public static Dictionary<Guid, object> CacheManager = new Dictionary<Guid, object>();
+
         // GET api/<controller>/5
         [HttpGet("{id}")]
         public T Get(Guid id)
@@ -25,15 +26,6 @@ namespace Orion.Net.Controllers
             }
 
             return new T();
-        }
-
-        // POST api/<controller>
-        [HttpPost]
-        public void Post([FromBody]T model)
-        {
-            // Save value in cache
-            if (!CacheManager.ContainsKey(model.ResultIdentifier))
-                CacheManager.Add(model.ResultIdentifier, model);
         }
     }
 }

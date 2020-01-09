@@ -64,6 +64,16 @@ namespace Orion.Net.Hubs
             await Clients.All.SendAsync("AnswerCommands", Context.ConnectionId, availableScripts);
         }
 
+        /// <summary>
+        /// Called by clients in order to notify server of the result
+        /// </summary>
+        /// <param name="resultIdentifier"></param>
+        /// <returns></returns>
+        public async Task ResultCommandSent(Guid resultIdentifier)
+        {
+            await Clients.All.SendAsync("ResultSent", resultIdentifier);
+        }
+
         #endregion
     }
 }

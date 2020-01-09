@@ -16,10 +16,7 @@ namespace Orion.Net.Core.Results
 
         internal override HttpContent GenerateDataContent()
         {
-            return new StringContent(JsonConvert.SerializeObject(new
-            {
-                
-            }));
+            return new StringContent(JsonConvert.SerializeObject(this));
         }
     }
 }

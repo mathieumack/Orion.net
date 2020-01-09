@@ -97,7 +97,7 @@ namespace Orion.Net.Client.Configuration
             switch(result.ResultType)
             {
                 case ClientScriptResultType.ConsoleLog:
-                    dataUri = platformUri + "api/StringResultData";
+                    dataUri = platformUri + "api/v1/StringResultData";
                     content = new StringContent(JsonConvert.SerializeObject(result));
                     break;
                 default:
