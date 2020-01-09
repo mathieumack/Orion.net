@@ -8,6 +8,7 @@ using Orion.Net.Core.Results;
 
 namespace Orion.Net.Controllers
 {
+    [ApiController]
     public class BaseDataController<T> : Controller where T : ClientScriptResult, new()
     {
         // Temporary cache management for tests only.
@@ -26,6 +27,15 @@ namespace Orion.Net.Controllers
             }
 
             return new T();
+        }
+
+        // POST api/<controller>
+        [HttpPost]
+        public void Post([FromBody]T model)
+        {
+            // Save value in cache
+            if (!CacheManager.ContainsKey(model.ResultIdentifier))
+                CacheManager.Add(model.ResultIdentifier, model);
         }
     }
 }

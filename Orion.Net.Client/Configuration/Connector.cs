@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR.Client;
 using Newtonsoft.Json;
@@ -98,7 +99,7 @@ namespace Orion.Net.Client.Configuration
             {
                 case ClientScriptResultType.ConsoleLog:
                     dataUri = platformUri + "api/v1/StringResultData";
-                    content = new StringContent(JsonConvert.SerializeObject(result));
+                    content = new StringContent(JsonConvert.SerializeObject(result), Encoding.UTF8, "application/json");
                     break;
                 default:
                     return;
