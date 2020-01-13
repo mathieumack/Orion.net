@@ -29,4 +29,4 @@ class orionclient {
         });
     }
 }
-//# sourceMappingURL=orionhub.js.map
+//# sourceMappingURL=OrionHub.js.map

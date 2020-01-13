@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Text;
 using System.Net.Http;
 using Newtonsoft.Json;
 using Orion.Net.Core.Interfaces;
@@ -16,7 +16,7 @@ namespace Orion.Net.Core.Results
 
         internal override HttpContent GenerateDataContent()
         {
-            return new StringContent(JsonConvert.SerializeObject(this));
+            return new StringContent(JsonConvert.SerializeObject(this), Encoding.UTF8, "application/json");
         }
     }
 }

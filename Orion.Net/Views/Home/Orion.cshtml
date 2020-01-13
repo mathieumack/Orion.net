@@ -26,6 +26,20 @@
     </div>
 </div>
 
+<script type="text/x-kendo-template" id="resultDisplayString">
+    <div class="col-xl-6 mt-4">
+        <div class="card border-left-#:Color# shadow h-100">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="h5 mb-0 text-gray-800">#:Content#</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
 <script type="text/x-kendo-template" id="connectedUserDetailTemplate">
     <div identifier="detailElement_#:connectionId#" class="currentConnectionDetail">
         <div class="card-header py-3">
@@ -51,6 +65,12 @@
                             <span class="text">send</span>
                         </a>
                     </div>
+                </div>
+                <hr class="k-hr" />
+                <div class="font-weight-bold">
+                    Historique des résultats
+                </div>
+                <div id="addResults_#:connectionId#">
                 </div>
             </div>
         </div>
@@ -84,9 +104,6 @@
             }).catch(function (err) {
                 return console.error(err.toString());
             });
-
-        //Display result Test
-        displayResult();
     }
 
 </script>
@@ -96,6 +113,7 @@
     console.info("start orion client"); 
     var connectedUserCardTemplate = kendo.template($("#connectedUserCardTemplate").html());
     var connectedUserDetailTemplate = kendo.template($("#connectedUserDetailTemplate").html());
+    var displayResultsStringTemplate = kendo.template($("#resultDisplayString").html());
     var tabStrip = $("#tabstrip");
 
     var connection = new signalR.HubConnectionBuilder().withUrl("/orionhub").build();
@@ -107,6 +125,10 @@
     
     connection.on("AnswerCommands", function (connectionId, commands) {
         loadAvailableCommands(connectionId, commands);
+    });
+
+    connection.on("ResultSent", function (connectionId, resultId) {
+        displayResult(connectionId, resultId);
     });
 
     connection.start().then(function () {
@@ -165,28 +187,16 @@
         }
     }
 
-    function displayResult() {
-        //Catch result command test
-        connection.on("ResultSent",
-            function (resultIdentifier) {
-                var uri = "api/v1/StringResultData/" + resultIdentifier;
-                console.log('ResultSend uri : ' + uri);
-
-                //$.getJSON( uri, function( data ) {
-                //    //var items = [];
-                //    $.each( data, function( key, value ) {
-                //        //items.push( "<li id='" + key + "'>" + val + "</li>" );
-                //        console.log("key : " + key + " value : " + value);
-                //    });
- 
-                    //$( "<ul/>", {
-                    //    "class": "my-new-list",
-                    //    html: items.join( "" )
-                    //}).appendTo( 'card-body' );
-                //});
-            }).catch(function (err) {
-                return console.error(err.toString());
+    function displayResult(connectionId, resultId) {
+        console.log('ResultSend uri : ' + uri);
+        var uri = "https://localhost:44359/api/v1/StringResultData/" + resultId;
+        $.get(uri, function (data) {
+            html = displayResultsStringTemplate({
+                Content: data.consoleContent,
+                Color: "primary"
             });
+            $("#addResults_" + connectionId).prepend(html);
+        });
     }
 
 </script>
