@@ -188,8 +188,8 @@
     }
 
     function displayResult(connectionId, resultId) {
+        var uri = "/api/v1/StringResultData/" + resultId;
         console.log('ResultSend uri : ' + uri);
-        var uri = "https://localhost:44359/api/v1/StringResultData/" + resultId;
         $.get(uri, function (data) {
             html = displayResultsStringTemplate({
                 Content: data.consoleContent,
