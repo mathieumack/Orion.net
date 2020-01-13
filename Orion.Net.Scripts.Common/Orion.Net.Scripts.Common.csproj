@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Orion.Net.Client\Orion.Net.Client.csproj" />
+    <ProjectReference Include="..\Orion.Net.Core\Orion.Net.Core.csproj" />
+  </ItemGroup>
+
+</Project>
