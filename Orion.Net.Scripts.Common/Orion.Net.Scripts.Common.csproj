@@ -1,7 +1,16 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageId>Orion.Net.Scripts.Common</PackageId>
+    <ProjectGuid>{5D8107A4-0B23-48B0-921C-1EADDECD70AD}</ProjectGuid>
+    <Authors>MACK Mathieu, BARBE Nicolas</Authors>
+    <Copyright>Copyright (c) MACK Mathieu</Copyright>
+    <PackageTags>orion,support,xamarin,wpf</PackageTags>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageLicenseUrl>https://opensource.org/licenses/MIT</PackageLicenseUrl>
+    <RepositoryUrl>https://github.com/mathieumack/Orion.net</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
