@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,11 +9,11 @@ using Orion.Net.Core.Scripts;
 namespace Orion.Net.Scripts.Common.Diagnostics
 {
     /// <summary>
-    /// Execute a process command on the client
+    /// Take a screenshot on the client computer
     /// </summary>
-    public class ExecuteProcessClientScript : BaseClientScript
+    public class TakeScreenShotClientScript : BaseClientScript
     {
-        public ExecuteProcessClientScript(Connector connector)
+        public TakeScreenShotClientScript(Connector connector)
             : base(connector)
         {
             identifier = Guid.NewGuid();
@@ -27,7 +27,7 @@ namespace Orion.Net.Scripts.Common.Diagnostics
             });
         }
 
-        public override string Title => "Execute process";
+        public override string Title => "Take screenshot";
 
         private readonly Guid identifier;
         public override Guid Identifier => identifier;
@@ -49,12 +49,13 @@ namespace Orion.Net.Scripts.Common.Diagnostics
 
             try
             {
-                if (arguments == null)
-                    Process.Start(parameter.ParameterValue);
-                else
-                    Process.Start(parameter.ParameterValue, arguments.ParameterValue);
+                //if (arguments == null)
+                //    Process.Start(parameter.ParameterValue);
+                //else
+                //    Process.Start(parameter.ParameterValue, arguments.ParameterValue);
 
-                await SendStringContent("File opened.");
+                await SendImageContent(@"C:\Users\cadier\Downloads\Logoeconocom.jpg");
+                await SendStringContent("ScreenShot taken.");
             }
             catch (Exception ex)
             {

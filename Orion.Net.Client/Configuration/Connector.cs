@@ -95,23 +95,27 @@ namespace Orion.Net.Client.Configuration
             var dataUri = string.Empty;
             HttpContent content = null;
 
-            switch(result.ResultType)
+            switch (result.ResultType)
             {
                 case ClientScriptResultType.ConsoleLog:
                     dataUri = platformUri + "api/v1/StringResultData";
+                    content = new StringContent(JsonConvert.SerializeObject(result), Encoding.UTF8, "application/json");
+                    break;
+                case ClientScriptResultType.Image:
+                    dataUri = platformUri + "api/v1/ImageResultData";
                     content = new StringContent(JsonConvert.SerializeObject(result), Encoding.UTF8, "application/json");
                     break;
                 default:
                     return;
             }
 
-            using(var client = new HttpClient())
+            using (var client = new HttpClient())
             {
                 await client.PostAsync(dataUri, content);
             }
 
             // Notify server client that a result has been sent :
-            await hubConnection.InvokeAsync("ResultCommandSent", result.ResultIdentifier);
+            await hubConnection.InvokeAsync("ResultCommandSent", result.ResultIdentifier, result.ResultType);
         }
     }
 }

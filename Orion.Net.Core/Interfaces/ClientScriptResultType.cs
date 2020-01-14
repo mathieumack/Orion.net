@@ -9,6 +9,10 @@
         /// <summary>
         /// List of string content
         /// </summary>
-        ConsoleLog = 2
+        ConsoleLog = 2,
+        /// <summary>
+        /// byte[], base64
+        /// </summary>
+        Image = 3
     }
 }

@@ -52,6 +52,18 @@ namespace Orion.Net.Client.Scripts
 
         }
 
+        protected async Task SendImageContent(string pathImage)
+        {
+            var result = new ImageContentResult()
+            {
+                ResultIdentifier = Guid.NewGuid(),
+                ImageInBase64 = System.IO.File.ReadAllBytes(pathImage)
+            };
+
+            // Send result content to server :
+            await connector.SendResultCommand(result);
+        }
+
         #endregion
     }
 }
