@@ -25,6 +25,7 @@ namespace Orion.Net.Hubs
         
         #endregion
 
+        //Function to delete ?
         public async Task SendMessage()
         {
             await Hello(Guid.NewGuid().ToString());
@@ -52,8 +53,8 @@ namespace Orion.Net.Hubs
         public async Task AskCommands(string connectionId)
         {
             await Clients.Client(connectionId).SendAsync("AskCommands");
+            await Groups.AddToGroupAsync(connectionId, connectionId);
             await Groups.AddToGroupAsync(Context.ConnectionId, connectionId);
-            await Groups.AddToGroupAsync(connectionId, Context.ConnectionId);
         }
 
         /// <summary>
