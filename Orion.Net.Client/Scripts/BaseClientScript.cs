@@ -57,7 +57,7 @@ namespace Orion.Net.Client.Scripts
             var result = new ImageContentResult()
             {
                 ResultIdentifier = Guid.NewGuid(),
-                ImageInBase64 = System.IO.File.ReadAllBytes(pathImage)
+                ImageInByteArray = System.IO.File.ReadAllBytes(pathImage)
             };
 
             // Send result content to server :

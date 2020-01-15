@@ -201,7 +201,7 @@
                 uri += "ImageResultData/" + resultId;
                 $.get(uri, function (data) {
                     html = displayResultsImageTemplate({
-                        Content: (data.imageInBase64),
+                        Content: (data.imageInByteArray),
                         Color: "danger"
                     });
                     $("#addResults_" + connectionId).prepend(html);

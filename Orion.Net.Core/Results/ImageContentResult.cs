@@ -12,7 +12,7 @@ namespace Orion.Net.Core.Results
         /// <summary>
         /// console result content
         /// </summary>
-        public byte[] ImageInBase64 { get; set; }
+        public byte[] ImageInByteArray { get; set; }
 
         internal override HttpContent GenerateDataContent()
         {
