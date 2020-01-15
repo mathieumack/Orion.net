@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Orion.Net.Client.Configuration;
@@ -35,26 +34,20 @@ namespace Orion.Net.Scripts.Common.Diagnostics
         public override async Task Execute(string parameters)
         {
             var paramItems = parameters.ExtractParams();
-            var parameter = paramItems.FirstOrDefault(e => e.ParameterName == "filePath");
+            var parameter = paramItems.FirstOrDefault(e => e.ParameterName == "screenshot");
             if (parameter == null)
             {
-                await SendStringContent("parameter invalid. filePath not found.");
-                await SendStringContent("parameter invalid. filePath not found.");
-                await SendStringContent("parameter invalid. filePath not found.");
-                await SendStringContent("parameter invalid. filePath not found.");
+                await SendStringContent("parameter invalid. Screenshot not taken.");
+                await SendStringContent("parameter invalid. Screenshot not taken.");
+                await SendStringContent("parameter invalid. Screenshot not taken.");
+                await SendStringContent("parameter invalid. Screenshot not taken.");
                 return;
             }
 
-            var arguments = paramItems.FirstOrDefault(e => e.ParameterName == "args");
-
             try
             {
-                //if (arguments == null)
-                //    Process.Start(parameter.ParameterValue);
-                //else
-                //    Process.Start(parameter.ParameterValue, arguments.ParameterValue);
-
-                await SendImageContent(@"C:\Users\cadier\Downloads\Logoeconocom.jpg");
+                string testPath = @"C:\Users\cadier\Downloads\Logoeconocom.jpg";
+                await SendImageContent(testPath);
                 await SendStringContent("ScreenShot taken.");
             }
             catch (Exception ex)
