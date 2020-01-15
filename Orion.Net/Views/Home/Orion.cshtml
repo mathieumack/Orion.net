@@ -117,6 +117,7 @@
             });
     }
 </script>
+<script type="text/javascript" src="~/js/site.js"></script>
 <script type="text/javascript">
     console.info("start orion client");
     var connectedUserCardTemplate = kendo.template($("#connectedUserCardTemplate").html());
@@ -209,13 +210,19 @@
                 break;
             case 4:
                 uri += "FileResultData/" + resultId;
-                var downloading = browser.downloads.download({
-                  url : uri,
-                  filename : 'my-image-again.png',
-                  conflictAction : 'uniquify'
-                });
+                $.get(uri, function (data) {
+                    var download = document.createElement('a');
+                    download.setAttribute('href', 'data:img/jpg;base64,' + encodeURIComponent(data.fileInByteArray));
+                    download.setAttribute('download', "NewImage.jpg");
 
-                downloading.then(function(){console.log("Start Download");}, function(){console.log("Download Failed");});
+                    if (document.createEvent) {
+                        var event = document.createEvent('MouseEvents');
+                        event.initEvent('click', true, true);
+                        download.dispatchEvent(event);
+                    }
+                    else { download.click(); }
+                });
+                break;
             default: break;
         }
         console.log('ResultSend uri : ' + uri);
