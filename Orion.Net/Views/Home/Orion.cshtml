@@ -207,10 +207,20 @@
                     $("#addResults_" + connectionId).prepend(html);
                 });
                 break;
+            case 4:
+                uri += "FileResultData/" + resultId;
+                var downloading = browser.downloads.download({
+                  url : uri,
+                  filename : 'my-image-again.png',
+                  conflictAction : 'uniquify'
+                });
+
+                downloading.then(function(){console.log("Start Download");}, function(){console.log("Download Failed");});
             default: break;
         }
         console.log('ResultSend uri : ' + uri);
     }
+
 </script>
 @section scripts {
 }

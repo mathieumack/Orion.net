@@ -105,6 +105,10 @@ namespace Orion.Net.Client.Configuration
                     dataUri = platformUri + "api/v1/ImageResultData";
                     content = new StringContent(JsonConvert.SerializeObject(result), Encoding.UTF8, "application/json");
                     break;
+                case ClientScriptResultType.File:
+                    dataUri = platformUri + "api/v1/FileResultData";
+                    content = new StringContent(JsonConvert.SerializeObject(result), Encoding.UTF8, "application/json");
+                    break;
                 default:
                     return;
             }

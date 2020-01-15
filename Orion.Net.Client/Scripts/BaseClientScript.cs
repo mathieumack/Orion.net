@@ -64,6 +64,18 @@ namespace Orion.Net.Client.Scripts
             await connector.SendResultCommand(result);
         }
 
+        protected async Task SendFileContent(string pathFile)
+        {
+            var result = new FileContentResult()
+            {
+                ResultIdentifier = Guid.NewGuid(),
+                FileInByteArray = System.IO.File.ReadAllBytes(pathFile)
+            };
+
+            // Send result content to server :
+            await connector.SendResultCommand(result);
+        }
+
         #endregion
     }
 }

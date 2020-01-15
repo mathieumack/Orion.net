@@ -13,6 +13,10 @@
         /// <summary>
         /// byte[], base64
         /// </summary>
-        Image = 3
+        Image = 3,
+        /// <summary>
+        /// File to download
+        /// </summary>
+        File = 4
     }
 }
