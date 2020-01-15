@@ -25,7 +25,6 @@ namespace Orion.Net.Hubs
         
         #endregion
 
-        //Function to delete ?
         public async Task SendMessage()
         {
             await Hello(Guid.NewGuid().ToString());
