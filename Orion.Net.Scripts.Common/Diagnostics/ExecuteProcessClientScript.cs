@@ -5,9 +5,6 @@ using System.Threading.Tasks;
 using Orion.Net.Client.Configuration;
 using Orion.Net.Client.Scripts;
 using Orion.Net.Core.Scripts;
-using Orion.Net.Client.Configuration;
-using Orion.Net.Client.Scripts;
-using Orion.Net.Core.Scripts;
 
 namespace Orion.Net.Scripts.Common.Diagnostics
 {

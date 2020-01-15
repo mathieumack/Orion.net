@@ -71,7 +71,7 @@ namespace Orion.Net.Hubs
         /// <returns></returns>
         public async Task ResultCommandSent(Guid resultIdentifier)
         {
-            await Clients.All.SendAsync("ResultSent", resultIdentifier);
+            await Clients.All.SendAsync("ResultSent", Context.ConnectionId, resultIdentifier);
         }
 
         #endregion
