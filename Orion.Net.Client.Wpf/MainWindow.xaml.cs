@@ -18,7 +18,7 @@ namespace Orion.Net.Client.Wpf
         {
             App.careCenterConnector = new Connector();
             App.careCenterConnector.AddCommandService(new ExecuteProcessClientScript(App.careCenterConnector));
-            App.careCenterConnector.AddCommandService(new TakeScreenShotClientScript(App.careCenterConnector));
+            App.careCenterConnector.AddCommandService(new SendImageContentClientScript(App.careCenterConnector));
 
             await App.careCenterConnector.Connect("https://localhost:44359/", MyName.Text);
         }

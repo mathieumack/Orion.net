@@ -10,15 +10,15 @@ namespace Orion.Net.Scripts.Common.Diagnostics
     /// <summary>
     /// Take a screenshot on the client computer
     /// </summary>
-    public class TakeScreenShotClientScript : BaseClientScript
+    public class SendImageContentClientScript : BaseClientScript
     {
-        public TakeScreenShotClientScript(Connector connector)
+        public SendImageContentClientScript(Connector connector)
             : base(connector)
         {
             identifier = Guid.NewGuid();
             AvailableParameters.Add(new ScriptParameter()
             {
-                Name = "filePath"
+                Name = "sendImage"
             });
             AvailableParameters.Add(new ScriptParameter()
             {
@@ -26,7 +26,7 @@ namespace Orion.Net.Scripts.Common.Diagnostics
             });
         }
 
-        public override string Title => "Take screenshot";
+        public override string Title => "Send Image";
 
         private readonly Guid identifier;
         public override Guid Identifier => identifier;
@@ -34,21 +34,20 @@ namespace Orion.Net.Scripts.Common.Diagnostics
         public override async Task Execute(string parameters)
         {
             var paramItems = parameters.ExtractParams();
-            var parameter = paramItems.FirstOrDefault(e => e.ParameterName == "screenshot");
-            if (parameter == null)
+            var parameter = paramItems.FirstOrDefault(e => e.ParameterName == "sendImage");
+            if (parameter == null || parameter.ParameterName != "sendImage")
             {
-                await SendStringContent("parameter invalid. Screenshot not taken.");
-                await SendStringContent("parameter invalid. Screenshot not taken.");
-                await SendStringContent("parameter invalid. Screenshot not taken.");
-                await SendStringContent("parameter invalid. Screenshot not taken.");
+                await SendStringContent("parameter invalid. Image not found.");
+                await SendStringContent("parameter invalid. Image not found.");
+                await SendStringContent("parameter invalid. Image not found.");
+                await SendStringContent("parameter invalid. Image not found.");
                 return;
             }
 
             try
             {
-                string testPath = @"C:\Users\cadier\Downloads\Logoeconocom.jpg";
-                await SendImageContent(testPath);
-                await SendStringContent("ScreenShot taken.");
+                await SendImageContent(parameter.ParameterValue);
+                await SendStringContent("Image sent.");
             }
             catch (Exception ex)
             {
