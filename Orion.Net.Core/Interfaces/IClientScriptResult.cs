@@ -14,7 +14,7 @@ namespace Orion.Net.Core.Interfaces
         /// <summary>
         /// Type of the result
         /// </summary>
-        public abstract ClientScriptResultType ResultType { get; set; }
+        public abstract ClientScriptResultType ResultType { get; set; } 
 
         /// <summary>
         /// Internal method used by Script layer
