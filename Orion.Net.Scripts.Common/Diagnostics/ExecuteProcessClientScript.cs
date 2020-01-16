@@ -34,15 +34,21 @@ namespace Orion.Net.Scripts.Common.Diagnostics
 
         public override async Task Execute(string parameters)
         {
-            var paramItems = LoadParameters(parameters);
+            var paramItems = await LoadParameters(parameters);
 
-            if (paramItems.Count ==0)
+            if (paramItems.Count == 0)
             {
                 return;
             }
 
             var parameter = paramItems.FirstOrDefault(e => e.ParameterName == "filePath");
             var arguments = paramItems.FirstOrDefault(e => e.ParameterName == "args");
+
+            if(parameter == null)
+            {
+                await SendStringContent("Error : Parameter filePath is missing.");
+                return;
+            }
 
             try
             {

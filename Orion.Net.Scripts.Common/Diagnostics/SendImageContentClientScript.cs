@@ -18,11 +18,7 @@ namespace Orion.Net.Scripts.Common.Diagnostics
             identifier = Guid.NewGuid();
             AvailableParameters.Add(new ScriptParameter()
             {
-                Name = "sendImage"
-            });
-            AvailableParameters.Add(new ScriptParameter()
-            {
-                Name = "args"
+                Name = "filePath"
             });
         }
 
@@ -33,14 +29,14 @@ namespace Orion.Net.Scripts.Common.Diagnostics
 
         public override async Task Execute(string parameters)
         {
-            var paramItems = LoadParameters(parameters);
+            var paramItems = await LoadParameters(parameters);
 
             if (paramItems.Count == 0)
             {
                 return;
             }
 
-            var parameter = paramItems.FirstOrDefault(e => e.ParameterName == "sendImage");
+            var parameter = paramItems.FirstOrDefault(e => e.ParameterName == "filePath");
 
             try
             {
