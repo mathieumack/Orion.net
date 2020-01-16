@@ -38,16 +38,12 @@ namespace Orion.Net.Scripts.Common.Diagnostics
             if (parameter == null || parameter.ParameterName != "sendImage")
             {
                 await SendStringContent("parameter invalid. Image not found.");
-                await SendStringContent("parameter invalid. Image not found.");
-                await SendStringContent("parameter invalid. Image not found.");
-                await SendStringContent("parameter invalid. Image not found.");
                 return;
             }
 
             try
             {
                 await SendImageContent(parameter.ParameterValue);
-                await SendStringContent("Image sent.");
             }
             catch (Exception ex)
             {
