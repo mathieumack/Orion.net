@@ -67,14 +67,14 @@ namespace Orion.Net.Client.Scripts
 
         protected async Task SendFileContent(string pathFile)
         {
-            new FileExtensionContentTypeProvider().TryGetContentType(pathFile, out string contentType);
-
+            new FileExtensionContentTypeProvider().TryGetContentType(pathFile, out string mime);
+            mime = mime ?? "application/octet-stream";
             var result = new FileContentResult()
             {
                 ResultIdentifier = Guid.NewGuid(),
                 FileAsByteArray = System.IO.File.ReadAllBytes(pathFile),
                 FileName = pathFile.Substring(pathFile.LastIndexOf('\\') + 1 ,pathFile.Length - pathFile.LastIndexOf('\\') - 1),
-                Mime = (contentType.Length == 0) ? "multipart/form-data": contentType
+                Mime = mime +";base64,"
             };
 
             // Send result content to server :
