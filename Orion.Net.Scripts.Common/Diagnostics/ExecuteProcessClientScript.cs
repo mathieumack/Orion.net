@@ -34,14 +34,14 @@ namespace Orion.Net.Scripts.Common.Diagnostics
 
         public override async Task Execute(string parameters)
         {
-            var paramItems = parameters.ExtractParams();
-            var parameter = paramItems.FirstOrDefault(e => e.ParameterName == "filePath");
-            if (parameter == null)
+            var paramItems = LoadParameters(parameters);
+
+            if (paramItems.Count ==0)
             {
-                await SendStringContent("parameter invalid. filePath not found.");
                 return;
             }
 
+            var parameter = paramItems.FirstOrDefault(e => e.ParameterName == "filePath");
             var arguments = paramItems.FirstOrDefault(e => e.ParameterName == "args");
 
             try

@@ -33,13 +33,14 @@ namespace Orion.Net.Scripts.Common.Diagnostics
 
         public override async Task Execute(string parameters)
         {
-            var paramItems = parameters.ExtractParams();
-            var parameter = paramItems.FirstOrDefault(e => e.ParameterName == "sendImage");
-            if (parameter == null || parameter.ParameterName != "sendImage")
+            var paramItems = LoadParameters(parameters);
+
+            if (paramItems.Count == 0)
             {
-                await SendStringContent("parameter invalid. Image not found.");
                 return;
             }
+
+            var parameter = paramItems.FirstOrDefault(e => e.ParameterName == "sendImage");
 
             try
             {
