@@ -18,7 +18,7 @@ namespace Orion.Net.Scripts.Common.Diagnostics
             identifier = Guid.NewGuid();
             AvailableParameters.Add(new ScriptParameter()
             {
-                Name = "filePath"
+                Name = "exportFile"
             });
             AvailableParameters.Add(new ScriptParameter()
             {
@@ -38,9 +38,6 @@ namespace Orion.Net.Scripts.Common.Diagnostics
             if (parameter == null)
             {
                 await SendStringContent("parameter invalid. exportFile not valid.");
-                await SendStringContent("parameter invalid. exportFile not valid.");
-                await SendStringContent("parameter invalid. exportFile not valid.");
-                await SendStringContent("parameter invalid. exportFile not valid.");
                 return;
             }
 
@@ -52,9 +49,7 @@ namespace Orion.Net.Scripts.Common.Diagnostics
                     await SendStringContent("No path file entered in args.");
                 else
                 {
-                    //string testPath = @"C:\Users\cadier\Downloads\Logoeconocom.jpg";
                     await SendFileContent(arguments.ParameterValue);
-                    await SendStringContent("File exported.");
                 }
 
             }

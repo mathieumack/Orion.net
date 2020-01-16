@@ -211,9 +211,10 @@
             case 4:
                 uri += "FileResultData/" + resultId;
                 $.get(uri, function (data) {
+                    console.log("FileName : " + data.fileName + "FileMime : " + data.fileMime);
                     var download = document.createElement('a');
-                    download.setAttribute('href', 'data:img/jpg;base64,' + encodeURIComponent(data.fileInByteArray));
-                    download.setAttribute('download', "NewImage.jpg");
+                    download.setAttribute('href', 'data:' + data.fileMime + encodeURIComponent(data.fileInByteArray));
+                    download.setAttribute('download', data.fileName);
 
                     if (document.createEvent) {
                         var event = document.createEvent('MouseEvents');

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.StaticFiles;
 using Orion.Net.Client.Configuration;
 using Orion.Net.Core.Interfaces;
 using Orion.Net.Core.Results;
@@ -66,10 +67,14 @@ namespace Orion.Net.Client.Scripts
 
         protected async Task SendFileContent(string pathFile)
         {
+            new FileExtensionContentTypeProvider().TryGetContentType(pathFile, out string contentType);
+
             var result = new FileContentResult()
             {
                 ResultIdentifier = Guid.NewGuid(),
-                FileInByteArray = System.IO.File.ReadAllBytes(pathFile)
+                FileAsByteArray = System.IO.File.ReadAllBytes(pathFile),
+                FileName = pathFile.Substring(pathFile.LastIndexOf('\\') + 1 ,pathFile.Length - pathFile.LastIndexOf('\\') - 1),
+                Mime = (contentType.Length == 0) ? "multipart/form-data": contentType
             };
 
             // Send result content to server :
