@@ -39,9 +39,6 @@ namespace Orion.Net.Scripts.Common.Diagnostics
             if (parameter == null)
             {
                 await SendStringContent("parameter invalid. filePath not found.");
-                await SendStringContent("parameter invalid. filePath not found.");
-                await SendStringContent("parameter invalid. filePath not found.");
-                await SendStringContent("parameter invalid. filePath not found.");
                 return;
             }
 
