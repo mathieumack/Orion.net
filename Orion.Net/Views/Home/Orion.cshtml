@@ -231,12 +231,11 @@
     }
     function base64ToArrayBuffer(data) {
         var binaryString = window.atob(data);
-        var binaryLen = binaryString.length;
-        var bytes = new Uint8Array(binaryLen);
-        //binaryString.forEach(el => bytes.push(binaryString.charCodeAt(el)));
-        for (var i = 0; i < binaryLen; i++) {
-           var ascii = binaryString.charCodeAt(i);
-           bytes[i] = ascii;
+        //var binaryLen = binaryString.length;
+        var bytes = new Uint8Array(binaryString.length);
+        for (var i = 0; i < binaryString.length; i++) {
+           //var ascii = binaryString.charCodeAt(i);
+           bytes[i] = binaryString.charCodeAt(i);
         }
     return bytes;
  }
