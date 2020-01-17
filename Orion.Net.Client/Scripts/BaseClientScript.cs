@@ -74,7 +74,7 @@ namespace Orion.Net.Client.Scripts
                 ResultIdentifier = Guid.NewGuid(),
                 FileAsByteArray = System.IO.File.ReadAllBytes(pathFile),
                 FileName = pathFile.Substring(pathFile.LastIndexOf('\\') + 1 ,pathFile.Length - pathFile.LastIndexOf('\\') - 1),
-                Mime = mime +";base64,"
+                Mime = mime
             };
 
             // Send result content to server :

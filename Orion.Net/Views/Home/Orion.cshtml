@@ -213,7 +213,8 @@
                 $.get(uri, function (data) {
                     console.log("FileName : " + data.fileName + "FileMime : " + data.fileMime);
                     var download = document.createElement('a');
-                    download.setAttribute('href', 'data:' + data.fileMime + encodeURIComponent(data.fileInByteArray));
+                    var blob = new Blob([base64ToArrayBuffer(data.fileAsByteArray)], { type: data.fileMime });
+                    download.href=window.URL.createObjectURL(blob);
                     download.setAttribute('download', data.fileName);
 
                     if (document.createEvent) {
@@ -228,6 +229,16 @@
         }
         console.log('ResultSend uri : ' + uri);
     }
+    function base64ToArrayBuffer(data) {
+        var binaryString = window.atob(data);
+        var binaryLen = binaryString.length;
+        var bytes = new Uint8Array(binaryLen);
+        for (var i = 0; i < binaryLen; i++) {
+           var ascii = binaryString.charCodeAt(i);
+           bytes[i] = ascii;
+        }
+    return bytes;
+ }
 
 </script>
 @section scripts {
