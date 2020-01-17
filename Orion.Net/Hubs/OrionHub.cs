@@ -53,6 +53,8 @@ namespace Orion.Net.Hubs
         public async Task AskCommands(string connectionId)
         {
             await Clients.Client(connectionId).SendAsync("AskCommands");
+            await Groups.AddToGroupAsync(connectionId, connectionId);
+            await Groups.AddToGroupAsync(Context.ConnectionId, connectionId);
         }
 
         /// <summary>
@@ -62,7 +64,7 @@ namespace Orion.Net.Hubs
         /// <returns></returns>
         public async Task ClientAnswerCommands(List<AvailableClientScript> availableScripts)
         {
-            await Clients.All.SendAsync("AnswerCommands", Context.ConnectionId, availableScripts);
+            await Clients.OthersInGroup(Context.ConnectionId).SendAsync("AnswerCommands", Context.ConnectionId, availableScripts);
         }
 
         /// <summary>
@@ -72,7 +74,7 @@ namespace Orion.Net.Hubs
         /// <returns></returns>
         public async Task ResultCommandSent(Guid resultIdentifier, int resultType)
         {
-            await Clients.All.SendAsync("ResultSent", Context.ConnectionId, resultIdentifier, resultType);
+            await Clients.OthersInGroup(Context.ConnectionId).SendAsync("ResultSent", Context.ConnectionId, resultIdentifier, resultType);
         }
 
         #endregion

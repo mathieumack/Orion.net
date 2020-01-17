@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -74,7 +75,7 @@ namespace Orion.Net.Client.Scripts
         }
 
         /// <summary>
-        /// Check path 
+        /// Check path and file
         /// Post ImageContentResult, with file from path save as byte array, on the paltform
         /// </summary>
         /// <param name="pathImage"></param>
@@ -82,7 +83,7 @@ namespace Orion.Net.Client.Scripts
         protected async Task SendImageContent(string pathImage)
         {
             //Check if path is valid and file exists
-            if (String.IsNullOrWhiteSpace(pathImage) || !System.IO.File.Exists(pathImage))
+            if (string.IsNullOrWhiteSpace(pathImage) || !File.Exists(pathImage))
             {
                 await SendStringContent("File not found or not accessible");
                 return;
@@ -91,11 +92,11 @@ namespace Orion.Net.Client.Scripts
             //Check if file can be read
             try
             {
-                var fileStream = new System.IO.FileStream(pathImage, System.IO.FileMode.Open);
+                var fileStream = new FileStream(pathImage, FileMode.Open);
                 var isReadable = fileStream.CanRead;
                 fileStream.Dispose();
             }
-            catch(System.IO.IOException ex)
+            catch(IOException ex)
             {
                 await SendStringContent("An error occured : " + ex.Message);
                 return;
@@ -105,7 +106,7 @@ namespace Orion.Net.Client.Scripts
             var result = new ImageContentResult()
             {
                 ResultIdentifier = Guid.NewGuid(),
-                ImageAsByteArray = System.IO.File.ReadAllBytes(pathImage)
+                ImageAsByteArray = File.ReadAllBytes(pathImage)
             };
 
             // Send result content to server :
