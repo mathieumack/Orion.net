@@ -40,6 +40,20 @@
     </div>
 </script>
 
+<script type="text/x-kendo-template" id="resultDisplayImage">
+    <div class="col-xl-6 mt-4">
+        <div class="card border-left-#:Color# shadow h-100">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <img class="h5 mb-0 text-gray-800 img-fluid" src="data:image/jpg;base64,#:Content#" alt="Result Image">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
 <script type="text/x-kendo-template" id="connectedUserDetailTemplate">
     <div identifier="detailElement_#:connectionId#" class="currentConnectionDetail">
         <div class="card-header py-3">
@@ -47,7 +61,7 @@
         </div>
         <div class="card-body">
             <div class="demo-section k-content">
-                <div>
+                <div class="font-weight-bold mb-4">
                     Détail de l'élément
                 </div>
                 <div class="row">
@@ -76,7 +90,6 @@
         </div>
     </div>
 </script>
-
 <script type="text/x-kendo-template" id="connectedUserCardTemplate">
     <div class="col-xl-3 col-md-6 mb-4" connectionId="#:connectionId#" onclick="loadClient('#:connectionId#')">
         <div class="card border-left-success shadow h-100 py-2">
@@ -91,9 +104,7 @@
         </div>
     </div>
 </script>
-
 <script type="text/javascript">
-
     function sendCommand(connectionId) {
         var dropdownlist = $("input[identifier = 'detailElement_commands_" + connectionId + "']").data("kendoDropDownList");
         connection.invoke("SendCommandToClient",
@@ -105,58 +116,47 @@
                 return console.error(err.toString());
             });
     }
-
 </script>
-
 <script type="text/javascript">
-
-    console.info("start orion client"); 
+    console.info("start orion client");
     var connectedUserCardTemplate = kendo.template($("#connectedUserCardTemplate").html());
     var connectedUserDetailTemplate = kendo.template($("#connectedUserDetailTemplate").html());
     var displayResultsStringTemplate = kendo.template($("#resultDisplayString").html());
+    var displayResultsImageTemplate = kendo.template($("#resultDisplayImage").html());
     var tabStrip = $("#tabstrip");
-
     var connection = new signalR.HubConnectionBuilder().withUrl("/orionhub").build();
 
-    
     connection.on("newClient", function (detail) {
         tabStrip.append(connectedUserCardTemplate(detail));
     });
-    
+
     connection.on("AnswerCommands", function (connectionId, commands) {
         loadAvailableCommands(connectionId, commands);
     });
-
-    connection.on("ResultSent", function (connectionId, resultId) {
-        displayResult(connectionId, resultId);
+    connection.on("ResultSent", function (connectionId, resultId, resultType) {
+        displayResult(connectionId, resultId, resultType);
     });
-
     connection.start().then(function () {
-        
+
     }).catch(function (err) {
         return console.error(err.toString());
     });
-
     function loadClient(connId) {
         $(".currentConnectionDetail").each(function () {
             $(this).hide();
         });
-        $("div[identifier='detailElement_" + connId+"']").show();
-
+        $("div[identifier='detailElement_" + connId + "']").show();
         if ($("div[identifier='detailElement_" + connId + "']").length == 0) {
             var html = connectedUserDetailTemplate({
                 connectionId: connId
             });
             $("#blocCurrentConnection").append(html);
-
             connection.invoke("AskCommands", connId).catch(function (err) {
                 return console.error(err.toString());
             });
-
             $("#sendAskCommandsId").attr("connectionId", connId);
         }
     }
-
     function loadAvailableCommands(connectionId, commands) {
         // create DropDownList from input HTML element
         $("input[identifier = 'detailElement_commands_" + connectionId + "']").kendoDropDownList({
@@ -166,41 +166,51 @@
             index: 0
         });
     }
-
     function loadClient(connId) {
         $(".currentConnectionDetail").each(function () {
             $(this).hide();
         });
         $("div[identifier='detailElement_" + connId + "']").show();
-
         if ($("div[identifier='detailElement_" + connId + "']").length == 0) {
             var html = connectedUserDetailTemplate({
                 connectionId: connId
             });
             $("#blocCurrentConnection").append(html);
-
             connection.invoke("AskCommands", connId).catch(function (err) {
                 return console.error(err.toString());
             });
-
             $("#sendAskCommandsId").attr("connectionId", connId);
         }
     }
+    function displayResult(connectionId, resultId, type) {
+        var uri = "/api/v1/";
+        var html;
 
-    function displayResult(connectionId, resultId) {
-        var uri = "/api/v1/StringResultData/" + resultId;
+        switch (type) {
+            case 2:
+                uri += "StringResultData/" + resultId;
+                $.get(uri, function (data) {
+                    html = displayResultsStringTemplate({
+                        Content: data.consoleContent,
+                        Color: "primary"
+                    });
+                    $("#addResults_" + connectionId).prepend(html);
+                });
+                break;
+            case 3:
+                uri += "ImageResultData/" + resultId;
+                $.get(uri, function (data) {
+                    html = displayResultsImageTemplate({
+                        Content: (data.imageAsByteArray),
+                        Color: "danger"
+                    });
+                    $("#addResults_" + connectionId).prepend(html);
+                });
+                break;
+            default: break;
+        }
         console.log('ResultSend uri : ' + uri);
-        $.get(uri, function (data) {
-            html = displayResultsStringTemplate({
-                Content: data.consoleContent,
-                Color: "primary"
-            });
-            $("#addResults_" + connectionId).prepend(html);
-        });
     }
-
 </script>
-
 @section scripts {
-
 }
