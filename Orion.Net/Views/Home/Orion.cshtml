@@ -233,6 +233,7 @@
         var binaryString = window.atob(data);
         var binaryLen = binaryString.length;
         var bytes = new Uint8Array(binaryLen);
+        //binaryString.forEach(el => bytes.push(binaryString.charCodeAt(el)));
         for (var i = 0; i < binaryLen; i++) {
            var ascii = binaryString.charCodeAt(i);
            bytes[i] = ascii;

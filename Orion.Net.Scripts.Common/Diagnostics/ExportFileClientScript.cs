@@ -12,17 +12,20 @@ namespace Orion.Net.Scripts.Common.Diagnostics
     /// </summary>
     public class ExportFileClientScript : BaseClientScript
     {
+        private const string exportFileParam = "exportFile";
+        private const string argsParam = "args";
+
         public ExportFileClientScript(Connector connector)
             : base(connector)
         {
             identifier = Guid.NewGuid();
             AvailableParameters.Add(new ScriptParameter()
             {
-                Name = "exportFile"
+                Name = exportFileParam
             });
             AvailableParameters.Add(new ScriptParameter()
             {
-                Name = "args"
+                Name = argsParam
             });
         }
 
@@ -34,19 +37,19 @@ namespace Orion.Net.Scripts.Common.Diagnostics
         public override async Task Execute(string parameters)
         {
             var paramItems = parameters.ExtractParams();
-            var parameter = paramItems.FirstOrDefault(e => e.ParameterName == "exportFile");
+            var parameter = paramItems.FirstOrDefault(e => e.ParameterName == exportFileParam);
             if (parameter == null)
             {
-                await SendStringContent("parameter invalid. exportFile not valid.");
+                await SendStringContent("parameter invalid." + exportFileParam + " not valid.");
                 return;
             }
 
-            var arguments = paramItems.FirstOrDefault(e => e.ParameterName == "args");
+            var arguments = paramItems.FirstOrDefault(e => e.ParameterName == argsParam);
 
             try
             {
                 if (arguments == null)
-                    await SendStringContent("No path file entered in args.");
+                    await SendStringContent("No path file entered in " + argsParam);
                 else
                 {
                     await SendFileContent(arguments.ParameterValue);

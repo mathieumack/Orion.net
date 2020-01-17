@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.StaticFiles;
@@ -65,14 +66,23 @@ namespace Orion.Net.Client.Scripts
             await connector.SendResultCommand(result);
         }
 
+        /// <summary>
+        /// TODO Add check for path and file, same as SendImageContent so put it in a function
+        /// get the mime of the file, read the file's bytes, extract the file's name from the path
+        /// Send FileContentResult
+        /// </summary>
+        /// <param name="pathFile"></param>
+        /// <returns></returns>
         protected async Task SendFileContent(string pathFile)
         {
+            //Get the file's mime or a default one
             new FileExtensionContentTypeProvider().TryGetContentType(pathFile, out string mime);
             mime = mime ?? "application/octet-stream";
+
             var result = new FileContentResult()
             {
                 ResultIdentifier = Guid.NewGuid(),
-                FileAsByteArray = System.IO.File.ReadAllBytes(pathFile),
+                FileAsByteArray = File.ReadAllBytes(pathFile),
                 FileName = pathFile.Substring(pathFile.LastIndexOf('\\') + 1 ,pathFile.Length - pathFile.LastIndexOf('\\') - 1),
                 Mime = mime
             };
