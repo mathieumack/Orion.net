@@ -17,12 +17,13 @@ namespace Orion.Net.Hubs
         /// <returns></returns>
         public async Task Hello(string clientLabel)
         {
-            await Clients.All.SendAsync("NewClient", new {
+            await Clients.All.SendAsync("NewClient", new
+            {
                 UserName = clientLabel,
                 Context.ConnectionId
             });
         }
-        
+
         #endregion
 
         public async Task SendMessage()
@@ -31,7 +32,7 @@ namespace Orion.Net.Hubs
         }
 
         #region Discuss with client for available commands
-        
+
         /// <summary>
         /// Send a command to a dedicated client
         /// </summary>
@@ -52,8 +53,6 @@ namespace Orion.Net.Hubs
         public async Task AskCommands(string connectionId)
         {
             await Clients.Client(connectionId).SendAsync("AskCommands");
-            await Groups.AddToGroupAsync(connectionId, connectionId);
-            await Groups.AddToGroupAsync(Context.ConnectionId, connectionId);
         }
 
         /// <summary>
@@ -63,7 +62,7 @@ namespace Orion.Net.Hubs
         /// <returns></returns>
         public async Task ClientAnswerCommands(List<AvailableClientScript> availableScripts)
         {
-            await Clients.OthersInGroup(Context.ConnectionId).SendAsync("AnswerCommands", Context.ConnectionId, availableScripts);
+            await Clients.All.SendAsync("AnswerCommands", Context.ConnectionId, availableScripts);
         }
 
         /// <summary>
@@ -71,9 +70,9 @@ namespace Orion.Net.Hubs
         /// </summary>
         /// <param name="resultIdentifier"></param>
         /// <returns></returns>
-        public async Task ResultCommandSent(Guid resultIdentifier)
+        public async Task ResultCommandSent(Guid resultIdentifier, int resultType)
         {
-            await Clients.OthersInGroup(Context.ConnectionId).SendAsync("ResultSent", resultIdentifier);
+            await Clients.All.SendAsync("ResultSent", Context.ConnectionId, resultIdentifier, resultType);
         }
 
         #endregion
