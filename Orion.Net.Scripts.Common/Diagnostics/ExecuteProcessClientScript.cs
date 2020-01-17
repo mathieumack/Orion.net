@@ -13,17 +13,21 @@ namespace Orion.Net.Scripts.Common.Diagnostics
     /// </summary>
     public class ExecuteProcessClientScript : BaseClientScript
     {
+        private const string filePathParam = "filePath";
+        private const string argsParam = "args";
+
+
         public ExecuteProcessClientScript(Connector connector)
             : base(connector)
         {
             identifier = Guid.NewGuid();
             AvailableParameters.Add(new ScriptParameter()
             {
-                Name = "filePath"
+                Name = filePathParam
             });
             AvailableParameters.Add(new ScriptParameter()
             {
-                Name = "args"
+                Name = argsParam
             });
         }
 
@@ -41,12 +45,12 @@ namespace Orion.Net.Scripts.Common.Diagnostics
                 return;
             }
 
-            var parameter = paramItems.FirstOrDefault(e => e.ParameterName == "filePath");
-            var arguments = paramItems.FirstOrDefault(e => e.ParameterName == "args");
+            var parameter = paramItems.FirstOrDefault(e => e.ParameterName == filePathParam);
+            var arguments = paramItems.FirstOrDefault(e => e.ParameterName == argsParam);
 
             if(parameter == null)
             {
-                await SendStringContent("Error : Parameter filePath is missing.");
+                await SendStringContent("Error : Parameter" + filePathParam + "is missing.");
                 return;
             }
 

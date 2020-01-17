@@ -46,8 +46,12 @@ namespace Orion.Net.Client.Scripts
 
         internal async Task Start(string parameters)
         {
+            // Manage start script :
+
             // Execute overrided execute method
             await Execute(parameters);
+
+            // Notifiy end script
         }
 
         #region Pre defined results
@@ -70,12 +74,34 @@ namespace Orion.Net.Client.Scripts
         }
 
         /// <summary>
+        /// Check path 
         /// Post ImageContentResult, with file from path save as byte array, on the paltform
         /// </summary>
         /// <param name="pathImage"></param>
         /// <returns></returns>
         protected async Task SendImageContent(string pathImage)
         {
+            //Check if path is valid and file exists
+            if (String.IsNullOrWhiteSpace(pathImage) || !System.IO.File.Exists(pathImage))
+            {
+                await SendStringContent("File not found or not accessible");
+                return;
+            }
+
+            //Check if file can be read
+            try
+            {
+                var fileStream = new System.IO.FileStream(pathImage, System.IO.FileMode.Open);
+                var isReadable = fileStream.CanRead;
+                fileStream.Dispose();
+            }
+            catch(System.IO.IOException ex)
+            {
+                await SendStringContent("An error occured : " + ex.Message);
+                return;
+            }
+
+            //Create result content
             var result = new ImageContentResult()
             {
                 ResultIdentifier = Guid.NewGuid(),

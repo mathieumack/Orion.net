@@ -93,15 +93,17 @@ namespace Orion.Net.Client.Configuration
         {
             // Send result object to the correct uri :
             var dataUri = string.Empty;
-            HttpContent content = new StringContent(JsonConvert.SerializeObject(result), Encoding.UTF8, "application/json");
+            HttpContent content = null;
 
             switch (result.ResultType)
             {
                 case ClientScriptResultType.ConsoleLog:
                     dataUri = platformUri + "api/v1/StringResultData";
+                    content = new StringContent(JsonConvert.SerializeObject(result), Encoding.UTF8, "application/json");
                     break;
                 case ClientScriptResultType.Image:
                     dataUri = platformUri + "api/v1/ImageResultData";
+                    content = new StringContent(JsonConvert.SerializeObject(result), Encoding.UTF8, "application/json");
                     break;
                 default:
                     return;

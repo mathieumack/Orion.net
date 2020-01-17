@@ -12,13 +12,15 @@ namespace Orion.Net.Scripts.Common.Diagnostics
     /// </summary>
     public class SendImageContentClientScript : BaseClientScript
     {
+        private const string filePathParam = "filePath";
+
         public SendImageContentClientScript(Connector connector)
             : base(connector)
         {
             identifier = Guid.NewGuid();
             AvailableParameters.Add(new ScriptParameter()
             {
-                Name = "filePath"
+                Name = filePathParam
             });
         }
 
@@ -36,7 +38,7 @@ namespace Orion.Net.Scripts.Common.Diagnostics
                 return;
             }
 
-            var parameter = paramItems.FirstOrDefault(e => e.ParameterName == "filePath");
+            var parameter = paramItems.FirstOrDefault(e => e.ParameterName == filePathParam);
 
             try
             {
