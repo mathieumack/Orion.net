@@ -211,9 +211,9 @@
             case 4:
                 uri += "FileResultData/" + resultId;
                 $.get(uri, function (data) {
-                    console.log("FileName : " + data.fileName + "FileMime : " + data.fileMime);
+                    //Create element a for download data as blob
                     var download = document.createElement('a');
-                    var blob = new Blob([base64ToArrayBuffer(data.fileAsByteArray)], { type: data.fileMime });
+                    var blob = new Blob([dataToArrayBuffer(data.fileAsByteArray)], { type: data.fileMime });
                     download.href=window.URL.createObjectURL(blob);
                     download.setAttribute('download', data.fileName);
 
@@ -227,18 +227,16 @@
                 break;
             default: break;
         }
-        console.log('ResultSend uri : ' + uri);
     }
-    function base64ToArrayBuffer(data) {
+    //Transform flux data to Array Buffer for file type
+    function dataToArrayBuffer(data) {
         var binaryString = window.atob(data);
-        //var binaryLen = binaryString.length;
         var bytes = new Uint8Array(binaryString.length);
         for (var i = 0; i < binaryString.length; i++) {
-           //var ascii = binaryString.charCodeAt(i);
            bytes[i] = binaryString.charCodeAt(i);
         }
     return bytes;
- }
+    }
 
 </script>
 @section scripts {
