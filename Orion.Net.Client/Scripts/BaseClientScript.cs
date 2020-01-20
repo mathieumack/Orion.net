@@ -109,7 +109,7 @@ namespace Orion.Net.Client.Scripts
         protected async Task SendImageContent(string pathImage)
         {
             //Check if path is valid and file exists
-            if (await CheckPathFile(pathImage) == false)
+            if (!await CheckPathFile(pathImage))
                 return;
             
             //Create result content
@@ -132,7 +132,7 @@ namespace Orion.Net.Client.Scripts
         protected async Task SendFileContent(string pathFile)
         {
             //Check if path is valid and file exists
-            if (await CheckPathFile(pathFile) == false)
+            if (!await CheckPathFile(pathFile))
                 return;
 
             //Get the file's mime or a default one
