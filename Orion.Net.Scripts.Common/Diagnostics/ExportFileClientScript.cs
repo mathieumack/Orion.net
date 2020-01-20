@@ -43,8 +43,6 @@ namespace Orion.Net.Scripts.Common.Diagnostics
                 return;
             }
 
-            var parameter = paramItems.FirstOrDefault(e => e.ParameterName == exportFileParam);
-
             var arguments = paramItems.FirstOrDefault(e => e.ParameterName == argsParam);
 
             try

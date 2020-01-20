@@ -8,7 +8,6 @@ using Orion.Net.Client.Configuration;
 using Orion.Net.Core.Interfaces;
 using Orion.Net.Core.Results;
 using Orion.Net.Core.Scripts;
-using System.Linq;
 
 namespace Orion.Net.Client.Scripts
 {
@@ -59,6 +58,31 @@ namespace Orion.Net.Client.Scripts
 
         #region Pre defined results
 
+        internal async Task<bool> CheckPathFile(string path)
+        {
+            //Check if path is valid and file exists
+            if (string.IsNullOrWhiteSpace(path) || !File.Exists(path))
+            {
+                await SendStringContent("File not found or not accessible");
+                return false;
+            }
+
+            //Check if file can be read
+            try
+            {
+                var fileStream = new FileStream(path, FileMode.Open);
+                var isReadable = fileStream.CanRead;
+                fileStream.Dispose();
+            }
+            catch (IOException ex)
+            {
+                await SendStringContent("An error occured : " + ex.Message);
+                return false;
+            }
+
+            return true;
+        }
+
         /// <summary>
         /// Post SendStringContent on the platform
         /// </summary>
@@ -85,25 +109,9 @@ namespace Orion.Net.Client.Scripts
         protected async Task SendImageContent(string pathImage)
         {
             //Check if path is valid and file exists
-            if (string.IsNullOrWhiteSpace(pathImage) || !File.Exists(pathImage))
-            {
-                await SendStringContent("File not found or not accessible");
+            if (await CheckPathFile(pathImage) == false)
                 return;
-            }
-
-            //Check if file can be read
-            try
-            {
-                var fileStream = new FileStream(pathImage, FileMode.Open);
-                var isReadable = fileStream.CanRead;
-                fileStream.Dispose();
-            }
-            catch (IOException ex)
-            {
-                await SendStringContent("An error occured : " + ex.Message);
-                return;
-            }
-
+            
             //Create result content
             var result = new ImageContentResult()
             {
@@ -116,7 +124,6 @@ namespace Orion.Net.Client.Scripts
         }
 
         /// <summary>
-        /// TODO Add check for path and file, same as SendImageContent so put it in a function
         /// get the mime of the file, read the file's bytes, extract the file's name from the path
         /// Send FileContentResult
         /// </summary>
@@ -125,24 +132,8 @@ namespace Orion.Net.Client.Scripts
         protected async Task SendFileContent(string pathFile)
         {
             //Check if path is valid and file exists
-            if (string.IsNullOrWhiteSpace(pathFile) || !File.Exists(pathFile))
-            {
-                await SendStringContent("File not found or not accessible");
+            if (await CheckPathFile(pathFile) == false)
                 return;
-            }
-
-            //Check if file can be read
-            try
-            {
-                var fileStream = new FileStream(pathFile, FileMode.Open);
-                var isReadable = fileStream.CanRead;
-                fileStream.Dispose();
-            }
-            catch (IOException ex)
-            {
-                await SendStringContent("An error occured : " + ex.Message);
-                return;
-            }
 
             //Get the file's mime or a default one
             new FileExtensionContentTypeProvider().TryGetContentType(pathFile, out string mime);
