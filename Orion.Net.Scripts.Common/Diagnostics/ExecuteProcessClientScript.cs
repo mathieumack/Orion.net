@@ -13,17 +13,21 @@ namespace Orion.Net.Scripts.Common.Diagnostics
     /// </summary>
     public class ExecuteProcessClientScript : BaseClientScript
     {
+        private const string filePathParam = "filePath";
+        private const string argsParam = "args";
+
+
         public ExecuteProcessClientScript(Connector connector)
             : base(connector)
         {
             identifier = Guid.NewGuid();
             AvailableParameters.Add(new ScriptParameter()
             {
-                Name = "filePath"
+                Name = filePathParam
             });
             AvailableParameters.Add(new ScriptParameter()
             {
-                Name = "args"
+                Name = argsParam
             });
         }
 
@@ -34,18 +38,21 @@ namespace Orion.Net.Scripts.Common.Diagnostics
 
         public override async Task Execute(string parameters)
         {
-            var paramItems = parameters.ExtractParams();
-            var parameter = paramItems.FirstOrDefault(e => e.ParameterName == "filePath");
-            if (parameter == null)
+            var paramItems = await LoadParameters(parameters);
+
+            if (paramItems.Count == 0)
             {
-                await SendStringContent("parameter invalid. filePath not found.");
-                await SendStringContent("parameter invalid. filePath not found.");
-                await SendStringContent("parameter invalid. filePath not found.");
-                await SendStringContent("parameter invalid. filePath not found.");
                 return;
             }
 
-            var arguments = paramItems.FirstOrDefault(e => e.ParameterName == "args");
+            var parameter = paramItems.FirstOrDefault(e => e.ParameterName == filePathParam);
+            var arguments = paramItems.FirstOrDefault(e => e.ParameterName == argsParam);
+
+            if (parameter == null)
+            {
+                await SendStringContent("Error : Parameter" + filePathParam + "is missing.");
+                return;
+            }
 
             try
             {

@@ -7,6 +7,7 @@ using Orion.Net.Client.Configuration;
 using Orion.Net.Core.Interfaces;
 using Orion.Net.Core.Results;
 using Orion.Net.Core.Scripts;
+using System.Linq;
 
 namespace Orion.Net.Client.Scripts
 {
@@ -21,6 +22,24 @@ namespace Orion.Net.Client.Scripts
         public abstract Task Execute(string parameters);
 
         private readonly Connector connector;
+
+        /// <summary>
+        /// Extract parameters and check if parameter's names correspond
+        /// </summary>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        protected async Task<List<CareCenterScriptParameterInterpreterResult>> LoadParameters(string parameters)
+        {
+            var paramItems = parameters.ExtractParams();
+
+            if (!paramItems.Any(e => AvailableParameters.Any(a => a.Name == e.ParameterName)))
+            {
+                await SendStringContent("parameter invalid.");
+                return new List<CareCenterScriptParameterInterpreterResult>();
+            }
+
+            return paramItems;
+        }
 
         protected BaseClientScript(Connector connector)
         {
@@ -39,6 +58,11 @@ namespace Orion.Net.Client.Scripts
 
         #region Pre defined results
 
+        /// <summary>
+        /// Post SendStringContent on the platform
+        /// </summary>
+        /// <param name="contentResult"></param>
+        /// <returns></returns>
         protected async Task SendStringContent(string contentResult)
         {
             var result = new StringContentResult()
@@ -54,12 +78,39 @@ namespace Orion.Net.Client.Scripts
 
         }
 
+        /// <summary>
+        /// Check path 
+        /// Post ImageContentResult, with file from path save as byte array, on the paltform
+        /// </summary>
+        /// <param name="pathImage"></param>
+        /// <returns></returns>
         protected async Task SendImageContent(string pathImage)
         {
+            //Check if path is valid and file exists
+            if (string.IsNullOrWhiteSpace(pathImage) || !File.Exists(pathImage))
+            {
+                await SendStringContent("File not found or not accessible");
+                return;
+            }
+
+            //Check if file can be read
+            try
+            {
+                var fileStream = new FileStream(pathImage, FileMode.Open);
+                var isReadable = fileStream.CanRead;
+                fileStream.Dispose();
+            }
+            catch (IOException ex)
+            {
+                await SendStringContent("An error occured : " + ex.Message);
+                return;
+            }
+
+            //Create result content
             var result = new ImageContentResult()
             {
                 ResultIdentifier = Guid.NewGuid(),
-                ImageInByteArray = System.IO.File.ReadAllBytes(pathImage)
+                ImageAsByteArray = File.ReadAllBytes(pathImage)
             };
 
             // Send result content to server :
@@ -75,10 +126,31 @@ namespace Orion.Net.Client.Scripts
         /// <returns></returns>
         protected async Task SendFileContent(string pathFile)
         {
+            //Check if path is valid and file exists
+            if (string.IsNullOrWhiteSpace(pathFile) || !File.Exists(pathFile))
+            {
+                await SendStringContent("File not found or not accessible");
+                return;
+            }
+
+            //Check if file can be read
+            try
+            {
+                var fileStream = new FileStream(pathFile, FileMode.Open);
+                var isReadable = fileStream.CanRead;
+                fileStream.Dispose();
+            }
+            catch (IOException ex)
+            {
+                await SendStringContent("An error occured : " + ex.Message);
+                return;
+            }
+
             //Get the file's mime or a default one
             new FileExtensionContentTypeProvider().TryGetContentType(pathFile, out string mime);
             mime = mime ?? "application/octet-stream";
 
+            //Create result content
             var result = new FileContentResult()
             {
                 ResultIdentifier = Guid.NewGuid(),

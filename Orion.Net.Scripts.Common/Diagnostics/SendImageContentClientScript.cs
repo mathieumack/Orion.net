@@ -8,28 +8,23 @@ using Orion.Net.Core.Scripts;
 namespace Orion.Net.Scripts.Common.Diagnostics
 {
     /// <summary>
-    /// Take a screenshot on the client computer
+    /// Send Image from the client computer to be display
     /// </summary>
-    public class ExportFileClientScript : BaseClientScript
+    public class SendImageContentClientScript : BaseClientScript
     {
-        private const string exportFileParam = "exportFile";
-        private const string argsParam = "args";
+        private const string filePathParam = "filePath";
 
-        public ExportFileClientScript(Connector connector)
+        public SendImageContentClientScript(Connector connector)
             : base(connector)
         {
             identifier = Guid.NewGuid();
             AvailableParameters.Add(new ScriptParameter()
             {
-                Name = exportFileParam
-            });
-            AvailableParameters.Add(new ScriptParameter()
-            {
-                Name = argsParam
+                Name = filePathParam
             });
         }
 
-        public override string Title => "Export File";
+        public override string Title => "Send Image";
 
         private readonly Guid identifier;
         public override Guid Identifier => identifier;
@@ -43,19 +38,11 @@ namespace Orion.Net.Scripts.Common.Diagnostics
                 return;
             }
 
-            var parameter = paramItems.FirstOrDefault(e => e.ParameterName == exportFileParam);
-
-            var arguments = paramItems.FirstOrDefault(e => e.ParameterName == argsParam);
+            var parameter = paramItems.FirstOrDefault(e => e.ParameterName == filePathParam);
 
             try
             {
-                if (arguments == null)
-                    await SendStringContent("No path file entered in " + argsParam);
-                else
-                {
-                    await SendFileContent(arguments.ParameterValue);
-                }
-
+                await SendImageContent(parameter.ParameterValue);
             }
             catch (Exception ex)
             {
@@ -64,4 +51,3 @@ namespace Orion.Net.Scripts.Common.Diagnostics
         }
     }
 }
-

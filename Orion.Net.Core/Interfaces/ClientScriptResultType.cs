@@ -11,7 +11,7 @@
         /// </summary>
         ConsoleLog = 2,
         /// <summary>
-        /// byte[], base64
+        /// byte[]
         /// </summary>
         Image = 3,
         /// <summary>
