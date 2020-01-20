@@ -3,7 +3,7 @@
 }
 
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800">Care center</h1>
+    <h1 class="h3 mb-2 text-gray-800" id="displayIdSupport">Care center</h1>
 </div>
 
 <div class="row">
@@ -125,6 +125,12 @@
     var displayResultsImageTemplate = kendo.template($("#resultDisplayImage").html());
     var tabStrip = $("#tabstrip");
     var connection = new signalR.HubConnectionBuilder().withUrl("/orionhub").build();
+
+    //ID Support
+    var support = document.createElement('h3');
+    support.innerText = "TOTO";
+    support.className = " h3 m-0 font-weight-bold text-info";
+    document.getElementById('displayIdSupport').appendChild(support);
 
     connection.on("newClient", function (detail) {
         tabStrip.append(connectedUserCardTemplate(detail));
