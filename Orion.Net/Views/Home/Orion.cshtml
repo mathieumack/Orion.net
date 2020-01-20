@@ -55,9 +55,9 @@
 </script>
 
 <script type="text/x-kendo-template" id="connectedUserDetailTemplate">
-    <div identifier="detailElement_#:connectionId#" class="currentConnectionDetail">
+    <div identifier="detailElement_#:appId#" class="currentConnectionDetail">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Current connection detail of #:connectionId#</h6>
+            <h6 class="m-0 font-weight-bold text-primary">Current connection detail of #:appId#</h6>
         </div>
         <div class="card-body">
             <div class="demo-section k-content">
@@ -66,13 +66,13 @@
                 </div>
                 <div class="row">
                     <div class="col col-md-2">
-                        <input identifier="detailElement_commands_#:connectionId#" value="" style="width: 100%;" />
+                        <input identifier="detailElement_commands_#:appId#" value="" style="width: 100%;" />
                     </div>
                     <div class="col col-md-8">
-                        <input type="text" identifier="detailElement_commands_params_#:connectionId#" class="form-control" placeholder="set parameters here">
+                        <input type="text" identifier="detailElement_commands_params_#:appId#" class="form-control" placeholder="set parameters here">
                     </div>
                     <div class="col col-md-2">
-                        <a class="d-none d-sm-inline-block btn btn-sm btn-dark shadow-sm" onclick="sendCommand('#:connectionId#')">
+                        <a class="d-none d-sm-inline-block btn btn-sm btn-dark shadow-sm" onclick="sendCommand('#:appId#')">
                             <span class="icon text-white-50">
                                 <i class="fas fa-check"></i>
                             </span>
@@ -84,19 +84,19 @@
                 <div class="font-weight-bold">
                     Historique des résultats
                 </div>
-                <div id="addResults_#:connectionId#">
+                <div id="addResults_#:appId#">
                 </div>
             </div>
         </div>
     </div>
 </script>
 <script type="text/x-kendo-template" id="connectedUserCardTemplate">
-    <div class="col-xl-3 col-md-6 mb-4" connectionId="#:connectionId#" onclick="loadClient('#:connectionId#')">
+    <div class="col-xl-3 col-md-6 mb-4" appId="#:appId#" onclick="loadClient('#:appId#')">
         <div class="card border-left-success shadow h-100 py-2">
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">#:connectionId#</div>
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">#:appId#</div>
                         <div class="h5 mb-0 font-weight-bold text-gray-800">#:userName#</div>
                     </div>
                 </div>
@@ -105,20 +105,22 @@
     </div>
 </script>
 <script type="text/javascript">
-    function sendCommand(connectionId) {
-        var dropdownlist = $("input[identifier = 'detailElement_commands_" + connectionId + "']").data("kendoDropDownList");
+    function sendCommand(appId) {
+        var dropdownlist = $("input[identifier = 'detailElement_commands_" + appId + "']").data("kendoDropDownList");
         connection.invoke("SendCommandToClient",
             {
-                ConnectionId: connectionId,
+                ConnectionId: appId,
                 CommandTitle: dropdownlist.text(),
-                CommandParam: $("input[identifier='detailElement_commands_params_" + connectionId + "']").val()
+                CommandParam: $("input[identifier='detailElement_commands_params_" + appId + "']").val()
             }).catch(function (err) {
                 return console.error(err.toString());
             });
     }
 </script>
 <script type="text/javascript">
-    console.info("start orion client");
+    //Get id support existant or create a new one ?
+    var jsClientId = "Toto";
+
     var connectedUserCardTemplate = kendo.template($("#connectedUserCardTemplate").html());
     var connectedUserDetailTemplate = kendo.template($("#connectedUserDetailTemplate").html());
     var displayResultsStringTemplate = kendo.template($("#resultDisplayString").html());
@@ -126,21 +128,26 @@
     var tabStrip = $("#tabstrip");
     var connection = new signalR.HubConnectionBuilder().withUrl("/orionhub").build();
 
-    //ID Support
+    //ID Support Display
     var support = document.createElement('h3');
-    support.innerText = "TOTO";
+    support.innerText = jsClientId;
     support.className = " h3 m-0 font-weight-bold text-info";
     document.getElementById('displayIdSupport').appendChild(support);
+
+    //Send supportId to group appId
+    connection.on("SendSupportId", function (appId) {
+        connection.invoke("SendSupport", jsClientId, appId);
+    })
 
     connection.on("newClient", function (detail) {
         tabStrip.append(connectedUserCardTemplate(detail));
     });
 
-    connection.on("AnswerCommands", function (connectionId, commands) {
-        loadAvailableCommands(connectionId, commands);
+    connection.on("AnswerCommands", function (appId, commands) {
+        loadAvailableCommands(appId, commands);
     });
-    connection.on("ResultSent", function (connectionId, resultId, resultType) {
-        displayResult(connectionId, resultId, resultType);
+    connection.on("ResultSent", function (appId, resultId, resultType) {
+        displayResult(appId, resultId, resultType);
     });
     connection.start().then(function () {
 
@@ -154,18 +161,18 @@
         $("div[identifier='detailElement_" + connId + "']").show();
         if ($("div[identifier='detailElement_" + connId + "']").length == 0) {
             var html = connectedUserDetailTemplate({
-                connectionId: connId
+                appId: connId
             });
             $("#blocCurrentConnection").append(html);
             connection.invoke("AskCommands", connId).catch(function (err) {
                 return console.error(err.toString());
             });
-            $("#sendAskCommandsId").attr("connectionId", connId);
+            $("#sendAskCommandsId").attr("appId", connId);
         }
     }
-    function loadAvailableCommands(connectionId, commands) {
+    function loadAvailableCommands(appId, commands) {
         // create DropDownList from input HTML element
-        $("input[identifier = 'detailElement_commands_" + connectionId + "']").kendoDropDownList({
+        $("input[identifier = 'detailElement_commands_" + appId + "']").kendoDropDownList({
             dataTextField: "title",
             dataValueField: "title",
             dataSource: commands,
@@ -179,16 +186,16 @@
         $("div[identifier='detailElement_" + connId + "']").show();
         if ($("div[identifier='detailElement_" + connId + "']").length == 0) {
             var html = connectedUserDetailTemplate({
-                connectionId: connId
+                appId: connId
             });
             $("#blocCurrentConnection").append(html);
             connection.invoke("AskCommands", connId).catch(function (err) {
                 return console.error(err.toString());
             });
-            $("#sendAskCommandsId").attr("connectionId", connId);
+            $("#sendAskCommandsId").attr("appId", connId);
         }
     }
-    function displayResult(connectionId, resultId, type) {
+    function displayResult(appId, resultId, type) {
         var uri = "/api/v1/";
         var html;
 
@@ -200,7 +207,7 @@
                         Content: data.consoleContent,
                         Color: "primary"
                     });
-                    $("#addResults_" + connectionId).prepend(html);
+                    $("#addResults_" + appId).prepend(html);
                 });
                 break;
             case 3:
@@ -210,7 +217,7 @@
                         Content: (data.imageAsByteArray),
                         Color: "danger"
                     });
-                    $("#addResults_" + connectionId).prepend(html);
+                    $("#addResults_" + appId).prepend(html);
                 });
                 break;
             default: break;

@@ -13,15 +13,45 @@ namespace Orion.Net.Hubs
         /// <summary>
         /// Called by clients in order to notify server that the server is connected ;)
         /// </summary>
+        /// <param name="appId"></param>
+        /// <param name="supportId"></param>
         /// <param name="clientLabel"></param>
         /// <returns></returns>
-        public async Task Hello(string clientLabel)
+        public async Task Hello(string appId, string supportId, string clientLabel)
         {
-            await Clients.All.SendAsync("NewClient", new
+            //Add Connection app to AppGroup name appId
+            await Groups.AddToGroupAsync(Context.ConnectionId, appId);
+
+            //Add Connection app to SupportGroup name support Id
+            await Groups.AddToGroupAsync(Context.ConnectionId, supportId);
+
+            //Send to group supportGroup so clients in it too, specify only support ?
+            await Clients.Groups(supportId).SendAsync("NewClient", new
             {
                 UserName = clientLabel,
-                Context.ConnectionId
+                AppId = appId
             });
+        }
+
+        /// <summary>
+        /// Called by Client to get support ID
+        /// </summary>
+        /// <param name="supportId"></param>
+        /// <returns></returns>
+        public async Task AskSupport(string appId)
+        {
+            await Clients.All.SendAsync("SendSupportId", appId);
+        }
+
+        /// <summary>
+        /// Called by support to send id to client
+        /// </summary>
+        /// <param name="supportId"></param>
+        /// <returns></returns>
+        public async Task SendSupport(string supportID, string appId)
+        {
+            await Groups.AddToGroupAsync(Context.ConnectionId, appId);
+            await Clients.Group(appId).SendAsync("SendSupport", supportID);
         }
 
         #endregion
@@ -37,7 +67,7 @@ namespace Orion.Net.Hubs
         /// <returns></returns>
         public async Task SendCommandToClient(ExecuteScriptCommand scriptCommand)
         {
-            await Clients.Client(scriptCommand.ConnectionId).SendAsync("ExecuteCommand", scriptCommand.CommandTitle, scriptCommand.CommandParam);
+            await Clients.Group(scriptCommand.ConnectionId).SendAsync("ExecuteCommand", scriptCommand.CommandTitle, scriptCommand.CommandParam);
         }
 
         /// <summary>
@@ -45,11 +75,9 @@ namespace Orion.Net.Hubs
         /// </summary>
         /// <param name=""></param>
         /// <returns></returns>
-        public async Task AskCommands(string connectionId)
+        public async Task AskCommands(string appId)
         {
-            await Clients.Client(connectionId).SendAsync("AskCommands");
-            await Groups.AddToGroupAsync(connectionId, connectionId);
-            await Groups.AddToGroupAsync(Context.ConnectionId, connectionId);
+            await Clients.Group(appId).SendAsync("AskCommands");
         }
 
         /// <summary>
@@ -57,9 +85,9 @@ namespace Orion.Net.Hubs
         /// </summary>
         /// <param name="clientLabel"></param>
         /// <returns></returns>
-        public async Task ClientAnswerCommands(List<AvailableClientScript> availableScripts)
+        public async Task ClientAnswerCommands(string appId, List<AvailableClientScript> availableScripts)
         {
-            await Clients.OthersInGroup(Context.ConnectionId).SendAsync("AnswerCommands", Context.ConnectionId, availableScripts);
+            await Clients.Group(appId).SendAsync("AnswerCommands", appId, availableScripts);
         }
 
         /// <summary>
@@ -67,9 +95,9 @@ namespace Orion.Net.Hubs
         /// </summary>
         /// <param name="resultIdentifier"></param>
         /// <returns></returns>
-        public async Task ResultCommandSent(Guid resultIdentifier, int resultType)
+        public async Task ResultCommandSent(string appId, Guid resultIdentifier, int resultType)
         {
-            await Clients.OthersInGroup(Context.ConnectionId).SendAsync("ResultSent", Context.ConnectionId, resultIdentifier, resultType);
+            await Clients.OthersInGroup(appId).SendAsync("ResultSent", appId, resultIdentifier, resultType);
         }
 
         #endregion

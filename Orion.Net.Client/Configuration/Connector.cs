@@ -14,9 +14,13 @@ namespace Orion.Net.Client.Configuration
 {
     public class Connector : IAsyncDisposable
     {
+        public Connector() { appId = new Guid().ToString(); supportId = null;}
+
         private HubConnection hubConnection;
         private string platformUri;
         private readonly List<BaseClientScript> commands = new List<BaseClientScript>();
+        private string appId;
+        private string supportId;
 
         public async ValueTask DisposeAsync()
         {
@@ -55,7 +59,7 @@ namespace Orion.Net.Client.Configuration
             hubConnection.On("AskCommands", async () =>
             {
                 // Ask client for available commands :
-                await hubConnection.InvokeAsync("ClientAnswerCommands", commands
+                await hubConnection.InvokeAsync("ClientAnswerCommands", appId, commands
                     .Select(e => new AvailableClientScript()
                     {
                         Title = e.Title,
@@ -71,7 +75,16 @@ namespace Orion.Net.Client.Configuration
             });
 
             await hubConnection.StartAsync();
-            await hubConnection.InvokeAsync("Hello", environmentLabel);
+
+            if (supportId == null)
+            {
+                await hubConnection.InvokeAsync("AskSupport", appId);
+                hubConnection.On<string>("SendSupport", async (supportID) => { 
+                    supportId = supportID;
+                    await hubConnection.InvokeAsync("Hello", appId, supportId, environmentLabel);
+                });
+            }
+            else { await hubConnection.InvokeAsync("Hello", appId, supportId, environmentLabel); }
         }
 
         /// <summary>
@@ -115,7 +128,7 @@ namespace Orion.Net.Client.Configuration
             }
 
             // Notify server client that a result has been sent :
-            await hubConnection.InvokeAsync("ResultCommandSent", result.ResultIdentifier, result.ResultType);
+            await hubConnection.InvokeAsync("ResultCommandSent", appId, result.ResultIdentifier, result.ResultType);
         }
     }
 }
