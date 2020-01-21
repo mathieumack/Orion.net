@@ -14,12 +14,14 @@ namespace Orion.Net.Client.Configuration
 {
     public class Connector : IAsyncDisposable
     {
-        public Connector() { appId = Guid.NewGuid().ToString();}
-
         private HubConnection hubConnection;
         private string platformUri;
         private readonly List<BaseClientScript> commands = new List<BaseClientScript>();
         private readonly string appId;
+
+        public Connector() { 
+            appId = Guid.NewGuid().ToString(); 
+        }
 
         public async ValueTask DisposeAsync()
         {
@@ -42,10 +44,11 @@ namespace Orion.Net.Client.Configuration
 
         /// <summary>
         /// Connect to the server.
-        /// Do not forget to call AddCommandService<>() to register ICareCenterClientScript class
+        /// Do not forget to call AddCommandService<>() to register IClientScript class 
         /// </summary>
         /// <param name="platformUri"></param>
         /// <param name="environmentLabel"></param>
+        /// <param name="supportID"></param>
         /// <returns></returns>
         public async Task Connect(string platformUri, string environmentLabel, string supportID)
         {

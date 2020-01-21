@@ -27,14 +27,14 @@ namespace Orion.Net.Client.Scripts
         /// </summary>
         /// <param name="parameters"></param>
         /// <returns></returns>
-        protected async Task <List<CareCenterScriptParameterInterpreterResult>> LoadParameters(string parameters)
+        protected async Task <List<ScriptParameterInterpreterResult>> LoadParameters(string parameters)
         {
             var paramItems = parameters.ExtractParams();
 
             if (!paramItems.Any(e => AvailableParameters.Any(a => a.Name == e.ParameterName)))
             {
                 await SendStringContent("parameter invalid.");
-                return new List<CareCenterScriptParameterInterpreterResult>();
+                return new List<ScriptParameterInterpreterResult>();
             }
 
             return paramItems;
@@ -89,28 +89,22 @@ namespace Orion.Net.Client.Scripts
                 return;
             }
 
-            //Check if file can be read
             try
             {
-                var fileStream = new FileStream(pathImage, FileMode.Open);
-                var isReadable = fileStream.CanRead;
-                fileStream.Dispose();
-            }
-            catch(IOException ex)
-            {
-                await SendStringContent("An error occured : " + ex.Message);
-                return;
-            }
+                //Create result content
+                var result = new ImageContentResult()
+                {
+                    ResultIdentifier = Guid.NewGuid(),
+                    ImageAsByteArray = File.ReadAllBytes(pathImage)
+                };
 
-            //Create result content
-            var result = new ImageContentResult()
+                // Send result content to server :
+                await connector.SendResultCommand(result);
+            }
+            catch(Exception ex)
             {
-                ResultIdentifier = Guid.NewGuid(),
-                ImageAsByteArray = File.ReadAllBytes(pathImage)
-            };
-
-            // Send result content to server :
-            await connector.SendResultCommand(result);
+                await this.SendStringContent("An error has occured : " + ex);
+            }
         }
 
         #endregion

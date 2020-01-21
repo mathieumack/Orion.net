@@ -1,9 +1,9 @@
 ﻿@{
-    ViewData["Title"] = "Care center";
+    ViewData["Title"] = "Orion.net";
 }
 
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-2 text-gray-800">Care center</h1>
+    <h1 class="h3 mb-2 text-gray-800">Orion.net</h1>
     <h1 class="h3 mb-2 text-gray-800" id="displaySupportId"></h1>
 </div>
 
@@ -110,7 +110,7 @@
         var dropdownlist = $("input[identifier = 'detailElement_commands_" + appId + "']").data("kendoDropDownList");
         connection.invoke("SendCommandToClient",
             {
-                ConnectionId: appId,
+                AppId: appId,
                 CommandTitle: dropdownlist.text(),
                 CommandParam: $("input[identifier='detailElement_commands_params_" + appId + "']").val()
             }).catch(function (err) {
@@ -153,17 +153,17 @@
     }).catch(function (err) {
         return console.error(err.toString());
     });
-    function loadClient(connId) {
+    function loadClient(appID) {
         $(".currentConnectionDetail").each(function () {
             $(this).hide();
         });
-        $("div[identifier='detailElement_" + connId + "']").show();
-        if ($("div[identifier='detailElement_" + connId + "']").length == 0) {
+        $("div[identifier='detailElement_" + appID + "']").show();
+        if ($("div[identifier='detailElement_" + appID + "']").length == 0) {
             var html = connectedUserDetailTemplate({
-                appId: connId
+                appId: appID
             });
             $("#blocCurrentConnection").append(html);
-            connection.invoke("AskCommands", connId).catch(function (err) {
+            connection.invoke("AskCommands", appID).catch(function (err) {
                 return console.error(err.toString());
             });
         }
@@ -177,17 +177,17 @@
             index: 0
         });
     }
-    function loadClient(connId) {
+    function loadClient(appID) {
         $(".currentConnectionDetail").each(function () {
             $(this).hide();
         });
-        $("div[identifier='detailElement_" + connId + "']").show();
-        if ($("div[identifier='detailElement_" + connId + "']").length == 0) {
+        $("div[identifier='detailElement_" + appID + "']").show();
+        if ($("div[identifier='detailElement_" + appID + "']").length == 0) {
             var html = connectedUserDetailTemplate({
-                appId: connId
+                appId: appID
             });
             $("#blocCurrentConnection").append(html);
-            connection.invoke("AskCommands", connId).catch(function (err) {
+            connection.invoke("AskCommands", appID).catch(function (err) {
                 return console.error(err.toString());
             });
         }

@@ -2,7 +2,7 @@
 {
     public class ExecuteScriptCommand
     {
-        public string ConnectionId { get; set; }
+        public string AppId { get; set; }
 
         public string CommandTitle { get; set; }
 

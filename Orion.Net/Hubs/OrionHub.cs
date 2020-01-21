@@ -50,20 +50,18 @@ namespace Orion.Net.Hubs
         /// <summary>
         /// Send a command to a dedicated client
         /// </summary>
-        /// <param name="connectionId"></param>
-        /// <param name="commandTitle"></param>
-        /// <param name="parameters"></param>
+        /// <param name="scriptCommand"></param>
         /// <returns></returns>
         public async Task SendCommandToClient(ExecuteScriptCommand scriptCommand)
         {
-            await Groups.AddToGroupAsync(Context.ConnectionId, scriptCommand.ConnectionId);
-            await Clients.Group(scriptCommand.ConnectionId).SendAsync("ExecuteCommand", scriptCommand.CommandTitle, scriptCommand.CommandParam);
+            await Clients.Group(scriptCommand.AppId).SendAsync("ExecuteCommand", scriptCommand.CommandTitle, scriptCommand.CommandParam);
         }
 
         /// <summary>
+        /// Add support connection id to appId group
         /// Send an ask command to a dedicated client
         /// </summary>
-        /// <param name=""></param>
+        /// <param name="appId"></param>
         /// <returns></returns>
         public async Task AskCommands(string appId)
         {
@@ -72,9 +70,10 @@ namespace Orion.Net.Hubs
         }
 
         /// <summary>
-        /// Called by clients in order to notify server that the server is connected ;)
+        /// Client send Command to support
         /// </summary>
-        /// <param name="clientLabel"></param>
+        /// <param name="appId"></param>
+        /// <param name="availableScripts"></param>
         /// <returns></returns>
         public async Task ClientAnswerCommands(string appId, List<AvailableClientScript> availableScripts)
         {
@@ -82,9 +81,11 @@ namespace Orion.Net.Hubs
         }
 
         /// <summary>
-        /// Called by clients in order to notify server of the result
+        /// Called by client in order to notify support of the result
         /// </summary>
+        /// <param name="appId"></param>
         /// <param name="resultIdentifier"></param>
+        /// <param name="resultType"></param>
         /// <returns></returns>
         public async Task ResultCommandSent(string appId, Guid resultIdentifier, int resultType)
         {
