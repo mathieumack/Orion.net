@@ -34,30 +34,13 @@ namespace Orion.Net.Hubs
         }
 
         /// <summary>
-        /// Create group appId with client connectionId
-        /// Called by Client to get a support ID
+        /// Create SupportId groupe with support connectionId
         /// </summary>
-        /// <param name="appId"></param>
+        /// <param name="supportId"></param>
         /// <returns></returns>
-        public async Task AskSupport(string appId)
+        public async Task StartSupportGroupe(string supportId)
         {
-            await Groups.AddToGroupAsync(Context.ConnectionId, appId);
-            await Clients.All.SendAsync("SendSupportId", appId);
-        }
-
-        /// <summary>
-        /// Create group supportID with support connectionID
-        /// Add support connectionID to group appId
-        /// Called by support to send id to client
-        /// </summary>
-        /// <param name="supportID"></param>
-        /// <param name="appId"></param>
-        /// <returns></returns>
-        public async Task SendSupport(string supportID, string appId)
-        {
-            await Groups.AddToGroupAsync(Context.ConnectionId, supportID);
-            await Groups.AddToGroupAsync(Context.ConnectionId, appId);
-            await Clients.OthersInGroup(appId).SendAsync("SendSupport", supportID);
+            await Groups.AddToGroupAsync(Context.ConnectionId, supportId);
         }
 
         #endregion
@@ -73,6 +56,7 @@ namespace Orion.Net.Hubs
         /// <returns></returns>
         public async Task SendCommandToClient(ExecuteScriptCommand scriptCommand)
         {
+            await Groups.AddToGroupAsync(Context.ConnectionId, scriptCommand.ConnectionId);
             await Clients.Group(scriptCommand.ConnectionId).SendAsync("ExecuteCommand", scriptCommand.CommandTitle, scriptCommand.CommandParam);
         }
 
@@ -83,7 +67,8 @@ namespace Orion.Net.Hubs
         /// <returns></returns>
         public async Task AskCommands(string appId)
         {
-            await Clients.Group(appId).SendAsync("AskCommands");
+            await Groups.AddToGroupAsync(Context.ConnectionId, appId);
+            await Clients.OthersInGroup(appId).SendAsync("AskCommands");
         }
 
         /// <summary>

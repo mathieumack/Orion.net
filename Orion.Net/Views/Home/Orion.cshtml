@@ -134,12 +134,7 @@
     support.className = " h3 m-0 font-weight-bold text-info";
     document.getElementById('displayIdSupport').appendChild(support);
 
-    //Send supportId to group appId
-    connection.on("SendSupportId", function (appId) {
-        connection.invoke("SendSupport", jsClientId, appId);
-    })
-
-    connection.on("newClient", function (detail) {
+    connection.on("NewClient", function (detail) {
         tabStrip.append(connectedUserCardTemplate(detail));
     });
 
@@ -150,7 +145,8 @@
         displayResult(appId, resultId, resultType);
     });
     connection.start().then(function () {
-
+        //Send supportId to create group supportId
+        connection.invoke("StartSupportGroupe", jsClientId);
     }).catch(function (err) {
         return console.error(err.toString());
     });

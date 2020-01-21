@@ -20,7 +20,8 @@ namespace Orion.Net.Client.Wpf
             App.careCenterConnector.AddCommandService(new ExecuteProcessClientScript(App.careCenterConnector));
             App.careCenterConnector.AddCommandService(new SendImageContentClientScript(App.careCenterConnector));
 
-            await App.careCenterConnector.Connect("https://localhost:44359/", MyName.Text);
+            await App.careCenterConnector.Connect("https://localhost:44359/", MyName.Text, SupportID.Text);
         }
+
     }
 }

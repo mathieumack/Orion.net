@@ -14,12 +14,12 @@ namespace Orion.Net.Client.Configuration
 {
     public class Connector : IAsyncDisposable
     {
-        public Connector() { appId = Guid.NewGuid().ToString(); supportId = null;}
+        public Connector() { appId = Guid.NewGuid().ToString();}
 
         private HubConnection hubConnection;
         private string platformUri;
         private readonly List<BaseClientScript> commands = new List<BaseClientScript>();
-        private string appId;
+        private readonly string appId;
         private string supportId;
 
         public async ValueTask DisposeAsync()
@@ -48,8 +48,9 @@ namespace Orion.Net.Client.Configuration
         /// <param name="platformUri"></param>
         /// <param name="environmentLabel"></param>
         /// <returns></returns>
-        public async Task Connect(string platformUri, string environmentLabel)
+        public async Task Connect(string platformUri, string environmentLabel, string supportID)
         {
+            supportId = supportID;
             this.platformUri = platformUri.EndsWith("/") ? platformUri : platformUri + "/";
 
             hubConnection = new HubConnectionBuilder()
@@ -75,17 +76,7 @@ namespace Orion.Net.Client.Configuration
             });
 
             await hubConnection.StartAsync();
-
-            if (supportId == null)
-            {
-                await hubConnection.InvokeAsync("AskSupport", appId);
-                hubConnection.On<string>("SendSupport", async (supportID) =>
-                {
-                    supportId = supportID;
-                    await hubConnection.InvokeAsync("Hello", appId, supportId, environmentLabel);
-                });
-            }
-            else { await hubConnection.InvokeAsync("Hello", appId, supportId, environmentLabel); }
+            await hubConnection.InvokeAsync("Hello", appId, supportId, environmentLabel);
 
         }
 
