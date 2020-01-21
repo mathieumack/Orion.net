@@ -16,7 +16,6 @@ namespace Orion.Net.Scripts.Common.Diagnostics
         private const string filePathParam = "filePath";
         private const string argsParam = "args";
 
-
         public ExecuteProcessClientScript(Connector connector)
             : base(connector)
         {
@@ -41,9 +40,7 @@ namespace Orion.Net.Scripts.Common.Diagnostics
             var paramItems = await LoadParameters(parameters);
 
             if (paramItems.Count == 0)
-            {
                 return;
-            }
 
             var parameter = paramItems.FirstOrDefault(e => e.ParameterName == filePathParam);
             var arguments = paramItems.FirstOrDefault(e => e.ParameterName == argsParam);

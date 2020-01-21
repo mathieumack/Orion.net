@@ -5,7 +5,7 @@ namespace Orion.Net.Client.Scripts
 {
     public static class CareCenterScriptParameterInterpreter
     {
-        private const string RegexPattern = @"(-([a-zA-Z]+) ""([a-zA-Z0-9\\:\. \/]+)"")+";
+        private const string RegexPattern = @"(-([a-zA-Z]+) ""([a-zA-Z0-9\\:\.\-_ \/]+)"")+";
 
         /// <summary>
         /// Extract parameters from a string to a parameter results list
