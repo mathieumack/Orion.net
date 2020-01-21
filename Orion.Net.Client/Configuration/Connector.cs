@@ -20,7 +20,6 @@ namespace Orion.Net.Client.Configuration
         private string platformUri;
         private readonly List<BaseClientScript> commands = new List<BaseClientScript>();
         private readonly string appId;
-        private string supportId;
 
         public async ValueTask DisposeAsync()
         {
@@ -50,7 +49,6 @@ namespace Orion.Net.Client.Configuration
         /// <returns></returns>
         public async Task Connect(string platformUri, string environmentLabel, string supportID)
         {
-            supportId = supportID;
             this.platformUri = platformUri.EndsWith("/") ? platformUri : platformUri + "/";
 
             hubConnection = new HubConnectionBuilder()
@@ -76,7 +74,7 @@ namespace Orion.Net.Client.Configuration
             });
 
             await hubConnection.StartAsync();
-            await hubConnection.InvokeAsync("Hello", appId, supportId, environmentLabel);
+            await hubConnection.InvokeAsync("Hello", appId, supportID, environmentLabel);
 
         }
 
