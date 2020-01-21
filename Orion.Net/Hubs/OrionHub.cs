@@ -26,11 +26,6 @@ namespace Orion.Net.Hubs
 
         #endregion
 
-        public async Task SendMessage()
-        {
-            await Hello(Guid.NewGuid().ToString());
-        }
-
         #region Discuss with client for available commands
 
         /// <summary>

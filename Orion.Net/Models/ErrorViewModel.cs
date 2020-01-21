@@ -1,5 +1,3 @@
-using System;
-
 namespace Orion.Net.Models
 {
     public class ErrorViewModel
