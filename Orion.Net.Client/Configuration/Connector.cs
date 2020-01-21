@@ -14,7 +14,7 @@ namespace Orion.Net.Client.Configuration
 {
     public class Connector : IAsyncDisposable
     {
-        public Connector() { appId = new Guid().ToString(); supportId = null;}
+        public Connector() { appId = Guid.NewGuid().ToString(); supportId = null;}
 
         private HubConnection hubConnection;
         private string platformUri;
@@ -79,12 +79,14 @@ namespace Orion.Net.Client.Configuration
             if (supportId == null)
             {
                 await hubConnection.InvokeAsync("AskSupport", appId);
-                hubConnection.On<string>("SendSupport", async (supportID) => { 
+                hubConnection.On<string>("SendSupport", async (supportID) =>
+                {
                     supportId = supportID;
                     await hubConnection.InvokeAsync("Hello", appId, supportId, environmentLabel);
                 });
             }
             else { await hubConnection.InvokeAsync("Hello", appId, supportId, environmentLabel); }
+
         }
 
         /// <summary>

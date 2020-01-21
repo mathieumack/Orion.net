@@ -19,14 +19,14 @@ namespace Orion.Net.Hubs
         /// <returns></returns>
         public async Task Hello(string appId, string supportId, string clientLabel)
         {
-            //Add Connection app to AppGroup name appId
+            //Add Connection app to AppGroup named appId in case of reconnection
             await Groups.AddToGroupAsync(Context.ConnectionId, appId);
 
-            //Add Connection app to SupportGroup name support Id
+            //Add Connection app to SupportGroup named support Id
             await Groups.AddToGroupAsync(Context.ConnectionId, supportId);
 
             //Send to group supportGroup so clients in it too, specify only support ?
-            await Clients.Groups(supportId).SendAsync("NewClient", new
+            await Clients.OthersInGroup(supportId).SendAsync("NewClient", new
             {
                 UserName = clientLabel,
                 AppId = appId
@@ -34,24 +34,30 @@ namespace Orion.Net.Hubs
         }
 
         /// <summary>
-        /// Called by Client to get support ID
+        /// Create group appId with client connectionId
+        /// Called by Client to get a support ID
         /// </summary>
-        /// <param name="supportId"></param>
+        /// <param name="appId"></param>
         /// <returns></returns>
         public async Task AskSupport(string appId)
         {
+            await Groups.AddToGroupAsync(Context.ConnectionId, appId);
             await Clients.All.SendAsync("SendSupportId", appId);
         }
 
         /// <summary>
+        /// Create group supportID with support connectionID
+        /// Add support connectionID to group appId
         /// Called by support to send id to client
         /// </summary>
-        /// <param name="supportId"></param>
+        /// <param name="supportID"></param>
+        /// <param name="appId"></param>
         /// <returns></returns>
         public async Task SendSupport(string supportID, string appId)
         {
+            await Groups.AddToGroupAsync(Context.ConnectionId, supportID);
             await Groups.AddToGroupAsync(Context.ConnectionId, appId);
-            await Clients.Group(appId).SendAsync("SendSupport", supportID);
+            await Clients.OthersInGroup(appId).SendAsync("SendSupport", supportID);
         }
 
         #endregion
@@ -87,7 +93,7 @@ namespace Orion.Net.Hubs
         /// <returns></returns>
         public async Task ClientAnswerCommands(string appId, List<AvailableClientScript> availableScripts)
         {
-            await Clients.Group(appId).SendAsync("AnswerCommands", appId, availableScripts);
+            await Clients.OthersInGroup(appId).SendAsync("AnswerCommands", appId, availableScripts);
         }
 
         /// <summary>
