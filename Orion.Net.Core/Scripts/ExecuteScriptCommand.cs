@@ -2,6 +2,9 @@
 {
     public class ExecuteScriptCommand
     {
+        /// <summary>
+        /// AppId of the Client for the hub
+        /// </summary>
         public string AppId { get; set; }
 
         /// <summary>

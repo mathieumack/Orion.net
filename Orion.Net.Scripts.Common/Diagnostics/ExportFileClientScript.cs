@@ -13,7 +13,7 @@ namespace Orion.Net.Scripts.Common.Diagnostics
     public class ExportFileClientScript : BaseClientScript
     {
         /// <summary>
-        /// Argument's Name of ExportFileClientScript
+        /// Argument's Name of <see cref="ExportFileClientScript"/>
         /// </summary>
         private const string argsParam = "args";
 

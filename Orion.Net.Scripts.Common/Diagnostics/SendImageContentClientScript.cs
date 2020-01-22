@@ -12,6 +12,9 @@ namespace Orion.Net.Scripts.Common.Diagnostics
     /// </summary>
     public class SendImageContentClientScript : BaseClientScript
     {
+        /// <summary>
+        /// Parameter's Name of <see cref="SendImageContentClientScript"/>
+        /// </summary>
         private const string filePathParam = "filePath";
 
         public SendImageContentClientScript(Connector connector)

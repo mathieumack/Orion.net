@@ -30,7 +30,7 @@ namespace Orion.Net.Client.Configuration
         }
 
         /// <summary>
-        /// Add a 
+        /// Add a CommandService to the WPF
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="command"></param>

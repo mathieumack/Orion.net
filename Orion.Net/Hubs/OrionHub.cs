@@ -35,7 +35,7 @@ namespace Orion.Net.Hubs
         }
 
         /// <summary>
-        /// Create SupportId groupe with support connectionId
+        /// Create/reconnect SupportId group with support connectionId
         /// </summary>
         /// <param name="supportId"></param>
         /// <returns></returns>

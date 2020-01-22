@@ -177,21 +177,6 @@
             index: 0
         });
     }
-    function loadClient(appID) {
-        $(".currentConnectionDetail").each(function () {
-            $(this).hide();
-        });
-        $("div[identifier='detailElement_" + appID + "']").show();
-        if ($("div[identifier='detailElement_" + appID + "']").length == 0) {
-            var html = connectedUserDetailTemplate({
-                appId: appID
-            });
-            $("#blocCurrentConnection").append(html);
-            connection.invoke("AskCommands", appID).catch(function (err) {
-                return console.error(err.toString());
-            });
-        }
-    }
     function displayResult(appId, resultId, type) {
         var uri = "/api/v1/";
         var html;

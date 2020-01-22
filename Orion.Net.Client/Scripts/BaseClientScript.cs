@@ -118,7 +118,45 @@ namespace Orion.Net.Client.Scripts
             }
             catch(Exception ex)
             {
-                await this.SendStringContent("An error has occured : " + ex);
+                await SendStringContent("An error has occured : " + ex);
+            }
+        }
+
+        /// <summary>
+        /// get the mime of the file, read the file's bytes, extract the file's name from the path
+        /// Send FileContentResult
+        /// </summary>
+        /// <param name="pathFile"></param>
+        /// <returns></returns>
+        protected async Task SendFileContent(string pathFile)
+        {
+            if (!CheckPathFile(pathFile))
+            {
+                await SendStringContent("File not found.");
+                return;
+            }
+
+            try
+            {
+                //Get the file's mime or a default one
+                new FileExtensionContentTypeProvider().TryGetContentType(pathFile, out string mime);
+                mime = mime ?? "application/octet-stream";
+
+                //Create result content
+                var result = new FileContentResult()
+                {
+                    ResultIdentifier = Guid.NewGuid(),
+                    FileAsByteArray = File.ReadAllBytes(pathFile),
+                    FileName = pathFile.Substring(pathFile.LastIndexOf('\\') + 1, pathFile.Length - pathFile.LastIndexOf('\\') - 1),
+                    Mime = mime
+                };
+
+                // Send result content to server :
+                await connector.SendResultCommand(result);
+            }
+            catch (Exception ex)
+            {
+                await SendStringContent("An error occured : " + ex);
             }
         }
 
