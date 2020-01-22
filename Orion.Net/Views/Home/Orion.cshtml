@@ -130,7 +130,7 @@
     var displayResultsStringTemplate = kendo.template($("#resultDisplayString").html());
     var displayResultsImageTemplate = kendo.template($("#resultDisplayImage").html());
     var tabStrip = $("#tabstrip");
-    var connection = new signalR.HubConnectionBuilder().withUrl("/orionhub").build();
+    var connection = new signalR.HubConnectionBuilder().withUrl("/orionhub").withAutomaticReconnect().build();
 
     //ID Support Display
     window.onload = function () {
