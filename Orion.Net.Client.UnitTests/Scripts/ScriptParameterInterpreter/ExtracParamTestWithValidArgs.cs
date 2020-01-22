@@ -4,7 +4,7 @@ using Orion.Net.Client.Scripts;
 namespace Orion.Net.Core.UnitTests
 {
     [TestClass]
-    public class ExtractParamTestWithValidArgs
+    public class ExtracParamTestWithValidArgs
     {
         [TestMethod]
         public void TestMethod1()

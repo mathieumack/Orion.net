@@ -1,32 +1,29 @@
-﻿
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Orion.Net.Client.Scripts;
 
 namespace Orion.Net.Core.UnitTests
 {
     [TestClass]
-    public class ExtractParamTestWithInvalidArgs
+    public class ExtractParamTestWithNoArgs
     {
         [TestMethod]
-        public void InvalidArgs()
+        public void ParamArgNull()
         {
-            var testParams = @"-filePath ""c:\temp\K*o /ala.jpg"" -ext ""c:\temp\Ko@ala.jpg""";
+            var testParams = @"""""""";
 
             var results = testParams.ExtractParams();
 
             Assert.AreEqual(0, results.Count);
-
         }
 
         [TestMethod]
-        public void InvalidParam()
+        public void ParamArgWhiteSpace()
         {
-            var testParams = @"-fil*ePath ""c:\temp\Ko /ala.jpg"" -ex@t ""c:\temp\Koala.jpg""";
+            var testParams = @" "" "" "" ";
 
             var results = testParams.ExtractParams();
 
             Assert.AreEqual(0, results.Count);
-
         }
     }
 }

@@ -7,10 +7,10 @@ namespace Orion.Net.Core.UnitTests
     /// Test for <see cref="CareCenterScriptParameterInterpreterResult">
     /// </summary>
     [TestClass]
-    public class ParameterInterpreterResultTestParameterName
+    public class TestParamName
     {
         /// <summary>
-        /// Test for ParameterName from <see cref="CareCenterScriptParameterInterpreterResult">
+        /// Test for ParameterName from <see cref="ScriptParameterInterpreterResult">
         /// <list type="bullet">
         /// <item>
         /// <term>First Assert</term>
@@ -25,7 +25,7 @@ namespace Orion.Net.Core.UnitTests
         [TestMethod]
         public void TestMethod1()
         {
-            var testParam = new CareCenterScriptParameterInterpreterResult();
+            var testParam = new ScriptParameterInterpreterResult();
 
             Assert.IsNull(testParam.ParameterName);
 
