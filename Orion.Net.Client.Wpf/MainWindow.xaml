@@ -6,8 +6,11 @@
         xmlns:local="clr-namespace:Orion.Net.Client.Wpf"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <StackPanel> 
-        <TextBox Name="MyName" Margin="20"></TextBox>
+    <StackPanel>
+        <Label Margin="20,0,20,0">User Name</Label>
+        <TextBox Name="MyName" Margin="20,0,20,0"></TextBox>
+        <Label Margin="20,0,20,0">Support ID</Label>
+        <TextBox Name="SupportID" Margin="20,0,20,20"></TextBox>
         <Button Content="Connect" Margin="20,0,20,0" Name="connectToServer" Click="connectToServer_Click"></Button>
     </StackPanel>
 </Window>

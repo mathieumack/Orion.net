@@ -8,7 +8,7 @@ using Orion.Net.Core.Scripts;
 namespace Orion.Net.Scripts.Common.Diagnostics
 {
     /// <summary>
-    /// Take a screenshot on the client computer
+    /// Send image from client side for display in support
     /// </summary>
     public class SendImageContentClientScript : BaseClientScript
     {
