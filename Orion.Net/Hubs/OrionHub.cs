@@ -11,7 +11,7 @@ namespace Orion.Net.Hubs
         #region New connections
 
         /// <summary>
-        /// Called by clients in order to notify server that the server is connected ;)
+        /// Called by clients in order to transmit information to support
         /// </summary>
         /// <param name="clientLabel"></param>
         /// <returns></returns>
@@ -31,9 +31,7 @@ namespace Orion.Net.Hubs
         /// <summary>
         /// Send a command to a dedicated client
         /// </summary>
-        /// <param name="connectionId"></param>
-        /// <param name="commandTitle"></param>
-        /// <param name="parameters"></param>
+        /// <param name="scriptCommand"></param>
         /// <returns></returns>
         public async Task SendCommandToClient(ExecuteScriptCommand scriptCommand)
         {
@@ -43,7 +41,7 @@ namespace Orion.Net.Hubs
         /// <summary>
         /// Send an ask command to a dedicated client
         /// </summary>
-        /// <param name=""></param>
+        /// <param name="connectionId"></param>
         /// <returns></returns>
         public async Task AskCommands(string connectionId)
         {
@@ -51,9 +49,9 @@ namespace Orion.Net.Hubs
         }
 
         /// <summary>
-        /// Called by clients in order to notify server that the server is connected ;)
+        /// Called by clients to send Commands List
         /// </summary>
-        /// <param name="clientLabel"></param>
+        /// <param name="availableScripts"></param>
         /// <returns></returns>
         public async Task ClientAnswerCommands(List<AvailableClientScript> availableScripts)
         {
@@ -61,9 +59,10 @@ namespace Orion.Net.Hubs
         }
 
         /// <summary>
-        /// Called by clients in order to notify server of the result
+        /// Called by client to send result
         /// </summary>
         /// <param name="resultIdentifier"></param>
+        /// <param name="resultType"></param>
         /// <returns></returns>
         public async Task ResultCommandSent(Guid resultIdentifier, int resultType)
         {

@@ -10,7 +10,7 @@ namespace Orion.Net.Core.Results
         public override ClientScriptResultType ResultType { get; set; } = ClientScriptResultType.ConsoleLog;
 
         /// <summary>
-        /// console result content
+        /// String send to support
         /// </summary>
         public string ConsoleContent { get; set; }
 

@@ -58,29 +58,14 @@ namespace Orion.Net.Client.Scripts
 
         #region Pre defined results
 
-        internal async Task<bool> CheckPathFile(string path)
+        /// <summary>
+        ///Check if path is valid or file exists
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        internal bool CheckPathFile(string path)
         {
-            //Check if path is valid and file exists
-            if (string.IsNullOrWhiteSpace(path) || !File.Exists(path))
-            {
-                await SendStringContent("File not found or not accessible");
-                return false;
-            }
-
-            //Check if file can be read
-            try
-            {
-                var fileStream = new FileStream(path, FileMode.Open);
-                var isReadable = fileStream.CanRead;
-                fileStream.Dispose();
-            }
-            catch (IOException ex)
-            {
-                await SendStringContent("An error occured : " + ex.Message);
-                return false;
-            }
-
-            return true;
+            return (string.IsNullOrWhiteSpace(path) || !File.Exists(path));
         }
 
         /// <summary>
@@ -108,9 +93,11 @@ namespace Orion.Net.Client.Scripts
         /// <returns></returns>
         protected async Task SendImageContent(string pathImage)
         {
-            //Check if path is valid and file exists
-            if (!await CheckPathFile(pathImage))
+            if (!CheckPathFile(pathImage))
+            {
+                await SendStringContent("File not found.");
                 return;
+            }
             
             //Create result content
             var result = new ImageContentResult()
@@ -131,25 +118,34 @@ namespace Orion.Net.Client.Scripts
         /// <returns></returns>
         protected async Task SendFileContent(string pathFile)
         {
-            //Check if path is valid and file exists
-            if (!await CheckPathFile(pathFile))
-                return;
-
-            //Get the file's mime or a default one
-            new FileExtensionContentTypeProvider().TryGetContentType(pathFile, out string mime);
-            mime = mime ?? "application/octet-stream";
-
-            //Create result content
-            var result = new FileContentResult()
+            if (!CheckPathFile(pathFile))
             {
-                ResultIdentifier = Guid.NewGuid(),
-                FileAsByteArray = File.ReadAllBytes(pathFile),
-                FileName = pathFile.Substring(pathFile.LastIndexOf('\\') + 1 ,pathFile.Length - pathFile.LastIndexOf('\\') - 1),
-                Mime = mime
-            };
+                await SendStringContent("File not found.");
+                return;
+            }
 
-            // Send result content to server :
-            await connector.SendResultCommand(result);
+            try
+            {
+                //Get the file's mime or a default one
+                new FileExtensionContentTypeProvider().TryGetContentType(pathFile, out string mime);
+                mime = mime ?? "application/octet-stream";
+
+                //Create result content
+                var result = new FileContentResult()
+                {
+                    ResultIdentifier = Guid.NewGuid(),
+                    FileAsByteArray = File.ReadAllBytes(pathFile),
+                    FileName = pathFile.Substring(pathFile.LastIndexOf('\\') + 1, pathFile.Length - pathFile.LastIndexOf('\\') - 1),
+                    Mime = mime
+                };
+
+                // Send result content to server :
+                await connector.SendResultCommand(result);
+            }
+            catch(Exception ex)
+            {
+                await SendStringContent("An error occured : " + ex);
+            }
         }
 
         #endregion

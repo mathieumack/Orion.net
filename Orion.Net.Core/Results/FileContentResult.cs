@@ -10,12 +10,18 @@ namespace Orion.Net.Core.Results
         public override ClientScriptResultType ResultType { get; set; } = ClientScriptResultType.File;
 
         /// <summary>
-        /// console result content
+        /// File as byte array
         /// </summary>
         public byte[] FileAsByteArray { get; set; }
 
+        /// <summary>
+        /// File name with extension
+        /// </summary>
         public string FileName { get; set; }
 
+        /// <summary>
+        /// File's mime type
+        /// </summary>
         public string Mime { get; set; }
 
         internal override HttpContent GenerateDataContent()

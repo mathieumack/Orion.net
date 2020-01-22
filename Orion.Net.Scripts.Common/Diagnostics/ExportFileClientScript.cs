@@ -8,11 +8,13 @@ using Orion.Net.Core.Scripts;
 namespace Orion.Net.Scripts.Common.Diagnostics
 {
     /// <summary>
-    /// Take a screenshot on the client computer
+    /// Export file from the client's computer
     /// </summary>
     public class ExportFileClientScript : BaseClientScript
     {
-        private const string exportFileParam = "exportFile";
+        /// <summary>
+        /// Argument's Name of ExportFileClientScript
+        /// </summary>
         private const string argsParam = "args";
 
         public ExportFileClientScript(Connector connector)
@@ -21,7 +23,7 @@ namespace Orion.Net.Scripts.Common.Diagnostics
             identifier = Guid.NewGuid();
             AvailableParameters.Add(new ScriptParameter()
             {
-                Name = exportFileParam
+                Name = "exportFile"
             });
             AvailableParameters.Add(new ScriptParameter()
             {
@@ -29,11 +31,23 @@ namespace Orion.Net.Scripts.Common.Diagnostics
             });
         }
 
+        /// <summary>
+        /// Title of the script ExportFileClientScript
+        /// </summary>
         public override string Title => "Export File";
 
         private readonly Guid identifier;
+
+        /// <summary>
+        /// Identifier of the script ExportFileClientScript
+        /// </summary>
         public override Guid Identifier => identifier;
 
+        /// <summary>
+        /// Execute the script ExportFileClientScript on the client side
+        /// </summary>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
         public override async Task Execute(string parameters)
         {
             var paramItems = await LoadParameters(parameters);

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace Orion.Net.Core.Scripts
 {
@@ -11,7 +10,7 @@ namespace Orion.Net.Core.Scripts
         public Guid Identifier { get; set; }
 
         /// <summary>
-        /// Title
+        /// Title of the client script
         /// </summary>
         public string Title { get; set; }
     }

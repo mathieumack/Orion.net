@@ -10,7 +10,7 @@ namespace Orion.Net.Core.Results
         public override ClientScriptResultType ResultType { get; set; } = ClientScriptResultType.Image;
 
         /// <summary>
-        /// console result content
+        /// Image as byte array
         /// </summary>
         public byte[] ImageAsByteArray { get; set; }
 
