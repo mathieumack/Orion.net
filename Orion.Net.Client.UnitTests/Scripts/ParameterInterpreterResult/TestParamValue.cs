@@ -31,7 +31,7 @@ namespace Orion.Net.Core.UnitTests
 
             testParam.ParameterValue = "toto";
 
-            Assert.AreEqual("toto", testParam.ParameterName);
+            Assert.AreEqual("toto", testParam.ParameterValue);
         }
     }
 }
