@@ -45,6 +45,11 @@ namespace Orion.Net.Client.Scripts
             this.connector = connector;
         }
 
+        /// <summary>
+        /// Execute parameters
+        /// </summary>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
         internal async Task Start(string parameters)
         {
             // Manage start script :
