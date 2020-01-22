@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 
 namespace Orion.Net.Client.Scripts
 {
-    public static class CareCenterScriptParameterInterpreter
+    public static class ScriptParameterInterpreter
     {
         private const string RegexPattern = @"(-([a-zA-Z]+) ""([a-zA-Z0-9\\:\.\-_ \/]+)"")+";
 
@@ -12,9 +12,9 @@ namespace Orion.Net.Client.Scripts
         /// </summary>
         /// <param name="parameters"></param>
         /// <returns></returns>
-        public static List<CareCenterScriptParameterInterpreterResult> ExtractParams(this string parameters)
+        public static List<ScriptParameterInterpreterResult> ExtractParams(this string parameters)
         {
-            var result = new List<CareCenterScriptParameterInterpreterResult>();
+            var result = new List<ScriptParameterInterpreterResult>();
 
             if (string.IsNullOrWhiteSpace(parameters) || !Regex.IsMatch(parameters, RegexPattern))
                 return result;
@@ -23,7 +23,7 @@ namespace Orion.Net.Client.Scripts
             {
                 if(match.Groups != null && match.Groups.Count == 4)
                 {
-                    result.Add(new CareCenterScriptParameterInterpreterResult()
+                    result.Add(new ScriptParameterInterpreterResult()
                     {
                         ParameterName = match.Groups[2].Value,
                         ParameterValue = match.Groups[3].Value

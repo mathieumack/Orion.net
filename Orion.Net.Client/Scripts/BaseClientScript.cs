@@ -28,14 +28,14 @@ namespace Orion.Net.Client.Scripts
         /// </summary>
         /// <param name="parameters"></param>
         /// <returns></returns>
-        protected async Task<List<CareCenterScriptParameterInterpreterResult>> LoadParameters(string parameters)
+        protected async Task <List<ScriptParameterInterpreterResult>> LoadParameters(string parameters)
         {
             var paramItems = parameters.ExtractParams();
 
             if (!paramItems.Any(e => AvailableParameters.Any(a => a.Name == e.ParameterName)))
             {
                 await SendStringContent("parameter invalid.");
-                return new List<CareCenterScriptParameterInterpreterResult>();
+                return new List<ScriptParameterInterpreterResult>();
             }
 
             return paramItems;
@@ -46,6 +46,11 @@ namespace Orion.Net.Client.Scripts
             this.connector = connector;
         }
 
+        /// <summary>
+        /// Execute parameters
+        /// </summary>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
         internal async Task Start(string parameters)
         {
             // Manage start script :
@@ -86,7 +91,7 @@ namespace Orion.Net.Client.Scripts
         }
 
         /// <summary>
-        /// Check path 
+        /// Check path and file
         /// Post ImageContentResult, with file from path save as byte array, on the paltform
         /// </summary>
         /// <param name="pathImage"></param>
@@ -98,45 +103,14 @@ namespace Orion.Net.Client.Scripts
                 await SendStringContent("File not found.");
                 return;
             }
-            
-            //Create result content
-            var result = new ImageContentResult()
-            {
-                ResultIdentifier = Guid.NewGuid(),
-                ImageAsByteArray = File.ReadAllBytes(pathImage)
-            };
-
-            // Send result content to server :
-            await connector.SendResultCommand(result);
-        }
-
-        /// <summary>
-        /// get the mime of the file, read the file's bytes, extract the file's name from the path
-        /// Send FileContentResult
-        /// </summary>
-        /// <param name="pathFile"></param>
-        /// <returns></returns>
-        protected async Task SendFileContent(string pathFile)
-        {
-            if (!CheckPathFile(pathFile))
-            {
-                await SendStringContent("File not found.");
-                return;
-            }
 
             try
             {
-                //Get the file's mime or a default one
-                new FileExtensionContentTypeProvider().TryGetContentType(pathFile, out string mime);
-                mime = mime ?? "application/octet-stream";
-
                 //Create result content
-                var result = new FileContentResult()
+                var result = new ImageContentResult()
                 {
                     ResultIdentifier = Guid.NewGuid(),
-                    FileAsByteArray = File.ReadAllBytes(pathFile),
-                    FileName = pathFile.Substring(pathFile.LastIndexOf('\\') + 1, pathFile.Length - pathFile.LastIndexOf('\\') - 1),
-                    Mime = mime
+                    ImageAsByteArray = File.ReadAllBytes(pathImage)
                 };
 
                 // Send result content to server :
@@ -144,7 +118,7 @@ namespace Orion.Net.Client.Scripts
             }
             catch(Exception ex)
             {
-                await SendStringContent("An error occured : " + ex);
+                await this.SendStringContent("An error has occured : " + ex);
             }
         }
 

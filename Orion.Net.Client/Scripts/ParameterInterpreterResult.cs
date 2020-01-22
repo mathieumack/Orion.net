@@ -1,6 +1,6 @@
 ﻿namespace Orion.Net.Client.Scripts
 {
-    public class CareCenterScriptParameterInterpreterResult
+    public class ScriptParameterInterpreterResult
     {
         public string ParameterName { get; set; }
 

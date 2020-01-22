@@ -2,10 +2,7 @@
 {
     public class ExecuteScriptCommand
     {
-        /// <summary>
-        /// ConnectionId of client
-        /// </summary>
-        public string ConnectionId { get; set; }
+        public string AppId { get; set; }
 
         /// <summary>
         /// Title of command from ExecuteScript
