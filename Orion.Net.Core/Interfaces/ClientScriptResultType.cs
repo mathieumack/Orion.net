@@ -11,8 +11,12 @@
         /// </summary>
         ConsoleLog = 2,
         /// <summary>
-        /// byte[]
+        /// Image as byte[]
         /// </summary>
-        Image = 3
+        Image = 3,
+        /// <summary>
+        /// File to download as byte[]
+        /// </summary>
+        File = 4
     }
 }

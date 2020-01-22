@@ -1,7 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Orion.Net.Client.Scripts;
 
-namespace Orion.Net.Core.UnitTests
+namespace Orion.Net.Client.UnitTests
 {
     /// <summary>
     /// Test for <see cref="CareCenterScriptParameterInterpreterResult">
@@ -23,7 +23,7 @@ namespace Orion.Net.Core.UnitTests
         /// </list>
         /// </summary>
         [TestMethod]
-        public void TestMethod1()
+        public void ParamInterpreterResultTestParamValue()
         {
             var testParam = new ScriptParameterInterpreterResult();
 

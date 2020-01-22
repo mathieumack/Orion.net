@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Core" Version="1.1.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.4.0" />
     <PackageReference Include="Moq" Version="4.13.1" />
     <PackageReference Include="MSTest.TestAdapter" Version="2.0.0" />
@@ -19,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Orion.Net.Client\Orion.Net.Client.csproj" />
+    <ProjectReference Include="..\Orion.Net.Scripts.Common\Orion.Net.Scripts.Common.csproj" />
   </ItemGroup>
 
   <ItemGroup>

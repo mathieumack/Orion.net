@@ -16,8 +16,11 @@ namespace Orion.Net.Client.Configuration
     {
         private HubConnection hubConnection;
         private string platformUri;
-        private readonly List<BaseClientScript> commands = new List<BaseClientScript>();
         private readonly string appId;
+        /// <summary>
+        /// Change private readonly to internal for unit test
+        /// </summary>
+        internal List<BaseClientScript> commands = new List<BaseClientScript>();
 
         public Connector() { 
             appId = Guid.NewGuid().ToString(); 

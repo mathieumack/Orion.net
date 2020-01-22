@@ -1,7 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Orion.Net.Client.Scripts;
 
-namespace Orion.Net.Core.UnitTests
+namespace Orion.Net.Client.UnitTests
 {
     [TestClass]
     public class ExtractParamTestWithInvalidArgs
