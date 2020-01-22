@@ -17,6 +17,11 @@ namespace Orion.Net.Client.Configuration
         private HubConnection hubConnection;
         private string platformUri;
         private readonly List<BaseClientScript> commands = new List<BaseClientScript>();
+        private readonly string appId;
+
+        public Connector() { 
+            appId = Guid.NewGuid().ToString(); 
+        }
 
         public async ValueTask DisposeAsync()
         {
@@ -39,12 +44,13 @@ namespace Orion.Net.Client.Configuration
 
         /// <summary>
         /// Connect to the server.
-        /// Do not forget to call AddCommandService<>() to register ICareCenterClientScript class
+        /// Do not forget to call AddCommandService<>() to register IClientScript class 
         /// </summary>
         /// <param name="platformUri"></param>
         /// <param name="environmentLabel"></param>
+        /// <param name="supportID"></param>
         /// <returns></returns>
-        public async Task Connect(string platformUri, string environmentLabel)
+        public async Task Connect(string platformUri, string environmentLabel, string supportID)
         {
             this.platformUri = platformUri.EndsWith("/") ? platformUri : platformUri + "/";
 
@@ -55,7 +61,7 @@ namespace Orion.Net.Client.Configuration
             hubConnection.On("AskCommands", async () =>
             {
                 // Ask client for available commands :
-                await hubConnection.InvokeAsync("ClientAnswerCommands", commands
+                await hubConnection.InvokeAsync("ClientAnswerCommands", appId, commands
                     .Select(e => new AvailableClientScript()
                     {
                         Title = e.Title,
@@ -71,7 +77,8 @@ namespace Orion.Net.Client.Configuration
             });
 
             await hubConnection.StartAsync();
-            await hubConnection.InvokeAsync("Hello", environmentLabel);
+            await hubConnection.InvokeAsync("Hello", appId, supportID, environmentLabel);
+
         }
 
         /// <summary>
@@ -115,7 +122,7 @@ namespace Orion.Net.Client.Configuration
             }
 
             // Notify server client that a result has been sent :
-            await hubConnection.InvokeAsync("ResultCommandSent", result.ResultIdentifier, result.ResultType);
+            await hubConnection.InvokeAsync("ResultCommandSent", appId, result.ResultIdentifier, result.ResultType);
         }
     }
 }

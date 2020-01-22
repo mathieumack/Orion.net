@@ -11,68 +11,86 @@ namespace Orion.Net.Hubs
         #region New connections
 
         /// <summary>
-        /// Called by clients in order to notify server that the server is connected ;)
+        /// Add client connection to appId group and supportId group
+        /// Called by clients to send information to support
         /// </summary>
+        /// <param name="appId"></param>
+        /// <param name="supportId"></param>
         /// <param name="clientLabel"></param>
         /// <returns></returns>
-        public async Task Hello(string clientLabel)
+        public async Task Hello(string appId, string supportId, string clientLabel)
         {
-            await Clients.All.SendAsync("NewClient", new
+            //Add Connection app to AppGroup named appId in case of reconnection
+            await Groups.AddToGroupAsync(Context.ConnectionId, appId);
+
+            //Add Connection app to SupportGroup named support Id
+            await Groups.AddToGroupAsync(Context.ConnectionId, supportId);
+
+            //Send to group supportGroup so clients in it too, specify only support ?
+            await Clients.OthersInGroup(supportId).SendAsync("NewClient", new
             {
                 UserName = clientLabel,
-                Context.ConnectionId
+                AppId = appId
             });
         }
 
-        #endregion
-
-        public async Task SendMessage()
+        /// <summary>
+        /// Create SupportId groupe with support connectionId
+        /// </summary>
+        /// <param name="supportId"></param>
+        /// <returns></returns>
+        public async Task StartSupportGroupe(string supportId)
         {
-            await Hello(Guid.NewGuid().ToString());
+            await Groups.AddToGroupAsync(Context.ConnectionId, supportId);
         }
+
+        #endregion
 
         #region Discuss with client for available commands
 
         /// <summary>
         /// Send a command to a dedicated client
         /// </summary>
-        /// <param name="connectionId"></param>
-        /// <param name="commandTitle"></param>
-        /// <param name="parameters"></param>
+        /// <param name="scriptCommand"></param>
         /// <returns></returns>
         public async Task SendCommandToClient(ExecuteScriptCommand scriptCommand)
         {
-            await Clients.Client(scriptCommand.ConnectionId).SendAsync("ExecuteCommand", scriptCommand.CommandTitle, scriptCommand.CommandParam);
+            await Clients.Group(scriptCommand.AppId).SendAsync("ExecuteCommand", scriptCommand.CommandTitle, scriptCommand.CommandParam);
         }
 
         /// <summary>
+        /// Add support connection id to appId group
         /// Send an ask command to a dedicated client
         /// </summary>
-        /// <param name=""></param>
+        /// <param name="appId"></param>
         /// <returns></returns>
-        public async Task AskCommands(string connectionId)
+        public async Task AskCommands(string appId)
         {
-            await Clients.Client(connectionId).SendAsync("AskCommands");
+            await Groups.AddToGroupAsync(Context.ConnectionId, appId);
+            await Clients.OthersInGroup(appId).SendAsync("AskCommands");
         }
 
         /// <summary>
-        /// Called by clients in order to notify server that the server is connected ;)
+        /// Client send Command to support
         /// </summary>
-        /// <param name="clientLabel"></param>
+        /// <param name="appId"></param>
+        /// <param name="availableScripts"></param>
         /// <returns></returns>
-        public async Task ClientAnswerCommands(List<AvailableClientScript> availableScripts)
+        public async Task ClientAnswerCommands(string appId, List<AvailableClientScript> availableScripts)
         {
-            await Clients.All.SendAsync("AnswerCommands", Context.ConnectionId, availableScripts);
+            await Clients.OthersInGroup(appId).SendAsync("AnswerCommands", appId, availableScripts);
         }
 
         /// <summary>
-        /// Called by clients in order to notify server of the result
+        /// Called by client in order to notify support of the result
         /// </summary>
+        /// <param name="appId"></param>
         /// <param name="resultIdentifier"></param>
+        /// <param name="resultType"></param>
         /// <returns></returns>
-        public async Task ResultCommandSent(Guid resultIdentifier, int resultType)
+        public async Task ResultCommandSent(string appId, Guid resultIdentifier, int resultType)
         {
-            await Clients.All.SendAsync("ResultSent", Context.ConnectionId, resultIdentifier, resultType);
+            await Clients.OthersInGroup(appId).SendAsync("ResultSent", appId, resultIdentifier, resultType);
         }
 
         #endregion
