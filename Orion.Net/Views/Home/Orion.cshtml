@@ -151,9 +151,12 @@
         //Send supportId to create group supportId
         connection.invoke("StartSupportGroupe", jsClientId);
     }).catch(function (err) {
+        return console.error(err.toString());
+    });
+    connection.onclose(function (){
         //Try to reconnect
         setTimeout(() => start(), 5000);
-        return console.error(err.toString());
+        connection.invoke("StartSupportGroupe", jsClientId);
     });
 
     function loadClient(appID) {
