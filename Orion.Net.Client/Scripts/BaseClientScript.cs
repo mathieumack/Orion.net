@@ -34,7 +34,7 @@ namespace Orion.Net.Client.Scripts
 
             if (!paramItems.Any(e => AvailableParameters.Any(a => a.Name == e.ParameterName)))
             {
-                await SendStringContent("parameter invalid.");
+                await SendStringContent("Parameter invalid.");
                 return new List<ScriptParameterInterpreterResult>();
             }
 

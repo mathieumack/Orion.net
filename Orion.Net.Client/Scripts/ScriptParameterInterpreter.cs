@@ -32,7 +32,7 @@ namespace Orion.Net.Client.Scripts
                 else
                 {
                     // Error to be managed :
-
+                    
                 }
             }
 

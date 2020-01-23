@@ -47,7 +47,7 @@ namespace Orion.Net.Scripts.Common.Diagnostics
 
             if (parameter == null)
             {
-                await SendStringContent("Error : Parameter" + filePathParam + "is missing.");
+                await SendStringContent("Error : Parameter " + filePathParam + " is missing.");
                 return;
             }
 
