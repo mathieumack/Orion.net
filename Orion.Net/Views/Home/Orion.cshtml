@@ -34,14 +34,15 @@
                 <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
                         <div class="h5 mb-0 text-gray-800">#:Content#</div>
-                        <div class="col col-md-8">#:CommandRetryTitle# #:CommandRetryParam#</div>
-                        <div class="col col-md-2">
-                            <a class="d-none d-sm-inline-block btn btn-sm btn-dark shadow-sm" onclick="sendRetryCommand('#:CommandRetryAppId#', '#:CommandRetryTitle#','#:CommandRetryParam#')">
-                                <span class="icon text-white-50">
-                                    <i class="fas fa-check"></i>
-                                </span>
-                                <span class="text">Retry</span>
-                            </a>
+                        <hr />
+                        <div class="row">
+                            <div class="col col-md-2 h5 mb-0 text-gray-800">#:CommandRetryTitle#</div>
+                            <div class="col col-md-8 h5 mb-0 text-gray-800">#:CommandRetryParam#</div>
+                            <div class="col col-md-2 align-middle">
+                                <a class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm text-white" onclick="sendRetryCommand('#:CommandRetryAppId#', '#:CommandRetryTitle#','#:CommandRetryParam#')">
+                                    Retry Command
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -54,9 +55,17 @@
     <div class="col-xl-6 mt-4">
         <div class="card border-left-#:Color# shadow h-100">
             <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                        <img class="h5 mb-0 text-gray-800 img-fluid" src="data:image/jpg;base64,#:Content#" alt="Result Image">
+                <div class="row">
+                    <img class="img-fluid" src="data:image/jpg;base64,#:Content#" alt="Result Image">
+                </div>
+                <hr/>
+                <div class="row">
+                    <div class="col col-md-2 h5 mb-0 text-gray-800">#:CommandRetryTitle#</div>
+                    <div class="col col-md-8 h5 mb-0 text-gray-800">#:CommandRetryParam#</div>
+                    <div class="col col-md-2 align-middle">
+                        <a class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm text-white" onclick="sendRetryCommand('#:CommandRetryAppId#', '#:CommandRetryTitle#','#:CommandRetryParam#')">
+                            Retry Command
+                        </a>
                     </div>
                 </div>
             </div>
@@ -82,11 +91,11 @@
                         <input type="text" identifier="detailElement_commands_params_#:appId#" class="form-control" placeholder="set parameters here">
                     </div>
                     <div class="col col-md-2">
-                        <a class="d-none d-sm-inline-block btn btn-sm btn-dark shadow-sm" onclick="sendCommand('#:appId#')">
+                        <a class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm text-white" onclick="sendCommand('#:appId#')">
                             <span class="icon text-white-50">
                                 <i class="fas fa-check"></i>
                             </span>
-                            <span class="text">send</span>
+                            <span class="text">Send</span>
                         </a>
                     </div>
                 </div>
@@ -115,27 +124,31 @@
     </div>
 </script>
 <script type="text/javascript">
+    function saveCommand(appId, title, param) {
+        commandRetryAppId = appId;
+        commandRetryTitle = title;
+        //Double the \ or js make ignore it
+        commandRetryParam = param.replace(/\\/g, '\\\\');
+    }
     function sendCommand(appId) {
         var dropdownlist = $("input[identifier = 'detailElement_commands_" + appId + "']").data("kendoDropDownList");
-        commandRetryAppId = appId;
-        commandRetryTitle = dropdownlist.text();
-        commandRetryParam = $("input[identifier='detailElement_commands_params_" + appId + "']").val();
-        console.log(commandRetryAppId +" "+ commandRetryTitle + " "+ commandRetryParam);
+        saveCommand(appId, dropdownlist.text(), $("input[identifier='detailElement_commands_params_" + appId + "']").val());
         connection.invoke("SendCommandToClient",
             {
-                AppId: appId,
-                CommandTitle: dropdownlist.text(),
-                CommandParam: $("input[identifier='detailElement_commands_params_" + appId + "']").val()
+                AppId: commandRetryAppId,
+                CommandTitle: commandRetryTitle,
+                CommandParam: commandRetryParam
             }).catch(function (err) {
                 return console.error(err.toString());
             });
     }
     function sendRetryCommand(appId, title, param) {
+        saveCommand(appId, title, param);
         connection.invoke("SendCommandToClient",
             {
-                AppId: appId,
-                CommandTitle: title,
-                CommandParam: param
+                AppId: commandRetryAppId,
+                CommandTitle: commandRetryTitle,
+                CommandParam: commandRetryParam
             }).catch(function (err) {
                 return console.error(err.toString());
             });
@@ -148,9 +161,7 @@
     }
     var jsClientId = (GuidFour() + "-" + GuidFour() + "-" + GuidFour() + "-" + GuidFour()).toLowerCase();;
 
-    //var commandRetry = { 'appId': "test", 'commandTitle': "test", 'commandParam': "test" };
     var commandRetryAppId, commandRetryTitle, commandRetryParam;
-    console.log(commandRetryAppId +" "+ commandRetryTitle + " "+ commandRetryParam);
 
     var connectedUserCardTemplate = kendo.template($("#connectedUserCardTemplate").html());
     var connectedUserDetailTemplate = kendo.template($("#connectedUserDetailTemplate").html());
@@ -172,7 +183,7 @@
         loadAvailableCommands(appId, commands);
     });
     connection.on("ResultSent", function (appId, resultId, resultType) {
-        displayResult(appId, resultId, resultType);
+        displayResult(resultId, resultType);
     });
     connection.start().then(function () {
         //Send supportId to create group supportId
@@ -219,7 +230,7 @@
             });
         }
     }
-    function displayResult(appId, resultId, type) {
+    function displayResult(resultId, type) {
         var uri = "/api/v1/";
         var html;
 
@@ -234,7 +245,7 @@
                         CommandRetryTitle: commandRetryTitle,
                         CommandRetryParam: commandRetryParam
                     });
-                    $("#addResults_" + appId).prepend(html);
+                    $("#addResults_" + commandRetryAppId).prepend(html);
                 });
                 break;
             case 3:
@@ -242,14 +253,16 @@
                 $.get(uri, function (data) {
                     html = displayResultsImageTemplate({
                         Content: (data.imageAsByteArray),
-                        Color: "danger"
+                        Color: "danger",
+                        CommandRetryAppId: commandRetryAppId,
+                        CommandRetryTitle: commandRetryTitle,
+                        CommandRetryParam: commandRetryParam
                     });
-                    $("#addResults_" + appId).prepend(html);
+                    $("#addResults_" + commandRetryAppId).prepend(html);
                 });
                 break;
             default: break;
         }
-        console.log('ResultSend uri : ' + uri);
     }
 </script>
 @section scripts {
