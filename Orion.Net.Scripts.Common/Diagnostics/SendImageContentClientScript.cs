@@ -41,10 +41,9 @@ namespace Orion.Net.Scripts.Common.Diagnostics
                 return;
             }
 
-            var parameter = paramItems.FirstOrDefault(e => e.ParameterName == filePathParam);
-
             try
             {
+                var parameter = paramItems.FirstOrDefault(e => e.ParameterName == filePathParam);
                 await SendImageContent(parameter.ParameterValue);
             }
             catch (Exception ex)

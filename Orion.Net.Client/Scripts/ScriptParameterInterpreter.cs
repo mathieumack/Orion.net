@@ -21,7 +21,7 @@ namespace Orion.Net.Client.Scripts
 
             foreach(Match match in Regex.Matches(parameters, RegexPattern))
             {
-                if(match.Groups != null && match.Groups.Count == 4)
+                if(match.Groups != null && match.Groups.Count == 4 && !string.IsNullOrWhiteSpace(match.Groups[3].Value))
                 {
                     result.Add(new ScriptParameterInterpreterResult()
                     {

@@ -70,7 +70,7 @@ namespace Orion.Net.Client.Scripts
         /// <returns></returns>
         internal bool CheckPathFile(string path)
         {
-            return (string.IsNullOrWhiteSpace(path) || !File.Exists(path));
+            return string.IsNullOrWhiteSpace(path) || !File.Exists(path);
         }
 
         /// <summary>
