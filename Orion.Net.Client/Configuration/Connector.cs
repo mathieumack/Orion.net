@@ -106,11 +106,11 @@ namespace Orion.Net.Client.Configuration
             {
                 case ClientScriptResultType.ConsoleLog:
                     dataUri = platformUri + "api/v1/StringResultData";
-                    content = new StringContent(JsonConvert.SerializeObject(result), Encoding.UTF8, "application/json");
+                    content = result.GenerateDataContent();
                     break;
                 case ClientScriptResultType.Image:
                     dataUri = platformUri + "api/v1/ImageResultData";
-                    content = new StringContent(JsonConvert.SerializeObject(result), Encoding.UTF8, "application/json");
+                    content = result.GenerateDataContent();
                     break;
                 default:
                     return;
