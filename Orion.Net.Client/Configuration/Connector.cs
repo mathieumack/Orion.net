@@ -100,17 +100,15 @@ namespace Orion.Net.Client.Configuration
         {
             // Send result object to the correct uri :
             var dataUri = string.Empty;
-            HttpContent content = null;
+            HttpContent content = result.GenerateDataContent();
 
             switch (result.ResultType)
             {
                 case ClientScriptResultType.ConsoleLog:
                     dataUri = platformUri + "api/v1/StringResultData";
-                    content = result.GenerateDataContent();
                     break;
                 case ClientScriptResultType.Image:
                     dataUri = platformUri + "api/v1/ImageResultData";
-                    content = result.GenerateDataContent();
                     break;
                 default:
                     return;
