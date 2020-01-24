@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.AspNetCore.SignalR.Client;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Orion.Net.Client.Configuration;
 
 namespace Orion.Net.Client.UnitTests.ConnectorClient
@@ -7,11 +8,16 @@ namespace Orion.Net.Client.UnitTests.ConnectorClient
     public class TestConnect
     {
         [TestMethod]
-        public void TestConnectClient()
+        public async void TestConnectClient()
         {
             Connector testConnector = new Connector();
-            HubOrion testHub = new HubOrion();
+            TestHub testHub = new TestHub();
+            await testConnector.Connect("https://localhost:44359/", "test", "test");
 
+            testConnector.hubConnection.On<bool>("TestCompleted", (e) =>
+            {
+                Assert.IsTrue(e);
+            });
         }
     }
 }

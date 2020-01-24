@@ -14,7 +14,10 @@ namespace Orion.Net.Client.Configuration
 {
     public class Connector : IAsyncDisposable
     {
-        private HubConnection hubConnection;
+        /// <summary>
+        /// Change private to internal for unit test
+        /// </summary>
+        internal HubConnection hubConnection;
         private string platformUri;
         private readonly string appId;
         /// <summary>
