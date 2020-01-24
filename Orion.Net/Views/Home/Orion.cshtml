@@ -127,8 +127,7 @@
     function saveCommand(appId, title, param) {
         commandRetryAppId = appId;
         commandRetryTitle = title;
-        //Double the \ or js ignore it
-        commandRetryParam = param.replace(/\\/g, '\\\\');
+        commandRetryParam = param.replace(/\\/g, '\\\\');  //Double the \ or js ignore it
     }
     function sendCommand(appId) {
         var dropdownlist = $("input[identifier = 'detailElement_commands_" + appId + "']").data("kendoDropDownList");
@@ -214,21 +213,6 @@
             dataSource: commands,
             index: 0
         });
-    }
-    function loadClient(appID) {
-        $(".currentConnectionDetail").each(function () {
-            $(this).hide();
-        });
-        $("div[identifier='detailElement_" + appID + "']").show();
-        if ($("div[identifier='detailElement_" + appID + "']").length == 0) {
-            var html = connectedUserDetailTemplate({
-                appId: appID
-            });
-            $("#blocCurrentConnection").append(html);
-            connection.invoke("AskCommands", appID).catch(function (err) {
-                return console.error(err.toString());
-            });
-        }
     }
     function displayResult(resultId, type) {
         var uri = "/api/v1/";
