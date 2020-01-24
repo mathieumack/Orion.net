@@ -127,7 +127,7 @@
     function saveCommand(appId, title, param) {
         commandRetryAppId = appId;
         commandRetryTitle = title;
-        //Double the \ or js make ignore it
+        //Double the \ or js ignore it
         commandRetryParam = param.replace(/\\/g, '\\\\');
     }
     function sendCommand(appId) {
@@ -182,7 +182,7 @@
     connection.on("AnswerCommands", function (appId, commands) {
         loadAvailableCommands(appId, commands);
     });
-    connection.on("ResultSent", function (appId, resultId, resultType) {
+    connection.on("ResultSent", function (resultId, resultType) {
         displayResult(resultId, resultType);
     });
     connection.start().then(function () {

@@ -90,7 +90,7 @@ namespace Orion.Net.Hubs
         /// <returns></returns>
         public async Task ResultCommandSent(string appId, Guid resultIdentifier, int resultType)
         {
-            await Clients.OthersInGroup(appId).SendAsync("ResultSent", appId, resultIdentifier, resultType);
+            await Clients.OthersInGroup(appId).SendAsync("ResultSent", resultIdentifier, resultType);
         }
 
         #endregion
