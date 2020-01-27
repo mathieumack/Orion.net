@@ -9,15 +9,19 @@ namespace Orion.Net.Client.UnitTests.ConnectorClient
     {
         /// <summary>
         /// Add a command service, as <see cref="ExecuteProcessClientScript"/>, to commands in <see cref="Connector"/>
+        /// <list type="bullet">
+        /// <item><term>First Assert Instantiation</term>
+        /// <description>Verify that the list is not null and the count is at 0</description></item>
+        /// <item><term>Second Assert Add a Command Service</term>
+        /// <description>Verify that the list of Commands has 1 command added to it</description></item>
+        /// </list>
         /// </summary>
         /// <remarks> Due to a error "System.IO.FileNotFoundException" 
-        /// Has to ass Microsoft.Bcl.AsyncInterfaces in PackageReference</remarks>
+        /// Has to add Microsoft.Bcl.AsyncInterfaces in PackageReference</remarks>
         [TestMethod]
         public void TestAddCommandValid()
         {
             Connector test = new Connector();
-
-            Assert.IsNotNull(test.commands);
 
             Assert.AreEqual(0, test.commands.Count);
 
