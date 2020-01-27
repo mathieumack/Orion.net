@@ -27,7 +27,7 @@ namespace Orion.Net.Client.Scripts
         /// </summary>
         /// <param name="parameters"></param>
         /// <returns></returns>
-        protected async Task <List<ScriptParameterInterpreterResult>> LoadParameters(string parameters)
+        protected async Task<List<ScriptParameterInterpreterResult>> LoadParameters(string parameters)
         {
             var paramItems = parameters.ExtractParams();
 

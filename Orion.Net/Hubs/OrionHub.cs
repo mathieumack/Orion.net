@@ -11,8 +11,8 @@ namespace Orion.Net.Hubs
         #region New connections
 
         /// <summary>
-        /// Add client connection to appId group and supportId group
-        /// Called by clients to send information to support
+        /// Add client connection to appId group and supportId group,
+        /// Called by clients to send informations to support
         /// </summary>
         /// <param name="appId"></param>
         /// <param name="supportId"></param>

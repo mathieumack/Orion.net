@@ -5,13 +5,22 @@ using Orion.Net.Core.Scripts;
 using System;
 using System.Threading.Tasks;
 
-namespace Orion.Net.Client.UnitTests.Scripts.ClientScript
+namespace Orion.Net.Client.UnitTests.Scripts.ClientScript.BaseScript
 {
     [TestClass]
     public class TestClassBaseClientScript : BaseClientScript
     {
+        private Guid identifier;
+
+        public bool TestExecuteResult;
+
+        public override string Title => "TestClass";
+
+        public override Guid Identifier => identifier;
+
         public TestClassBaseClientScript(Connector connector) : base(connector)
         {
+            TestExecuteResult = false;
             identifier = Guid.NewGuid();
             AvailableParameters.Add(new ScriptParameter()
             {
@@ -19,20 +28,19 @@ namespace Orion.Net.Client.UnitTests.Scripts.ClientScript
             });
             AvailableParameters.Add(new ScriptParameter()
             {
-                Name = "test"
+                Name = "args"
             });
         }
 
-        public override string Title => "TestClass";
-
-        private Guid identifier;
-
-        public override Guid Identifier => identifier;
-
+        /// <summary>
+        /// Return true if param correspond, else false
+        /// </summary>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
         public override async Task Execute(string parameters)
         {
             var paramItems = await LoadParameters(parameters);
-            return;
+            TestExecuteResult = (paramItems.Count !=0) ? true : false;
         }
     }
 }
