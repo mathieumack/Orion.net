@@ -7,6 +7,7 @@ namespace Orion.Net.Client.UnitTests.ConnectorClient
 {
     /// <summary>
     /// Not working, try other idea
+    /// TODO
     /// </summary>
     [TestClass]
     public class TestConnect

@@ -40,7 +40,20 @@ namespace Orion.Net.Client.UnitTests.Scripts.ClientScript.BaseScript
         public override async Task Execute(string parameters)
         {
             var paramItems = await LoadParameters(parameters);
-            TestExecuteResult = (paramItems.Count !=0) ? true : false;
+            TestExecuteResult = (paramItems.Count != 0) ? true : false;
+        }
+
+        public bool TestSendStringContent(string test)
+        {
+            try
+            {
+                SendStringContent(test);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
     }
 }

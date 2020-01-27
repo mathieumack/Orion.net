@@ -42,7 +42,9 @@ namespace Orion.Net.Client.UnitTests.ConnectorClient
                 }
             }
             catch(Exception ex)
-            { Assert.Fail(ex.ToString()); }
+            { 
+                Assert.Fail(ex.ToString()); 
+            }
         }
     }
 }
