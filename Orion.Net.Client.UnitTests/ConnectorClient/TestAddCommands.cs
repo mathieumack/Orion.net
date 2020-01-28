@@ -1,23 +1,21 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Orion.Net.Client.Configuration;
 using Orion.Net.Scripts.Common.Diagnostics;
+using Orion.Net.Client.Scripts;
 
 namespace Orion.Net.Client.UnitTests.ConnectorClient
 {
-    [TestClass]
+    /// <summary>
+    /// Unit Test for <see cref="Connector"/>
+    /// Check the method <see cref="Connector.AddCommandService{T}(T)"/> with the two types of <see cref="BaseCientScript"/>
+    /// <list type="number">
+    /// <item>Check that the list of <see cref="BaseClientScript"/> is empty at the instantiation</item>
+    /// <item>Check the list has two items after the execution of the method</item></list>
+    /// </summary>
+    /// <remarks> Due to a error "System.IO.FileNotFoundException" 
+    /// Has to add Microsoft.Bcl.AsyncInterfaces in PackageReference</remarks>    [TestClass]
     public class TestAddCommands
     {
-        /// <summary>
-        /// Add a command service, as <see cref="ExecuteProcessClientScript"/>, to commands in <see cref="Connector"/>
-        /// <list type="bullet">
-        /// <item><term>First Assert Instantiation</term>
-        /// <description>Verify that the list is not null and the count is at 0</description></item>
-        /// <item><term>Second Assert Add a Command Service</term>
-        /// <description>Verify that the list of Commands has 1 command added to it</description></item>
-        /// </list>
-        /// </summary>
-        /// <remarks> Due to a error "System.IO.FileNotFoundException" 
-        /// Has to add Microsoft.Bcl.AsyncInterfaces in PackageReference</remarks>
         [TestMethod]
         public void TestAddCommandValid()
         {
@@ -26,8 +24,9 @@ namespace Orion.Net.Client.UnitTests.ConnectorClient
             Assert.AreEqual(0, test.commands.Count);
 
             test.AddCommandService(new ExecuteProcessClientScript(test));
+            test.AddCommandService(new SendImageContentClientScript(test));
 
-            Assert.AreEqual(1, test.commands.Count);
+            Assert.AreEqual(2, test.commands.Count);
         }
     }
 }

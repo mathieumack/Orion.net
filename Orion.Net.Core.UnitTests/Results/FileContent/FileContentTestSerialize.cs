@@ -1,9 +1,12 @@
 ﻿//using Microsoft.VisualStudio.TestTools.UnitTesting;
 //using Orion.Net.Core.Results;
-//using System;
 
 //namespace Orion.Net.Core.UnitTests.Results.FileContent
 //{
+//    /// <summary>
+//    /// Unit Test for <see cref="FileContentResult"/>
+//    /// Try the method <see cref="FileContentResult.GenerateDataContent"/> sending back a string
+//    /// </summary>
 //    [TestClass]
 //    public class FileContentTestSerialize
 //    {
@@ -12,14 +15,7 @@
 //        {
 //            FileContentResult testContent = new FileContentResult();
 
-//            try
-//            {
-//                Assert.IsNotNull(testContent.GenerateDataContent());
-//            }
-//            catch (Exception ex)
-//            {
-//                Assert.Fail(ex.ToString());
-//            }
+//            Assert.IsNotNull(testContent.GenerateDataContent());
 //        }
 //    }
 //}

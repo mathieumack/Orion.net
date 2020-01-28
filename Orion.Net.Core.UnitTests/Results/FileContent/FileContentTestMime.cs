@@ -3,7 +3,13 @@
 
 //namespace Orion.Net.Core.UnitTests.Results.FileContent
 //{
-//    //Lot of similar string Assert, create a 
+//    /// <summary>
+//    /// Unit Test for <see cref = "FileContentResult" />
+//    /// < list type="number">
+//    /// <item>Verify<see cref="FileContentResult.Mime"/> is not instantiated</item>
+//    /// <item>Verify<see cref="FileContentResult.Mime"/> set and get</item>
+//    /// </list>
+//    /// </summary>    
 //    [TestClass]
 //    public class FileContentTestMime
 //    {

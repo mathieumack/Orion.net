@@ -3,6 +3,13 @@ using Orion.Net.Core.Results;
 
 namespace Orion.Net.Core.UnitTests.Results.ImageContent
 {
+    /// <summary>
+    /// Unit Test for <see cref="ImageContentResult"/>
+    /// <list type="number">
+    /// <item>Verify <see cref="ImageContentResult.ImageAsByteArray"/> is not instantiated</item>
+    /// <item>Verify <see cref="ImageContentResult.ImageAsByteArray"/> set and get</item>
+    /// </list>
+    /// </summary>
     [TestClass]
     public class ImageContentTestImageByte
     {

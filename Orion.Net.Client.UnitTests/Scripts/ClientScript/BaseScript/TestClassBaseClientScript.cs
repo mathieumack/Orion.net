@@ -7,17 +7,27 @@ using System.Threading.Tasks;
 
 namespace Orion.Net.Client.UnitTests.Scripts.ClientScript.BaseScript
 {
+    /// <summary>
+    /// TestClass herited from <see cref="BaseClientScript"/> to implement Unit Test
+    /// </summary>
     [TestClass]
     public class TestClassBaseClientScript : BaseClientScript
     {
         private Guid identifier;
 
+        /// <summary>
+        /// To verify <see cref="BaseClientScript.Execute(string)"/>
+        /// </summary>
         public bool TestExecuteResult;
 
         public override string Title => "TestClass";
 
         public override Guid Identifier => identifier;
 
+        /// <summary>
+        /// Instantiation the attributes
+        /// </summary>
+        /// <param name="connector"></param>
         public TestClassBaseClientScript(Connector connector) : base(connector)
         {
             TestExecuteResult = false;
@@ -43,6 +53,11 @@ namespace Orion.Net.Client.UnitTests.Scripts.ClientScript.BaseScript
             TestExecuteResult = (paramItems.Count != 0) ? true : false;
         }
 
+        /// <summary>
+        /// Test for protected method <see cref="BaseClientScript.SendStringContent(string)"/>
+        /// </summary>
+        /// <param name="test"></param>
+        /// <returns></returns>
         public bool TestSendStringContent(string test)
         {
             try
@@ -54,6 +69,35 @@ namespace Orion.Net.Client.UnitTests.Scripts.ClientScript.BaseScript
             {
                 return false;
             }
+        }
+
+        /// <summary>
+        /// Test for protected method <see cref="BaseClientScript.SendImageContent(string)"/>
+        /// </summary>
+        /// <param name="test"></param>
+        /// <returns></returns>
+        public bool TestSendImageContent(string test)
+        {
+            try
+            {
+                SendImageContent(test);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Test for protected method <see cref="BaseClientScript.SendFileContent(string)"/>
+        /// </summary>
+        /// <param name="test"></param>
+        /// <returns></returns>
+        public bool TestSendFileContent(string test)
+        {
+            //TODO
+            return false;
         }
     }
 }

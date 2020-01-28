@@ -3,6 +3,10 @@ using Orion.Net.Client.Scripts;
 
 namespace Orion.Net.Client.UnitTests
 {
+    /// <summary>
+    /// Unit Test for <see cref="ScriptParameterInterpreter.ExtractParams(string)"/>
+    /// Verify with two valid parameters
+    /// </summary>
     [TestClass]
     public class ExtracParamTestWithValidArgs
     {

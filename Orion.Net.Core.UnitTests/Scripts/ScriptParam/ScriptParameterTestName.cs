@@ -3,6 +3,13 @@ using Orion.Net.Core.Scripts;
 
 namespace Orion.Net.Core.UnitTests.Scripts.ScriptParam
 {
+    /// <summary>
+    /// Unit Test for <see cref="ScriptParameter"/>
+    /// <list type="number">
+    /// <item>Verify <see cref="ScriptParameter.Name"/> is not instantiated</item>
+    /// <item>Verify <see cref="ScriptParameter.Name"/> set and get</item>
+    /// </list>
+    /// </summary>
     [TestClass]
     public class ScriptParameterTestName
     {

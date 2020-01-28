@@ -8,7 +8,8 @@ using System.Threading.Tasks;
 namespace Orion.Net.Client.Configuration
 {
     /// <summary>
-    /// Not test in it but maybe sent bool or something
+    /// Class Test to simulate <see cref="OrionHub"/> for Unit Test of <see cref="Connector"/>
+    /// Suppression of the support side
     /// </summary>
     [TestClass]
     public class TestHub : Hub
@@ -28,17 +29,8 @@ namespace Orion.Net.Client.Configuration
         {
             clientConnection = Context.ConnectionId;
             appID = appId;
-            //TestHello(appId, supportId, clientLabel);
             await AskCommands();
         }
-
-        //[DataTestMethod]
-        //public void TestHello(string appId, string supportId, string clientLabel)
-        //{
-        //    Assert.IsNotNull(appId);
-
-        //    Assert.AreEqual(supportId, clientLabel);
-        //}
 
         /// <summary>
         /// Add support connection id to appId group
@@ -59,17 +51,8 @@ namespace Orion.Net.Client.Configuration
         /// <returns></returns>
         public async Task ClientAnswerCommands(string appId, List<AvailableClientScript> availableScripts)
         {
-            //TestClientAnswerCommands(appId, availableScripts);
             await SendCommandToClient();
         }
-
-        //[DataTestMethod]
-        //public void TestClientAnswerCommands(string appId, List<AvailableClientScript> availableScripts)
-        //{
-        //    Assert.AreEqual(appId, appID);
-
-        //    Assert.AreNotEqual(0, availableScripts.Count);
-        //}
 
         /// <summary>
         /// Send a command to a dedicated client
@@ -97,15 +80,6 @@ namespace Orion.Net.Client.Configuration
         {
             await Clients.Client(clientConnection).SendAsync("TestCompleted", true);
             return true;
-            //TestResultCommand(resultIdentifier, resultType);
         }
-
-        //[DataTestMethod]
-        //public void TestResultCommand(Guid resultIdentifier, int resultType)
-        //{
-        //    Assert.IsTrue(string.IsNullOrWhiteSpace(resultIdentifier.ToString()));
-
-        //    Assert.AreEqual(1, resultType);
-        //}
     }
 }

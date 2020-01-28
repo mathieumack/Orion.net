@@ -24,4 +24,8 @@
     <ProjectReference Include="..\Orion.Net.Scripts.Common\Orion.Net.Scripts.Common.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Scripts\ClientScript\SendImage\" />
+  </ItemGroup>
+
 </Project>

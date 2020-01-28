@@ -3,6 +3,13 @@
 
 //namespace Orion.Net.Core.UnitTests.Results.FileContent
 //{
+//    /// <summary>
+//    /// Unit Test for <see cref="FileContentResult"/>
+//    /// <list type="number">
+//    /// <item>Verify <see cref="FileContentResult.FileAsByteArray"/> is not instantiated</item>
+//    /// <item>Verify <see cref="FileContentResult.FileAsByteArray"/> set and get</item>
+//    /// </list>
+//    /// </summary>
 //    [TestClass]
 //    public class FileContentTestFileByte
 //    {

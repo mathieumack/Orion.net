@@ -3,6 +3,11 @@ using Orion.Net.Client.Scripts;
 
 namespace Orion.Net.Client.UnitTests
 {
+    /// <summary>
+    /// Unit Test for <see cref="ScriptParameterInterpreter.ExtractParams(string)"/>
+    /// Check with parameters value empty or white spaced
+    /// both should return a empty list of <see cref="ScriptParameterInterpreterResult"/>
+    /// </summary>
     [TestClass]
     public class ExtractParamTestWithNoArgs
     {

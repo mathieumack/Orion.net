@@ -4,24 +4,15 @@ using Orion.Net.Client.Scripts;
 namespace Orion.Net.Client.UnitTests
 {
     /// <summary>
-    /// Test for <see cref="CareCenterScriptParameterInterpreterResult">
+    /// Test for ParameterValue from <see cref="ScriptParameterInterpreterResult">
+    /// <list type="number">
+    /// <item>At the instantiation of <see cref="ScriptParameterInterpreterResult.ParameterValue"/>, expect null</item>
+    /// <item>Check <see cref="ScriptParameterInterpreterResult.ParameterValue"/> set and get</item>
+    /// </list>
     /// </summary>
     [TestClass]
     public class TestParamValue
     {
-        /// <summary>
-        /// Test for ParameterValue from <see cref="ScriptParameterInterpreterResult">
-        /// <list type="bullet">
-        /// <item>
-        /// <term>First Assert</term>
-        /// <description>At the instantiation, expect null</description>
-        /// </item>
-        /// <item>
-        /// <term>Second Assert</term>
-        /// <description>After attribution of value, expect value</description>
-        /// </item>
-        /// </list>
-        /// </summary>
         [TestMethod]
         public void ParamInterpreterResultTestParamValue()
         {

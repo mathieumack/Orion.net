@@ -10,7 +10,9 @@ using System.Threading.Tasks;
 namespace Orion.Net.Client.UnitTests.ConnectorClient
 {
     /// <summary>
-    /// Not the best way or the good way at all
+    /// Unit Test for <see cref="Connector"/>
+    /// Check the method <see cref="Connector.SendResultCommand{T}(T)"/> for all types of <see cref="ClientScriptResult"/>
+    /// TO DO : Not the best way or the good way at all
     /// Fail error : "System.Net.Http.HttpRequestException.
     /// Aucune connexion n’a pu être établie car l’ordinateur cible l’a expressément refusée."
     /// </summary>

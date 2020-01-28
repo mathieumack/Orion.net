@@ -4,6 +4,13 @@ using Orion.Net.Core.Scripts;
 
 namespace Orion.Net.Core.UnitTests.Scripts.ExecuteScriptCom
 {
+    /// <summary>
+    /// Unit Test for <see cref="ExecuteScriptCommand"/>
+    /// <list type="number">
+    /// <item>Verify <see cref="ExecuteScriptCommand.AppId"/> is not instantiated</item>
+    /// <item>Verify <see cref="ExecuteScriptCommand.AppId"/> set and get</item>
+    /// </list>
+    /// </summary>
     [TestClass]
     public class ExecuteScriptTestAppId
     {

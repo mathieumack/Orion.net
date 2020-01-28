@@ -4,6 +4,10 @@ using Orion.Net.Core.Results;
 
 namespace Orion.Net.Core.UnitTests.Results.StringContent
 {
+    /// <summary>
+    /// Unit Test for <see cref="StringContentResult"/>
+    /// Verify instantiation of <see cref="StringContentResult.ResultType"/> to <see cref="ClientScriptResultType.ConsoleLog"/>
+    /// </summary>
     [TestClass]
     public class StringContentTestResultType
     {

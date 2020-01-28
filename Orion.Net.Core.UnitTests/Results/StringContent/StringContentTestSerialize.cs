@@ -1,9 +1,12 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Orion.Net.Core.Results;
-using System;
 
 namespace Orion.Net.Core.UnitTests.Results.StringContent
 {
+    /// <summary>
+    /// Unit Test for <see cref="StringContentResult"/>
+    /// Try the method <see cref="StringContentResult.GenerateDataContent"/> sending back a string
+    /// </summary>
     [TestClass]
     public class StringContentTestSerialize
     {
@@ -11,15 +14,9 @@ namespace Orion.Net.Core.UnitTests.Results.StringContent
         public void Serialize()
         {
             StringContentResult testContent = new StringContentResult();
+            var serializeContent = testContent.GenerateDataContent();
 
-            try
-            {
-                Assert.IsNotNull(testContent.GenerateDataContent());
-            }
-            catch (Exception ex)
-            {
-                Assert.Fail(ex.ToString());
-            }
+            Assert.IsNotNull(serializeContent);
         }
     }
 }

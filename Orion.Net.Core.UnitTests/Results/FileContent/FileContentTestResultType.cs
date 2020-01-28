@@ -4,6 +4,10 @@
 
 //namespace Orion.Net.Core.UnitTests.Results.FileContent
 //{
+//    /// <summary>
+//    /// Unit Test for <see cref="FileContentResult"/>
+//    /// Verify instantiation of <see cref="FileContentResult.ResultType"/> to <see cref="ClientScriptResultType.File"/>
+//    /// </summary>
 //    [TestClass]
 //    public class FileContentTestResultType
 //    {

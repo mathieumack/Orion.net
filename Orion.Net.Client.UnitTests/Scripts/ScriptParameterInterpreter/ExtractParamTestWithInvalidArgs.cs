@@ -3,6 +3,11 @@ using Orion.Net.Client.Scripts;
 
 namespace Orion.Net.Client.UnitTests
 {
+    /// <summary>
+    /// Unit Test for <see cref="ScriptParameterInterpreter.ExtractParams(string)"/>
+    /// with invalid Arguments and invalid Parameter 
+    /// both returning an empty list of <see cref="ScriptParameterInterpreterResult"/>
+    /// </summary>
     [TestClass]
     public class ExtractParamTestWithInvalidArgs
     {

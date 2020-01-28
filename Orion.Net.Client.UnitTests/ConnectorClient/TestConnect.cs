@@ -6,8 +6,9 @@ using System;
 namespace Orion.Net.Client.UnitTests.ConnectorClient
 {
     /// <summary>
-    /// Not working, try other idea
-    /// TODO
+    /// Unit Test for <see cref="Connector"/>
+    /// Check the method <see cref="Connector.Connect(string, string, string)"/>
+    /// TO DO : not working at all
     /// </summary>
     [TestClass]
     public class TestConnect

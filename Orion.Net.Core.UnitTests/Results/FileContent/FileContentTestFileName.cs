@@ -3,7 +3,13 @@
 
 //namespace Orion.Net.Core.UnitTests.Results.FileContent
 //{
-//    //Put the string cut generating the fileName in a method for testing ?
+//    /// <summary>
+//    /// Unit Test for <see cref = "FileContentResult" />
+//    /// < list type="number">
+//    /// <item>Verify<see cref="FileContentResult.FileName"/> is not instantiated</item>
+//    /// <item>Verify<see cref="FileContentResult.FileName"/> set and get</item>
+//    /// </list>
+//    /// </summary> 
 //    [TestClass]
 //    public class FileContentTestFileName
 //    {
