@@ -22,8 +22,8 @@ namespace Orion.Net.Client.UnitTests.ConnectorClient
         [TestMethod]
         public async Task VerifySendResultTestCommand()
         {
-            Connector testConnector = new Connector();
             TestHub testHub = new TestHub();
+            Connector testConnector = new Connector();
             List<ClientScriptResult> testResults = new List<ClientScriptResult>
             {
                 new StringContentResult(),
@@ -33,7 +33,7 @@ namespace Orion.Net.Client.UnitTests.ConnectorClient
             try
             {
                 await testConnector.Connect("https://localhost:44359/", "test", "test");
-
+            
                 foreach (var result in testResults)
                 {
                     await testConnector.SendResultCommand(result);
