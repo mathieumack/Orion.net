@@ -5,24 +5,42 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Orion.Net.Core.Interfaces;
 using Orion.Net.Core.Results;
+using StackExchange.Redis;
 
 namespace Orion.Net.Controllers
 {
     [ApiController]
     public class BaseDataController<T> : Controller where T : ClientScriptResult, new()
     {
-        // Temporary cache management for tests only.
-        // TODO : replace with a  distributed cache management system
-        public static Dictionary<Guid, object> CacheManager = new Dictionary<Guid, object>();
+        //RedicAzureCache
+
+        internal Lazy<ConnectionMultiplexer> lazyConnection;
+        internal IDatabase cacheRedis;
+
+        public BaseDataController()
+        {
+            lazyConnection = new Lazy<ConnectionMultiplexer>(() =>
+            {
+                string cacheConnection = "<name>.redis.cache.windows.net,abortConnect=false,ssl=true,password=<key>";
+                return ConnectionMultiplexer.Connect(cacheConnection);
+            });
+
+            cacheRedis = lazyConnection.Value.GetDatabase();
+        }
+
+        ~BaseDataController()
+        {
+            lazyConnection.Value.Dispose();
+        }
 
         // GET api/<controller>/5
         [HttpGet("{id}")]
         public T Get(Guid id)
         {
-            if (CacheManager.ContainsKey(id))
+            if (cacheRedis.KeyExists(id.ToString()))
             {
-                var result = CacheManager[id];
-                CacheManager.Remove(id);
+                var result = cacheRedis.ExecuteAsync("GET",id.ToString());
+                cacheRedis.KeyDelete(id.ToString());
                 return result as T;
             }
 
@@ -33,9 +51,8 @@ namespace Orion.Net.Controllers
         [HttpPost]
         public void Post([FromBody]T model)
         {
-            // Save value in cache
-            if (!CacheManager.ContainsKey(model.ResultIdentifier))
-                CacheManager.Add(model.ResultIdentifier, model);
+            // Save value if key doesn't exist already
+            cacheRedis.ExecuteAsync("SETNX",model.ResultIdentifier.ToString(), model.ToString());
         }
     }
 }

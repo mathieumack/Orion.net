@@ -199,7 +199,9 @@
         switch (type) {
             case 2:
                 uri += "StringResultData/" + resultId;
+                console.log(uri);
                 $.get(uri, function (data) {
+                    console.log(data);
                     html = displayResultsStringTemplate({
                         Content: data.consoleContent,
                         Color: "primary"
