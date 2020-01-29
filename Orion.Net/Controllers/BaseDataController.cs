@@ -39,13 +39,10 @@ namespace Orion.Net.Controllers
         [HttpGet("{id}")]
         public string Get(Guid id)
         {
-            //cacheRedis = lazyConnection.Value.GetDatabase(asyncState: true);
-
             if (cacheRedis.KeyExists(id.ToString()))
             {
                 var result = cacheRedis.StringGet(id.ToString());
                 cacheRedis.KeyDelete(id.ToString());
-                //new StringContent(result, Encoding.UTF8, "application/json");
                 return result.ToString();
             }
 

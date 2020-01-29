@@ -16,7 +16,6 @@ namespace Orion.Net.Scripts.Common.Diagnostics
         private const string filePathParam = "filePath";
         private const string argsParam = "args";
 
-
         public ExecuteProcessClientScript(Connector connector)
             : base(connector)
         {

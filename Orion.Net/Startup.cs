@@ -31,6 +31,16 @@ namespace Orion.Net
             services.AddRazorPages();
 
             services.AddSignalR();
+            //services.AddStackExchangeRedisCache(options =>
+            //{
+            //    options.Configuration = myKeyVaultConfigService.GetByKey("redis-connectionstring").Result;
+            //    options.ConfigurationOptions = new ConfigurationOptions()
+            //    {
+            //        ConnectRetry = 3,
+            //        ReconnectRetryPolicy = new LinearRetry(1500)
+            //    };
+            //    options.InstanceName = "myawesome-api";
+            //});
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

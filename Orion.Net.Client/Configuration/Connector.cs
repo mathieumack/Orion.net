@@ -116,10 +116,9 @@ namespace Orion.Net.Client.Configuration
         {
             var content = JsonConvert.SerializeObject(result);
 
-            //cacheRedis = lazyConnection.Value.GetDatabase(asyncState: true);
             // Save value if key doesn't exist already
             if (!cacheRedis.KeyExists(result.ResultIdentifier.ToString()))
-                cacheRedis.StringSet(result.ResultIdentifier.ToString(), content);
+                cacheRedis.StringSet(result.ResultIdentifier.ToString(), content, TimeSpan.FromDays(1));
 
             // Notify server client that a result has been sent :
             await hubConnection.InvokeAsync("ResultCommandSent", appId, result.ResultIdentifier, result.ResultType);

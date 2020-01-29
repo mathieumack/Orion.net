@@ -153,6 +153,7 @@
     }).catch(function (err) {
         return console.error(err.toString());
     });
+
     function loadClient(appID) {
         $(".currentConnectionDetail").each(function () {
             $(this).hide();
@@ -177,21 +178,6 @@
             index: 0
         });
     }
-    function loadClient(appID) {
-        $(".currentConnectionDetail").each(function () {
-            $(this).hide();
-        });
-        $("div[identifier='detailElement_" + appID + "']").show();
-        if ($("div[identifier='detailElement_" + appID + "']").length == 0) {
-            var html = connectedUserDetailTemplate({
-                appId: appID
-            });
-            $("#blocCurrentConnection").append(html);
-            connection.invoke("AskCommands", appID).catch(function (err) {
-                return console.error(err.toString());
-            });
-        }
-    }
     function displayResult(appId, resultId, type) {
         var uri = "/api/v1/";
         var html;
@@ -199,7 +185,6 @@
         switch (type) {
             case 2:
                 uri += "StringResultData/" + resultId;
-                console.log(uri);
                 $.get(uri, function (data) {
                     deserialized = JSON.parse(data);
                     html = displayResultsStringTemplate({
@@ -207,7 +192,6 @@
                         Color: "primary"
                     });
                     $("#addResults_" + appId).prepend(html);
-                    console.log(temp);
                 });
                 break;
             case 3:
@@ -216,14 +200,13 @@
                     deserialized = JSON.parse(data);
                     html = displayResultsImageTemplate({
                         Content: (deserialized.ImageAsByteArray),
-                        Color: "danger"
+                        Color: "warning"
                     });
                     $("#addResults_" + appId).prepend(html);
                 });
                 break;
             default: break;
         }
-        console.log('ResultSend uri : ' + uri);
     }
 </script>
 @section scripts {
