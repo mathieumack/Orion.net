@@ -19,7 +19,7 @@ namespace Orion.Net.Client.Configuration
         internal Lazy<ConnectionMultiplexer> lazyConnection;
         internal IDatabase cacheRedis;
         private HubConnection hubConnection;
-        private string platformUri;
+        private string platFormUri;
         private readonly List<BaseClientScript> commands = new List<BaseClientScript>();
         private readonly string appId;
 
@@ -68,10 +68,10 @@ namespace Orion.Net.Client.Configuration
         /// <returns></returns>
         public async Task Connect(string platformUri, string environmentLabel, string supportID)
         {
-            this.platformUri = platformUri.EndsWith("/") ? platformUri : platformUri + "/";
+            this.platFormUri = platformUri.EndsWith("/") ? platformUri : platformUri + "/";
 
             hubConnection = new HubConnectionBuilder()
-                                        .WithUrl(platformUri + "orionhub")
+                                        .WithUrl(platFormUri + "orionhub")
                                         .Build();
 
             hubConnection.On("AskCommands", async () =>
