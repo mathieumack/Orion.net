@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -26,7 +27,7 @@ namespace Orion.Net.Client.Configuration
             appId = Guid.NewGuid().ToString();
             lazyConnection = new Lazy<ConnectionMultiplexer>(() =>
             {
-                string cacheConnection = "<name>.redis.cache.windows.net,abortConnect=false,ssl=true,password=<key>";
+                string cacheConnection = ConfigurationManager.AppSettings["RedisConnection"].ToString();
                 return ConnectionMultiplexer.Connect(cacheConnection);
             });
 
