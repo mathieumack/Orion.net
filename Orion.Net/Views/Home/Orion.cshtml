@@ -201,19 +201,21 @@
                 uri += "StringResultData/" + resultId;
                 console.log(uri);
                 $.get(uri, function (data) {
-                    console.log(data);
+                    deserialized = JSON.parse(data);
                     html = displayResultsStringTemplate({
-                        Content: data.consoleContent,
+                        Content: deserialized.ConsoleContent,
                         Color: "primary"
                     });
                     $("#addResults_" + appId).prepend(html);
+                    console.log(temp);
                 });
                 break;
             case 3:
                 uri += "ImageResultData/" + resultId;
                 $.get(uri, function (data) {
+                    deserialized = JSON.parse(data);
                     html = displayResultsImageTemplate({
-                        Content: (data.imageAsByteArray),
+                        Content: (deserialized.ImageAsByteArray),
                         Color: "danger"
                     });
                     $("#addResults_" + appId).prepend(html);

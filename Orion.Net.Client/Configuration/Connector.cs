@@ -9,18 +9,33 @@ using Newtonsoft.Json;
 using Orion.Net.Client.Scripts;
 using Orion.Net.Core.Interfaces;
 using Orion.Net.Core.Scripts;
+using StackExchange.Redis;
 
 namespace Orion.Net.Client.Configuration
 {
     public class Connector : IAsyncDisposable
     {
+        internal Lazy<ConnectionMultiplexer> lazyConnection;
+        internal IDatabase cacheRedis;
         private HubConnection hubConnection;
         private string platformUri;
         private readonly List<BaseClientScript> commands = new List<BaseClientScript>();
         private readonly string appId;
 
         public Connector() { 
-            appId = Guid.NewGuid().ToString(); 
+            appId = Guid.NewGuid().ToString();
+            lazyConnection = new Lazy<ConnectionMultiplexer>(() =>
+            {
+                string cacheConnection = "<name>.redis.cache.windows.net,abortConnect=false,ssl=true,password=<key>";
+                return ConnectionMultiplexer.Connect(cacheConnection);
+            });
+
+            cacheRedis = lazyConnection.Value.GetDatabase(asyncState: true);
+        }
+
+        ~Connector()
+        {
+            lazyConnection.Value.Dispose();
         }
 
         public async ValueTask DisposeAsync()
@@ -98,28 +113,12 @@ namespace Orion.Net.Client.Configuration
         /// <param name="result"></param>
         internal async Task SendResultCommand<T>(T result) where T : ClientScriptResult
         {
-            // Send result object to the correct uri :
-            var dataUri = string.Empty;
-            HttpContent content = null;
+            var content = JsonConvert.SerializeObject(result);
 
-            switch (result.ResultType)
-            {
-                case ClientScriptResultType.ConsoleLog:
-                    dataUri = platformUri + "api/v1/StringResultData";
-                    content = new StringContent(JsonConvert.SerializeObject(result), Encoding.UTF8, "application/json");
-                    break;
-                case ClientScriptResultType.Image:
-                    dataUri = platformUri + "api/v1/ImageResultData";
-                    content = new StringContent(JsonConvert.SerializeObject(result), Encoding.UTF8, "application/json");
-                    break;
-                default:
-                    return;
-            }
-
-            using (var client = new HttpClient())
-            {
-                await client.PostAsync(dataUri, content);
-            }
+            //cacheRedis = lazyConnection.Value.GetDatabase(asyncState: true);
+            // Save value if key doesn't exist already
+            if (!cacheRedis.KeyExists(result.ResultIdentifier.ToString()))
+                cacheRedis.StringSet(result.ResultIdentifier.ToString(), content);
 
             // Notify server client that a result has been sent :
             await hubConnection.InvokeAsync("ResultCommandSent", appId, result.ResultIdentifier, result.ResultType);
