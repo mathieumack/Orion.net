@@ -1,10 +1,17 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Authentication.AzureAD.UI;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Orion.Net.Hubs;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System;
 
 namespace Orion.Net
 {
@@ -27,10 +34,40 @@ namespace Orion.Net
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            try
+            {
+                services.AddAuthentication(AzureADDefaults.AuthenticationScheme)
+                .AddAzureAD(options => Configuration.Bind("AzureAd", options));
+
+                //Totally ignored at first
+                services.Configure<OpenIdConnectOptions>(AzureADDefaults.OpenIdScheme, options =>
+                {
+                    // Microsoft identity platform
+                    options.Authority = options.Authority + "/v2.0/";
+
+                    // accept several tenants (here simplified)
+                    options.TokenValidationParameters.ValidateIssuer = true;
+                });
+
+                services.AddMvc(options =>
+                {
+                    var policy = new AuthorizationPolicyBuilder()
+                                    .RequireAuthenticatedUser()
+                                    .Build();
+                    options.Filters.Add(new AuthorizeFilter(policy));
+                }).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            }
+            catch(Exception ex)
+            {
+                string test = ex.ToString();
+                return;
+            }
+
             services.AddControllersWithViews();
             services.AddRazorPages();
 
             services.AddSignalR();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
