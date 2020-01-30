@@ -11,9 +11,6 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
-
-
 
 namespace Orion.Net
 {
@@ -36,7 +33,7 @@ namespace Orion.Net
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-
+            //For AAD
             services.AddAuthentication(AzureADDefaults.AuthenticationScheme)
                     .AddAzureAD(options => Configuration.Bind("AzureAd", options));
 
@@ -55,7 +52,9 @@ namespace Orion.Net
                                 .RequireAuthenticatedUser()
                                 .Build();
                 options.Filters.Add(new AuthorizeFilter(policy));
-            }).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+                //options.EnableEndpointRouting =false; //added for warning
+            }).SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+            //To this point
 
             services.AddControllersWithViews();
             services.AddRazorPages();
@@ -88,6 +87,18 @@ namespace Orion.Net
             });
 
             app.UseNodeModules();
+
+            //Add for AAD
+            app.UseAuthentication();
+            app.UseHttpsRedirection();
+
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute(
+                    name: "default",
+                    template: "{controller=Home}/{action=Orion}/{id?}");
+            });
+            //To this point
         }
     }
 }
