@@ -13,6 +13,8 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 
+
+
 namespace Orion.Net
 {
     public class Startup
@@ -34,34 +36,26 @@ namespace Orion.Net
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            try
-            {
-                services.AddAuthentication(AzureADDefaults.AuthenticationScheme)
-                .AddAzureAD(options => Configuration.Bind("AzureAd", options));
 
-                //Totally ignored at first
-                services.Configure<OpenIdConnectOptions>(AzureADDefaults.OpenIdScheme, options =>
-                {
+            services.AddAuthentication(AzureADDefaults.AuthenticationScheme)
+                    .AddAzureAD(options => Configuration.Bind("AzureAd", options));
+
+            services.Configure<OpenIdConnectOptions>(AzureADDefaults.OpenIdScheme, options =>
+            {
                     // Microsoft identity platform
                     options.Authority = options.Authority + "/v2.0/";
 
                     // accept several tenants (here simplified)
                     options.TokenValidationParameters.ValidateIssuer = true;
-                });
+            });
 
-                services.AddMvc(options =>
-                {
-                    var policy = new AuthorizationPolicyBuilder()
-                                    .RequireAuthenticatedUser()
-                                    .Build();
-                    options.Filters.Add(new AuthorizeFilter(policy));
-                }).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-            }
-            catch(Exception ex)
+            services.AddMvc(options =>
             {
-                string test = ex.ToString();
-                return;
-            }
+                var policy = new AuthorizationPolicyBuilder()
+                                .RequireAuthenticatedUser()
+                                .Build();
+                options.Filters.Add(new AuthorizeFilter(policy));
+            }).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             services.AddControllersWithViews();
             services.AddRazorPages();
