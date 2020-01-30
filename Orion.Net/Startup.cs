@@ -45,8 +45,8 @@ namespace Orion.Net
                     // Microsoft identity platform
                     options.Authority = options.Authority + "/v2.0/";
 
-                    // accept several tenants (here simplified)
-                    options.TokenValidationParameters.ValidateIssuer = true;
+                    // doesn't accept several tenants (simplified version)
+                    options.TokenValidationParameters.ValidateIssuer = false;
             });
 
             services.AddMvc(options =>
