@@ -52,7 +52,6 @@ namespace Orion.Net
                                 .RequireAuthenticatedUser()
                                 .Build();
                 options.Filters.Add(new AuthorizeFilter(policy));
-                //options.EnableEndpointRouting =false; //added for warning
             }).SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
             //To this point
 
@@ -90,18 +89,6 @@ namespace Orion.Net
             });
 
             app.UseNodeModules();
-
-            //Add for AAD
-            app.UseAuthentication();
-            app.UseHttpsRedirection();
-
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Orion}/{id?}");
-            });
-            //To this point
         }
     }
 }
