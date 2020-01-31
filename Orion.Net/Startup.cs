@@ -79,6 +79,9 @@ namespace Orion.Net
             app.UseStaticFiles();
             app.UseCookiePolicy();
 
+            //AAD
+            app.UseAuthentication();
+
             app.UseRouting();
 
             app.UseEndpoints(endpoints =>
