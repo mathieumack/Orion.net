@@ -3,7 +3,7 @@
     {
       "src": [
         {
-          "cwd": "../",
+          "cwd": "../..",
           "files": [
             "**Orion.Net.Client.csproj",
             "**Orion.Net.Scripts.Common.csproj"
