@@ -2,6 +2,9 @@
 
 namespace Orion.Net.Core.Scripts
 {
+    /// <summary>
+    /// Basic information on a Client Script Available to find it
+    /// </summary>
     public class AvailableClientScript
     {
         /// <summary>

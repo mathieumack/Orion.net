@@ -8,7 +8,8 @@ using Orion.Net.Core.Scripts;
 namespace Orion.Net.Scripts.Common.Diagnostics
 {
     /// <summary>
-    /// Send Image from the client computer to be display
+    /// <inheritdoc/>
+    /// <para>Send Image from the client computer to be display</para>
     /// </summary>
     public class SendImageContentClientScript : BaseClientScript
     {
@@ -16,7 +17,10 @@ namespace Orion.Net.Scripts.Common.Diagnostics
         /// Parameter's Name of <see cref="SendImageContentClientScript"/>
         /// </summary>
         private const string filePathParam = "filePath";
-
+        /// <summary>
+        /// Constructor of <see cref="SendImageContentClientScript"/> with the Client connector
+        /// </summary>
+        /// <param name="connector">Client connector</param>
         public SendImageContentClientScript(Connector connector)
             : base(connector)
         {
@@ -27,11 +31,24 @@ namespace Orion.Net.Scripts.Common.Diagnostics
             });
         }
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         public override string Title => "Send Image";
-
+        /// <summary>
+        /// Private identifier to set <see cref="Identifier"/>
+        /// </summary>
         private readonly Guid identifier;
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         public override Guid Identifier => identifier;
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <param name="parameters"></param>
+        /// <exception cref="Exception">Fail to execute command, send back an error message</exception>
         public override async Task Execute(string parameters)
         {
             var paramItems = await LoadParameters(parameters);

@@ -1,5 +1,8 @@
 ﻿namespace Orion.Net.Core.Interfaces
 {
+    /// <summary>
+    /// Result type for Client Script
+    /// </summary>
     public enum ClientScriptResultType
     {
         /// <summary>

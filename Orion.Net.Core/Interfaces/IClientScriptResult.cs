@@ -3,12 +3,15 @@ using System.Net.Http;
 
 namespace Orion.Net.Core.Interfaces
 {
+    /// <summary>
+    /// Result Script from Client
+    /// </summary>
     public abstract class ClientScriptResult
     {
         /// <summary>
         /// Identifier for the generated result
-        /// Used by the server to check result content
         /// </summary>
+        /// <remarks>Used by the server to check result content</remarks>
         public virtual Guid ResultIdentifier { get; set; }
 
         /// <summary>
@@ -19,7 +22,7 @@ namespace Orion.Net.Core.Interfaces
         /// <summary>
         /// Internal method used by Script layer
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Serialize Json HttpContent</returns>
         internal abstract HttpContent GenerateDataContent();
     }
 }

@@ -46,7 +46,6 @@ namespace Orion.Net.Client.Configuration
         /// <summary>
         /// Dispose the connection to the Hub
         /// </summary>
-        /// <returns></returns>
         public async ValueTask DisposeAsync()
         {
             if (hubConnection != null)
@@ -67,10 +66,10 @@ namespace Orion.Net.Client.Configuration
         }
 
         /// <summary>
-        /// <para>Connect to the server : On and Invoke 
+        /// <para>Connect to the server and interact with On and Invoke 
         /// <list type="bullet">
         /// <item>On.AskCommands() : InvokeAsync.ClientAnswerCommands to send back <see cref="commands"/></item>
-        /// <item>On.ExecuteCommand (string,string)</item>
+        /// <item>On.ExecuteCommand(string,string)</item>
         /// <item>On.StartAsync()</item>
         /// <item>InvokeAsync("Hello", appId, supportID, environmentLabel)</item>
         /// </list></para>
@@ -113,20 +112,20 @@ namespace Orion.Net.Client.Configuration
         }
 
         /// <summary>
-        /// Return a command from title
+        /// Get the command corresponding to the title
         /// </summary>
         /// <param name="commandTitle"></param>
-        /// <returns></returns>
+        /// <returns><see cref="BaseClientScript"/> Command</returns>
         private BaseClientScript GetCommand(string commandTitle)
         {
             return commands.FirstOrDefault(e => e.Title == commandTitle);
         }
 
         /// <summary>
-        /// Send a result object to the platform and call hub to force refresh
+        /// Send a result object to the platform API and notify the hub the result was send with parameters to recuperate it
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="result"></param>
+        /// <typeparam name="T"><see cref="ClientScriptResult"/></typeparam>
+        /// <param name="result">result object</param>
         internal async Task SendResultCommand<T>(T result) where T : ClientScriptResult
         {
             // Send result object to the correct uri :

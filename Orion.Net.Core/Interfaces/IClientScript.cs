@@ -3,6 +3,9 @@ using System.Threading.Tasks;
 
 namespace Orion.Net.Core.Interfaces
 {
+    /// <summary>
+    /// Client Script Interface
+    /// </summary>
     public interface IClientScript
     {
         /// <summary>

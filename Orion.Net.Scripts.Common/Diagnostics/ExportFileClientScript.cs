@@ -8,7 +8,8 @@ using Orion.Net.Core.Scripts;
 namespace Orion.Net.Scripts.Common.Diagnostics
 {
     /// <summary>
-    /// Export file from the client's computer
+    /// <inheritdoc/>
+    /// <para>Export file from the client's computer</para>
     /// </summary>
     public class ExportFileClientScript : BaseClientScript
     {
@@ -17,6 +18,10 @@ namespace Orion.Net.Scripts.Common.Diagnostics
         /// </summary>
         private const string argsParam = "args";
 
+        /// <summary>
+        /// Constructor of <see cref="ExportFileClientScript"/> with the Client Connector
+        /// </summary>
+        /// <param name="connector"></param>
         public ExportFileClientScript(Connector connector)
             : base(connector)
         {
@@ -32,22 +37,24 @@ namespace Orion.Net.Scripts.Common.Diagnostics
         }
 
         /// <summary>
-        /// Title of the script ExportFileClientScript
+        /// <inheritdoc/>
         /// </summary>
         public override string Title => "Export File";
-
+        /// <summary>
+        /// Private identifier to set <see cref="Identifier"/>
+        /// </summary>
         private readonly Guid identifier;
 
         /// <summary>
-        /// Identifier of the script ExportFileClientScript
+        /// <inheritdoc/>
         /// </summary>
         public override Guid Identifier => identifier;
 
         /// <summary>
-        /// Execute the script ExportFileClientScript on the client side
+        /// <inheritdoc/>
         /// </summary>
         /// <param name="parameters"></param>
-        /// <returns></returns>
+        /// <exception cref="Exception">Fail to execute the command, send back an error message</exception>
         public override async Task Execute(string parameters)
         {
             var paramItems = await LoadParameters(parameters);

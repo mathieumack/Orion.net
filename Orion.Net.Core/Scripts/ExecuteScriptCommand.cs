@@ -1,5 +1,8 @@
 ﻿namespace Orion.Net.Core.Scripts
 {
+    /// <summary>
+    /// Command's information send to Client to execute
+    /// </summary>
     public class ExecuteScriptCommand
     {
         /// <summary>

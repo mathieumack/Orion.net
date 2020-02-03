@@ -1,5 +1,8 @@
 ﻿namespace Orion.Net.Client.Scripts
 {
+    /// <summary>
+    /// Parameter of a Script
+    /// </summary>
     public class ScriptParameterInterpreterResult
     {
         /// <summary>

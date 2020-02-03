@@ -11,23 +11,41 @@ using Orion.Net.Core.Scripts;
 
 namespace Orion.Net.Client.Scripts
 {
+    /// <summary>
+    /// Client Script use to execute a command on the client side
+    /// </summary>
     public abstract class BaseClientScript : IClientScript
     {
+        /// <summary>
+        /// <inheritdoc/>
+        /// Inherited from <see cref="IClientScript"/>
+        /// </summary>
         public abstract string Title { get; }
-
+        /// <summary>
+        /// <inheritdoc/>
+        /// Inherited from <see cref="IClientScript"/>
+        /// </summary>
         public abstract Guid Identifier { get; }
-
+        /// <summary>
+        /// List of <see cref="ScriptParameter"/> for the command
+        /// </summary>
         protected List<ScriptParameter> AvailableParameters { get; } = new List<ScriptParameter>();
-
+        /// <summary>
+        /// <inheritdoc/>
+        /// Inherited from <see cref="IClientScript"/>
+        /// </summary>
         public abstract Task Execute(string parameters);
-
+        /// <summary>
+        /// Client Connector to the Hub
+        /// </summary>
         private readonly Connector connector;
 
         /// <summary>
-        /// Extract parameters and check if parameter's names correspond
+        /// Extract parameters and check if parameters's names correspond
         /// </summary>
         /// <param name="parameters"></param>
-        /// <returns></returns>
+        /// <returns>A list of <see cref="ScriptParameterInterpreterResult"/></returns>
+        /// <remarks>The returned list will be empty is the parameters don't correspond</remarks>
         protected async Task <List<ScriptParameterInterpreterResult>> LoadParameters(string parameters)
         {
             var paramItems = parameters.ExtractParams();
@@ -41,6 +59,10 @@ namespace Orion.Net.Client.Scripts
             return paramItems;
         }
 
+        /// <summary>
+        /// Constructor with the Client Connector
+        /// </summary>
+        /// <param name="connector">Client Connector</param>
         protected BaseClientScript(Connector connector)
         {
             this.connector = connector;
@@ -50,7 +72,7 @@ namespace Orion.Net.Client.Scripts
         /// Execute parameters
         /// </summary>
         /// <param name="parameters"></param>
-        /// <returns></returns>
+        /// <return></return>
         internal async Task Start(string parameters)
         {
             // Manage start script :
@@ -64,20 +86,20 @@ namespace Orion.Net.Client.Scripts
         #region Pre defined results
 
         /// <summary>
-        ///Check if path is valid or file exists
+        /// Check if path is valid or file exists
         /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
+        /// <param name="path">Path to the file</param>
+        /// <returns>Boolean</returns>
         internal bool CheckPathFile(string path)
         {
             return string.IsNullOrWhiteSpace(path) || !File.Exists(path);
         }
 
         /// <summary>
-        /// Post SendStringContent on the platform
+        /// Create and send a new string content result
         /// </summary>
-        /// <param name="contentResult"></param>
-        /// <returns></returns>
+        /// <return></return>
+        /// <param name="contentResult">String content</param>
         protected async Task SendStringContent(string contentResult)
         {
             var result = new StringContentResult()
@@ -92,10 +114,11 @@ namespace Orion.Net.Client.Scripts
 
         /// <summary>
         /// Check path and file
-        /// Post ImageContentResult, with file from path save as byte array, on the paltform
+        /// Create and send a new image content with file from path save as byte array
         /// </summary>
-        /// <param name="pathImage"></param>
-        /// <returns></returns>
+        /// <param name="pathImage">Path to the image</param>
+        /// <return></return>
+        /// <exception cref="Exception">The conversion can fail and a message will be send</exception>
         protected async Task SendImageContent(string pathImage)
         {
             if (!CheckPathFile(pathImage))
@@ -123,11 +146,12 @@ namespace Orion.Net.Client.Scripts
         }
 
         /// <summary>
-        /// get the mime of the file, read the file's bytes, extract the file's name from the path
-        /// Send FileContentResult
+        /// Check path and file, get the the file's mime
+        /// Create and send a new file content with file from path save as byte array
         /// </summary>
-        /// <param name="pathFile"></param>
-        /// <returns></returns>
+        /// <param name="pathFile">Path of the file</param>
+        /// <return></return>
+        /// <exception cref="Exception">The conversion can fail and a message will be send</exception>
         protected async Task SendFileContent(string pathFile)
         {
             if (!CheckPathFile(pathFile))

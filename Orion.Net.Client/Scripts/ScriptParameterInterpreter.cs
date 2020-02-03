@@ -3,8 +3,15 @@ using System.Text.RegularExpressions;
 
 namespace Orion.Net.Client.Scripts
 {
+    /// <summary>
+    /// Interpreter of Parameters contained in a string
+    /// </summary>
     public static class ScriptParameterInterpreter
     {
+        /// <summary>
+        /// RegexPattern use to search parameter's name and their value in a string
+        /// </summary>
+        /// <example>-parameter parameterValue</example>"
         private const string RegexPattern = @"(-([a-zA-Z]+) ""([a-zA-Z0-9\\:\.\-_ \/]+)"")+";
 
         /// <summary>
