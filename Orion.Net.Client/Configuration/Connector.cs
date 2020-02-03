@@ -1,16 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.SignalR.Client;
+﻿using Microsoft.AspNetCore.SignalR.Client;
 using Newtonsoft.Json;
 using Orion.Net.Client.Scripts;
 using Orion.Net.Core.Interfaces;
 using Orion.Net.Core.Scripts;
 using StackExchange.Redis;
+using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Orion.Net.Client.Configuration
 {
@@ -68,7 +66,7 @@ namespace Orion.Net.Client.Configuration
         /// <returns></returns>
         public async Task Connect(string platformUri, string environmentLabel, string supportID)
         {
-            this.platFormUri = platformUri.EndsWith("/") ? platformUri : platformUri + "/";
+             this.platFormUri = platformUri.EndsWith("/") ? platformUri : platformUri + "/";
 
             hubConnection = new HubConnectionBuilder()
                                         .WithUrl(platFormUri + "orionhub")
