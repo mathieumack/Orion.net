@@ -1,16 +1,16 @@
-﻿using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.AzureAD.UI;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Orion.Net.Hubs;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc.Authorization;
-using Microsoft.AspNetCore.Mvc;
 
 namespace Orion.Net
 {
@@ -39,11 +39,11 @@ namespace Orion.Net
 
             services.Configure<OpenIdConnectOptions>(AzureADDefaults.OpenIdScheme, options =>
             {
-                    // Microsoft identity platform
-                    options.Authority = options.Authority + "/v2.0/";
+                // Microsoft identity platform
+                options.Authority = options.Authority + "/v2.0/";
 
-                    // doesn't accept several tenants (simplified version)
-                    options.TokenValidationParameters.ValidateIssuer = false;
+                // doesn't accept several tenants (simplified version)
+                options.TokenValidationParameters.ValidateIssuer = false;
             });
 
             services.AddMvc(options =>
@@ -59,7 +59,6 @@ namespace Orion.Net
             services.AddRazorPages();
 
             services.AddSignalR();
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

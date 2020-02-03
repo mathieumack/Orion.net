@@ -1,4 +1,7 @@
 ﻿using System.Diagnostics;
+using System.Linq;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Orion.Net.Models;
 
@@ -32,6 +35,7 @@ namespace Orion.Net.Controllers
 
         public IActionResult Orion()
         {
+            ViewData["User"] = User.Identity.Name;
             return View();
         }
 
