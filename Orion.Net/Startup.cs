@@ -37,15 +37,6 @@ namespace Orion.Net
             services.AddAuthentication(AzureADDefaults.AuthenticationScheme)
                     .AddAzureAD(options => Configuration.Bind("AzureAd", options));
 
-            services.Configure<OpenIdConnectOptions>(AzureADDefaults.OpenIdScheme, options =>
-            {
-                // Microsoft identity platform
-                options.Authority = options.Authority + "/v2.0/";
-
-                // doesn't accept several tenants (simplified version)
-                options.TokenValidationParameters.ValidateIssuer = false;
-            });
-
             services.AddMvc(options =>
             {
                 var policy = new AuthorizationPolicyBuilder()

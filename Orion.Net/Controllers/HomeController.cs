@@ -1,9 +1,9 @@
-﻿using System.Diagnostics;
-using System.Linq;
-using System.Security.Claims;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Orion.Net.Models;
+using System.Diagnostics;
+using System.Linq;
+using System.Security.Claims;
 
 namespace Orion.Net.Controllers
 {
@@ -38,8 +38,10 @@ namespace Orion.Net.Controllers
 
         public IActionResult Orion()
         {
-            ViewData["User"] = User.Identity.Name;
-            return View();
+            return View(new UserProfileViewModel()
+            {
+                Name = User.Identity.Name,
+            });
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

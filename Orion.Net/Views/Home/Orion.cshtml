@@ -161,13 +161,11 @@
         var ca = document.cookie.split(';');
         for (var i = 0; i < ca.length; i++) {
             if (ca[i].slice(0, 10) == "supportId=") {
-                console.log("Cookie get : " + ca[i]);
                 return ca[i].slice(10, ca[i].length);
             }
         }
         var guid = (GuidFour() + "-" + GuidFour() + "-" + GuidFour() + "-" + GuidFour()).toLowerCase();
         document.cookie = "supportId=" + guid + "; expires = 60 * 60 * 24";
-        console.log("Cookie set : " + guid);
         return guid;
     }
 

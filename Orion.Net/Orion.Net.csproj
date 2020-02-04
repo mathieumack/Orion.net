@@ -27,6 +27,4 @@
     <ProjectReference Include="..\Orion.Net.Core\Orion.Net.Core.csproj" />
   </ItemGroup>
 
-  <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
-
 </Project>
