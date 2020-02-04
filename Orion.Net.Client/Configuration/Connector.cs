@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR.Client;
-using Newtonsoft.Json;
 using Orion.Net.Client.Scripts;
 using Orion.Net.Core.Interfaces;
 using Orion.Net.Core.Scripts;
@@ -100,17 +98,15 @@ namespace Orion.Net.Client.Configuration
         {
             // Send result object to the correct uri :
             var dataUri = string.Empty;
-            HttpContent content = null;
+            HttpContent content = result.GenerateDataContent();
 
             switch (result.ResultType)
             {
                 case ClientScriptResultType.ConsoleLog:
                     dataUri = platformUri + "api/v1/StringResultData";
-                    content = new StringContent(JsonConvert.SerializeObject(result), Encoding.UTF8, "application/json");
                     break;
                 case ClientScriptResultType.Image:
                     dataUri = platformUri + "api/v1/ImageResultData";
-                    content = new StringContent(JsonConvert.SerializeObject(result), Encoding.UTF8, "application/json");
                     break;
                 default:
                     return;

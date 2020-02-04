@@ -27,6 +27,24 @@
     </div>
 </div>
 
+<script type="text/x-kendo-template" id="commandSent">
+    <div class="col-xl-6 mt-4">
+        <div class="card border-left-#:Color# shadow h-100">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col col-md-2 align-self-center h5 mb-0 text-gray-800">#:CommandRetryTitle#</div>
+                    <div class="col col-md-8 h5 mb-0 text-gray-800">#:CommandRetryParam#</div>
+                    <div class="col col-md-2 align-self-center h5 mb-0">
+                        <a class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm text-white" onclick="sendRetryCommand('#:CommandRetryAppId#', '#:CommandRetryTitle#','#:CommandRetryParam#')">
+                            Retry Command
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
 <script type="text/x-kendo-template" id="resultDisplayString">
     <div class="col-xl-6 mt-4">
         <div class="card border-left-#:Color# shadow h-100">
@@ -45,10 +63,8 @@
     <div class="col-xl-6 mt-4">
         <div class="card border-left-#:Color# shadow h-100">
             <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                        <img class="h5 mb-0 text-gray-800 img-fluid" src="data:image/jpg;base64,#:Content#" alt="Result Image">
-                    </div>
+                <div class="row">
+                    <img class="img-fluid" src="data:image/jpg;base64,#:Content#" alt="Result Image">
                 </div>
             </div>
         </div>
@@ -73,11 +89,11 @@
                         <input type="text" identifier="detailElement_commands_params_#:appId#" class="form-control" placeholder="set parameters here">
                     </div>
                     <div class="col col-md-2">
-                        <a class="d-none d-sm-inline-block btn btn-sm btn-dark shadow-sm" onclick="sendCommand('#:appId#')">
+                        <a class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm text-white" onclick="sendCommand('#:appId#')">
                             <span class="icon text-white-50">
                                 <i class="fas fa-check"></i>
                             </span>
-                            <span class="text">send</span>
+                            <span class="text">Send</span>
                         </a>
                     </div>
                 </div>
@@ -106,16 +122,32 @@
     </div>
 </script>
 <script type="text/javascript">
+    function saveCommand(appId, title, param) {
+        commandRetryAppId = appId;
+        commandRetryTitle = title;
+        commandRetryParam = param.replace(/\\/g, '\\\\');  //Double the \ or js ignore it
+    }
     function sendCommand(appId) {
         var dropdownlist = $("input[identifier = 'detailElement_commands_" + appId + "']").data("kendoDropDownList");
+        sendRetryCommand(appId, dropdownlist.text(), $("input[identifier='detailElement_commands_params_" + appId + "']").val());
+    }
+    function sendRetryCommand(appId, title, param) {
+        saveCommand(appId, title, param);
         connection.invoke("SendCommandToClient",
             {
-                AppId: appId,
-                CommandTitle: dropdownlist.text(),
-                CommandParam: $("input[identifier='detailElement_commands_params_" + appId + "']").val()
+                AppId: commandRetryAppId,
+                CommandTitle: commandRetryTitle,
+                CommandParam: commandRetryParam
             }).catch(function (err) {
                 return console.error(err.toString());
             });
+        html = displayCommandSent({
+            Color: "success",
+            CommandRetryAppId: commandRetryAppId,
+            CommandRetryTitle: commandRetryTitle,
+            CommandRetryParam: commandRetryParam
+        });
+        $("#addResults_" + commandRetryAppId).prepend(html);
     }
 </script>
 <script type="text/javascript">
@@ -125,12 +157,17 @@
     }
     var jsClientId = (GuidFour() + "-" + GuidFour() + "-" + GuidFour() + "-" + GuidFour()).toLowerCase();
 
+    var commandRetryAppId, commandRetryTitle, commandRetryParam;
+
     var connectedUserCardTemplate = kendo.template($("#connectedUserCardTemplate").html());
     var connectedUserDetailTemplate = kendo.template($("#connectedUserDetailTemplate").html());
+    var displayCommandSent = kendo.template($("#commandSent").html());
     var displayResultsStringTemplate = kendo.template($("#resultDisplayString").html());
     var displayResultsImageTemplate = kendo.template($("#resultDisplayImage").html());
     var tabStrip = $("#tabstrip");
-    var connection = new signalR.HubConnectionBuilder().withUrl("/orionhub").build();
+    var connection = new signalR.HubConnectionBuilder()
+        .withUrl("/orionhub")
+        .build();
 
     //ID Support Display
     window.onload = function () {
@@ -177,21 +214,6 @@
             index: 0
         });
     }
-    function loadClient(appID) {
-        $(".currentConnectionDetail").each(function () {
-            $(this).hide();
-        });
-        $("div[identifier='detailElement_" + appID + "']").show();
-        if ($("div[identifier='detailElement_" + appID + "']").length == 0) {
-            var html = connectedUserDetailTemplate({
-                appId: appID
-            });
-            $("#blocCurrentConnection").append(html);
-            connection.invoke("AskCommands", appID).catch(function (err) {
-                return console.error(err.toString());
-            });
-        }
-    }
     function displayResult(appId, resultId, type) {
         var uri = "/api/v1/";
         var html;
@@ -202,7 +224,7 @@
                 $.get(uri, function (data) {
                     html = displayResultsStringTemplate({
                         Content: data.consoleContent,
-                        Color: "primary"
+                        Color: "primary",
                     });
                     $("#addResults_" + appId).prepend(html);
                 });
@@ -212,14 +234,13 @@
                 $.get(uri, function (data) {
                     html = displayResultsImageTemplate({
                         Content: (data.imageAsByteArray),
-                        Color: "danger"
+                        Color: "warning",
                     });
                     $("#addResults_" + appId).prepend(html);
                 });
                 break;
             default: break;
         }
-        console.log('ResultSend uri : ' + uri);
     }
 </script>
 @section scripts {
