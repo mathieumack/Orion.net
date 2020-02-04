@@ -3,6 +3,9 @@ using System.Threading.Tasks;
 
 namespace Orion.Net.Core.Interfaces
 {
+    /// <summary>
+    /// Client Script Interface
+    /// </summary>
     public interface IClientScript
     {
         /// <summary>
@@ -14,7 +17,7 @@ namespace Orion.Net.Core.Interfaces
         /// Unique identifier of the script
         /// </summary>
         Guid Identifier { get; }
-        
+
         /// <summary>
         /// Execute the script on the client side
         /// </summary>

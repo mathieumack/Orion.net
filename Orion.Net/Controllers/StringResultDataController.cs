@@ -5,6 +5,10 @@ using Orion.Net.Core.Results;
 
 namespace Orion.Net.Controllers
 {
+    /// <summary>
+    /// <inheritdoc/>
+    /// <para>For String Result Type</para>
+    /// </summary>
     [Route("api/v1/StringResultData")]
     public class StringResultDataController : BaseDataController<StringContentResult>
     {

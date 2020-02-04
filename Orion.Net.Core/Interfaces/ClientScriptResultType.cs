@@ -1,5 +1,8 @@
 ﻿namespace Orion.Net.Core.Interfaces
 {
+    /// <summary>
+    /// Result type for Client Script
+    /// </summary>
     public enum ClientScriptResultType
     {
         /// <summary>
@@ -11,7 +14,7 @@
         /// </summary>
         ConsoleLog = 2,
         /// <summary>
-        /// byte[]
+        /// Image as byte[]
         /// </summary>
         Image = 3
     }

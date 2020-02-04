@@ -7,6 +7,9 @@ using Orion.Net.Models;
 
 namespace Orion.Net.Controllers
 {
+    /// <summary>
+    /// Controller of the pages and its content
+    /// </summary>
     public class HomeController : Controller
     {
         public IActionResult Index()

@@ -1,13 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Orion.Net.Core.Interfaces;
-using Orion.Net.Core.Results;
+using System;
+using System.Collections.Generic;
 
 namespace Orion.Net.Controllers
 {
+    /// <summary>
+    /// Platform API local
+    /// </summary>
+    /// <typeparam name="T"> Client Script Result</typeparam>
     [ApiController]
     public class BaseDataController<T> : Controller where T : ClientScriptResult, new()
     {
