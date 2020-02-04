@@ -86,16 +86,6 @@ namespace Orion.Net.Client.Scripts
         #region Pre defined results
 
         /// <summary>
-        /// Check if path is valid or file exists
-        /// </summary>
-        /// <param name="path">Path to the file</param>
-        /// <returns>Boolean</returns>
-        internal bool CheckPathFile(string path)
-        {
-            return string.IsNullOrWhiteSpace(path) || !File.Exists(path);
-        }
-
-        /// <summary>
         /// Create and send a new string content result
         /// </summary>
         /// <return></return>
@@ -121,7 +111,7 @@ namespace Orion.Net.Client.Scripts
         /// <exception cref="Exception">The conversion can fail and a message will be send</exception>
         protected async Task SendImageContent(string pathImage)
         {
-            if (!CheckPathFile(pathImage))
+            if (!File.Exists(pathImage))
             {
                 await SendStringContent("File not found.");
                 return;
@@ -154,7 +144,7 @@ namespace Orion.Net.Client.Scripts
         /// <exception cref="Exception">The conversion can fail and a message will be send</exception>
         protected async Task SendFileContent(string pathFile)
         {
-            if (!CheckPathFile(pathFile))
+            if (!File.Exists(pathFile))
             {
                 await SendStringContent("File not found.");
                 return;

@@ -12,7 +12,7 @@ namespace Orion.Net.Client.Scripts
         /// RegexPattern use to search parameter's name and their value in a string
         /// </summary>
         /// <example>-parameter parameterValue</example>"
-        private const string RegexPattern = @"(-([a-zA-Z]+) ""([a-zA-Z0-9\\:\.\-_ \/]+)"")+";
+        private const string RegexPattern = @"(-([a-zA-Z]+) ""([a-zA-Z0-9áàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ\\:\.\-_ \/]+)"")+";
 
         /// <summary>
         /// Extract parameters from a string to a parameter results list
