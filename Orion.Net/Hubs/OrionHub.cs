@@ -6,17 +6,20 @@ using Orion.Net.Core.Scripts;
 
 namespace Orion.Net.Hubs
 {
+    /// <summary>
+    /// SignalR hub for Orion with methods called by clients
+    /// </summary>
     public class OrionHub : Hub
     {
         #region New connections
 
         /// <summary>
         /// Add client connection to appId group and supportId group
-        /// Called by clients to send information to support
+        /// <para>Called by clients to send information to support</para>
         /// </summary>
-        /// <param name="appId"></param>
-        /// <param name="supportId"></param>
-        /// <param name="clientLabel"></param>
+        /// <param name="appId">Identifier of the Client application</param>
+        /// <param name="supportId">Identifier of the Support</param>
+        /// <param name="clientLabel">UserName of the Client</param>
         /// <returns></returns>
         public async Task Hello(string appId, string supportId, string clientLabel)
         {
@@ -35,9 +38,9 @@ namespace Orion.Net.Hubs
         }
 
         /// <summary>
-        /// Create SupportId groupe with support connectionId
+        /// Create/reconnect SupportId group with support connectionId
         /// </summary>
-        /// <param name="supportId"></param>
+        /// <param name="supportId">Identifier of Support</param>
         /// <returns></returns>
         public async Task StartSupportGroupe(string supportId)
         {
@@ -51,7 +54,7 @@ namespace Orion.Net.Hubs
         /// <summary>
         /// Send a command to a dedicated client
         /// </summary>
-        /// <param name="scriptCommand"></param>
+        /// <param name="scriptCommand">Basic Information of the command</param>
         /// <returns></returns>
         public async Task SendCommandToClient(ExecuteScriptCommand scriptCommand)
         {
@@ -60,9 +63,9 @@ namespace Orion.Net.Hubs
 
         /// <summary>
         /// Add support connection id to appId group
-        /// Send an ask command to a dedicated client
+        /// <para>Send an ask command to a dedicated client</para>
         /// </summary>
-        /// <param name="appId"></param>
+        /// <param name="appId">Identifier of the Client application</param>
         /// <returns></returns>
         public async Task AskCommands(string appId)
         {
@@ -71,10 +74,10 @@ namespace Orion.Net.Hubs
         }
 
         /// <summary>
-        /// Client send Command to support
+        /// Client send list of Commands to support
         /// </summary>
-        /// <param name="appId"></param>
-        /// <param name="availableScripts"></param>
+        /// <param name="appId">Identifier of Client application</param>
+        /// <param name="availableScripts">List of command scripts available</param>
         /// <returns></returns>
         public async Task ClientAnswerCommands(string appId, List<AvailableClientScript> availableScripts)
         {
@@ -82,11 +85,11 @@ namespace Orion.Net.Hubs
         }
 
         /// <summary>
-        /// Called by client in order to notify support of the result
+        /// Called by client to send result to support
         /// </summary>
-        /// <param name="appId"></param>
-        /// <param name="resultIdentifier"></param>
-        /// <param name="resultType"></param>
+        /// <param name="appId">Identifier of Client application</param>
+        /// <param name="resultIdentifier">Identifier of the result object</param>
+        /// <param name="resultType">Type of the result object</param>
         /// <returns></returns>
         public async Task ResultCommandSent(string appId, Guid resultIdentifier, int resultType)
         {
