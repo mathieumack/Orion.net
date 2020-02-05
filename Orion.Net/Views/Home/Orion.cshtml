@@ -151,12 +151,6 @@
     }
 </script>
 <script type="text/javascript">
-    //Create GUID
-    function GuidFour() {
-        return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
-    }
-    var jsClientId = (GuidFour() + "-" + GuidFour() + "-" + GuidFour() + "-" + GuidFour()).toLowerCase();;
-
     var commandRetryAppId, commandRetryTitle, commandRetryParam;
 
     var connectedUserCardTemplate = kendo.template($("#connectedUserCardTemplate").html());
@@ -169,9 +163,12 @@
         .withUrl("/orionhub")
         .build();
 
-    //ID Support Display
+    //ID Support
     window.onload = function () {
-        document.getElementById('displaySupportId').innerText = "Support ID : " + this.jsClientId;
+        $.get("/api/v1/StringResultData", function (data) {
+            document.getElementById('displaySupportId').innerText = "Support ID : " + data;
+            connection.invoke("StartSupportGroupe", data);
+        });
     }
 
     connection.on("NewClient", function (detail) {
@@ -185,8 +182,6 @@
         displayResult(appId, resultId, resultType);
     });
     connection.start().then(function () {
-        //Send supportId to create group supportId
-        connection.invoke("StartSupportGroupe", jsClientId);
     }).catch(function (err) {
         return console.error(err.toString());
     });

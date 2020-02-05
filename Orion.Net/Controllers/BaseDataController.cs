@@ -55,7 +55,7 @@ namespace Orion.Net.Controllers
                 return result.ToString();
             }
 
-            return "{\"ConsoleContent\" : \"Error from Api Get\"}";
+            return "Key Redis doesn't exist";
         }
     }
 }
