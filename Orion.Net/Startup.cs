@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Orion.Net.Hubs;
+using System.Configuration;
 
 namespace Orion.Net
 {
@@ -30,7 +31,7 @@ namespace Orion.Net
             services.AddControllersWithViews();
             services.AddRazorPages();
 
-            services.AddSignalR();
+            services.AddSignalR().AddAzureSignalR(ConfigurationManager.AppSettings["AzureSignalRConnection"].ToString());
             //services.AddStackExchangeRedisCache(options =>
             //{
             //    options.Configuration = myKeyVaultConfigService.GetByKey("redis-connectionstring").Result;
@@ -65,6 +66,11 @@ namespace Orion.Net
                 endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapHub<OrionHub>("/orionhub");
             });
+
+            //app.UseAzureSignalR(routes =>
+            //{
+            //    routes.MapHub<OrionHub>("/orionhub");
+            //});
 
             app.UseNodeModules();
         }

@@ -43,7 +43,8 @@ namespace Orion.Net.Client.Configuration
         /// <summary>
         /// Constructor with instantiation of the GUID of <see cref="appId"/>, the connection to Redis server <see cref="lazyConnection"/> and the interface of the server <see cref="cacheRedis"/>
         /// </summary>
-        public Connector() { 
+        public Connector()
+        {
             appId = Guid.NewGuid().ToString();
             lazyConnection = new Lazy<ConnectionMultiplexer>(() =>
             {
@@ -101,10 +102,15 @@ namespace Orion.Net.Client.Configuration
         /// <returns><see cref="commands"/> when the the Hub send "AskCommands"</returns>
         public async Task Connect(string platformUri, string environmentLabel, string supportID)
         {
-             var platFormUri = platformUri.EndsWith("/") ? platformUri : platformUri + "/";
+            //TO DO : connection to Azure SignalR Service
+
+            var platFormUri = platformUri.EndsWith("/") ? platformUri : platformUri + "/";
 
             hubConnection = new HubConnectionBuilder()
-                                        .WithUrl(platFormUri + "orionhub")
+                                        .WithUrl("https://<name>.service.signalr.net/client/?hub=<namehub>", options =>
+                                        {
+                                            options.UseDefaultCredentials = true;
+                                        })
                                         .Build();
 
             hubConnection.On("AskCommands", async () =>
