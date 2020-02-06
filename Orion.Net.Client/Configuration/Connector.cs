@@ -107,10 +107,7 @@ namespace Orion.Net.Client.Configuration
             var platFormUri = platformUri.EndsWith("/") ? platformUri : platformUri + "/";
 
             hubConnection = new HubConnectionBuilder()
-                                        .WithUrl("https://<name>.service.signalr.net/client/?hub=<namehub>", options =>
-                                        {
-                                            options.UseDefaultCredentials = true;
-                                        })
+                                        .WithUrl(platFormUri + "orionhub")
                                         .Build();
 
             hubConnection.On("AskCommands", async () =>
