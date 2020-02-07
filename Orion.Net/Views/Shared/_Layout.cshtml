@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@inject Microsoft.ApplicationInsights.AspNetCore.JavaScriptSnippet JavaScriptSnippet
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -27,6 +28,7 @@
     <script src="~/lib/signalr/dist/signalr.js"></script>
     <script src="~/lib/kendo/dist/js/kendo.ui.core.min.js"></script>
     <script src="~/lib/sbadmin2/dist/sb-admin-2.js"></script>
+    @Html.Raw(JavaScriptSnippet.FullScript)
 </head>
 <body class="fixed-nav sticky-footer bg-light" id="page-top">
     <!-- Page Wrapper -->

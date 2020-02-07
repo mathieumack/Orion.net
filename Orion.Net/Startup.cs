@@ -5,7 +5,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Orion.Net.Hubs;
-using System.Configuration;
 
 namespace Orion.Net
 {
@@ -31,17 +30,8 @@ namespace Orion.Net
             services.AddControllersWithViews();
             services.AddRazorPages();
 
-            services.AddSignalR().AddAzureSignalR(ConfigurationManager.AppSettings["AzureSignalRConnection"].ToString());
-            //services.AddStackExchangeRedisCache(options =>
-            //{
-            //    options.Configuration = myKeyVaultConfigService.GetByKey("redis-connectionstring").Result;
-            //    options.ConfigurationOptions = new ConfigurationOptions()
-            //    {
-            //        ConnectRetry = 3,
-            //        ReconnectRetryPolicy = new LinearRetry(1500)
-            //    };
-            //    options.InstanceName = "myawesome-api";
-            //});
+            services.AddSignalR().AddAzureSignalR("key");
+            services.AddApplicationInsightsTelemetry();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -66,13 +56,6 @@ namespace Orion.Net
                 endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapHub<OrionHub>("/orionhub");
             });
-
-            //app.UseAzureSignalR(routes =>
-            //{
-            //    routes.MapHub<OrionHub>("/orionhub");
-            //});
-
-            app.UseNodeModules();
         }
     }
 }
