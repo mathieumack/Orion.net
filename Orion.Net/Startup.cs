@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.AzureAD.UI;
-using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -11,7 +10,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Orion.Net.Hubs;
-using Microsoft.IdentityModel;
 
 namespace Orion.Net
 {
@@ -37,16 +35,6 @@ namespace Orion.Net
             //For AAD
             services.AddAuthentication(AzureADDefaults.AuthenticationScheme)
                     .AddAzureAD(options => Configuration.Bind("AzureAd", options));
-
-            //Disrupt User.Identity.Name
-            services.Configure<OpenIdConnectOptions>(AzureADDefaults.OpenIdScheme, options =>
-            {
-                // Microsoft identity platform
-                options.Authority = options.Authority + "/v2.0/";
-
-                // doesn't accept several tenants (simplified version)
-                options.TokenValidationParameters.ValidateIssuer = false;
-            });
 
             services.AddMvc(options =>
             {

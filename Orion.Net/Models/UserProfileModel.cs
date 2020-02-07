@@ -1,9 +1,9 @@
 ﻿namespace Orion.Net.Models
 {
     /// <summary>
-    /// Profile View Model of the AAD User
+    /// Profile Model of the AAD User
     /// </summary>
-    public class UserProfileViewModel
+    public class UserProfileModel
     {
         /// <summary>
         /// Name of the AAD user connected

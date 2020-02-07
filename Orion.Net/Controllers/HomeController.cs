@@ -2,8 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Orion.Net.Models;
 using System.Diagnostics;
-using System.Linq;
-using System.Security.Claims;
 
 namespace Orion.Net.Controllers
 {
@@ -38,7 +36,7 @@ namespace Orion.Net.Controllers
 
         public IActionResult Orion()
         {
-            return View(new UserProfileViewModel()
+            return View(new UserProfileModel()
             {
                 Name = User.Identity.Name,
             });
