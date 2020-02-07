@@ -29,7 +29,7 @@ namespace Orion.Net.Controllers
         {
             lazyConnection = new Lazy<ConnectionMultiplexer>(() =>
             {
-                string cacheConnection = "password";
+                string cacheConnection = Environment.GetEnvironmentVariable("redis");
                 return ConnectionMultiplexer.Connect(cacheConnection);
             });
 
