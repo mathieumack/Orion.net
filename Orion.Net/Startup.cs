@@ -33,13 +33,12 @@ namespace Orion.Net
             services.AddSignalR();
             //services.AddStackExchangeRedisCache(options =>
             //{
-            //    options.Configuration = myKeyVaultConfigService.GetByKey("redis-connectionstring").Result;
+            //    options.Configuration = Configuration["redis"];
             //    options.ConfigurationOptions = new ConfigurationOptions()
             //    {
             //        ConnectRetry = 3,
             //        ReconnectRetryPolicy = new LinearRetry(1500)
             //    };
-            //    options.InstanceName = "myawesome-api";
             //});
         }
 
