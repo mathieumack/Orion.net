@@ -2,6 +2,9 @@
 
 namespace Orion.Net.Core.Scripts
 {
+    /// <summary>
+    /// Basic information on a Client Script Available to find it
+    /// </summary>
     public class AvailableClientScript
     {
         /// <summary>
@@ -10,7 +13,7 @@ namespace Orion.Net.Core.Scripts
         public Guid Identifier { get; set; }
 
         /// <summary>
-        /// Title
+        /// Title of the client script
         /// </summary>
         public string Title { get; set; }
     }

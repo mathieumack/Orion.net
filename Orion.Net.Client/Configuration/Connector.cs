@@ -10,23 +10,44 @@ using Orion.Net.Core.Scripts;
 
 namespace Orion.Net.Client.Configuration
 {
+    /// <summary>
+    /// Client Connector to the <see cref="OrionHub"/>
+    /// </summary>
     public class Connector : IAsyncDisposable
     {
         /// <summary>
-        /// Change private to internal for unit test
+        /// Client Connection to the hub
         /// </summary>
-        internal HubConnection hubConnection;
+        private HubConnection hubConnection;
+        /// <summary>
+        /// Path to the Hub
+        /// </summary>
         private string platformUri;
+        /// <summary>
+        /// List of <see cref="BaseClientScript"/>, each one corresponding to a executable command
+        /// </summary>
+        /// <remarks><see cref="commands"/> is empty by default, to add command, the Client App calls <see cref="AddCommandService{T}(T)"/></remarks>
+        private readonly List<BaseClientScript> commands = new List<BaseClientScript>();
+        /// <summary>
+        /// Identifier of the Client Application
+        /// </summary>
+        /// <remarks>Use for connection purpose on the Hub</remarks>
         private readonly string appId;
         /// <summary>
         /// Change private readonly to internal for unit test
         /// </summary>
         internal List<BaseClientScript> commands = new List<BaseClientScript>();
 
+        /// <summary>
+        /// Constructor with instantiation of the GUID of <see cref="appId"/>
+        /// </summary>
         public Connector() { 
             appId = Guid.NewGuid().ToString(); 
         }
 
+        /// <summary>
+        /// Dispose the connection to the Hub
+        /// </summary>
         public async ValueTask DisposeAsync()
         {
             if (hubConnection != null)
@@ -34,7 +55,7 @@ namespace Orion.Net.Client.Configuration
         }
 
         /// <summary>
-        /// Add a 
+        /// Add a CommandService to the Client App
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="command"></param>
@@ -47,13 +68,19 @@ namespace Orion.Net.Client.Configuration
         }
 
         /// <summary>
-        /// Connect to the server.
+        /// <para>Connect to the server and interact with On and Invoke 
+        /// <list type="bullet">
+        /// <item>On.AskCommands() : InvokeAsync.ClientAnswerCommands to send back <see cref="commands"/></item>
+        /// <item>On.ExecuteCommand(string,string)</item>
+        /// <item>On.StartAsync()</item>
+        /// <item>InvokeAsync("Hello", appId, supportID, environmentLabel)</item>
+        /// </list></para>
         /// Do not forget to call AddCommandService<>() to register IClientScript class 
         /// </summary>
         /// <param name="platformUri"></param>
         /// <param name="environmentLabel"></param>
         /// <param name="supportID"></param>
-        /// <returns></returns>
+        /// <returns><see cref="commands"/> when the the Hub send "AskCommands"</returns>
         public async Task Connect(string platformUri, string environmentLabel, string supportID)
         {
             this.platformUri = platformUri.EndsWith("/") ? platformUri : platformUri + "/";
@@ -86,20 +113,20 @@ namespace Orion.Net.Client.Configuration
         }
 
         /// <summary>
-        /// Return a command from title
+        /// Get the command corresponding to the title
         /// </summary>
         /// <param name="commandTitle"></param>
-        /// <returns></returns>
+        /// <returns><see cref="BaseClientScript"/> Command</returns>
         private BaseClientScript GetCommand(string commandTitle)
         {
             return commands.FirstOrDefault(e => e.Title == commandTitle);
         }
 
         /// <summary>
-        /// Send a result object to the platform and call hub to force refresh
+        /// Send a result object to the platform API and notify the hub the result was send with parameters to recuperate it
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="result"></param>
+        /// <typeparam name="T"><see cref="ClientScriptResult"/></typeparam>
+        /// <param name="result">result object</param>
         internal async Task SendResultCommand<T>(T result) where T : ClientScriptResult
         {
             // Send result object to the correct uri :
