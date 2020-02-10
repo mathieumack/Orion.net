@@ -1,9 +1,13 @@
-﻿using System.Diagnostics;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Orion.Net.Models;
+using System.Diagnostics;
 
 namespace Orion.Net.Controllers
 {
+    /// <summary>
+    /// Controller of the pages and its content
+    /// </summary>
     public class HomeController : Controller
     {
         public IActionResult Index()
@@ -32,7 +36,10 @@ namespace Orion.Net.Controllers
 
         public IActionResult Orion()
         {
-            return View();
+            return View(new UserProfileModel()
+            {
+                Name = User.Identity.Name,
+            });
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
