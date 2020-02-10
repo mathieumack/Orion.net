@@ -31,8 +31,11 @@ namespace Orion.Net
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
-
-            //For AAD
+            
+            #region AAD Authentification
+            //For AAD : get secret values from Key vault for the configuration in appsettings.json
+            Configuration["AzureAd:TenantId"] = Configuration["AADTenantId"];
+            Configuration["AzureAd:ClientId"] = Configuration["AADClientId"];
             services.AddAuthentication(AzureADDefaults.AuthenticationScheme)
                     .AddAzureAD(options => Configuration.Bind("AzureAd", options));
 
@@ -43,12 +46,15 @@ namespace Orion.Net
                                 .Build();
                 options.Filters.Add(new AuthorizeFilter(policy));
             }).SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
-            //To this point
+            #endregion
 
             services.AddControllersWithViews();
             services.AddRazorPages();
 
-            services.AddSignalR().AddAzureSignalR(Configuration["signalr"]);
+            services.AddSignalR()
+                .AddAzureSignalR(Configuration["signalr"]);
+
+            Configuration["ApplicationInsights:InstrumentationKey"] = Configuration["Insights"];
             services.AddApplicationInsightsTelemetry();
         }
 
