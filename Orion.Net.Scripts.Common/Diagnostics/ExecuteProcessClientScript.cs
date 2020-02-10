@@ -40,11 +40,19 @@ namespace Orion.Net.Scripts.Common.Diagnostics
             });
         }
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// <para>Override for <see cref="ExecuteProcessClientScript"/></para>
+        /// </summary>
         public override string Title => "Execute process";
         /// <summary>
         /// Private identifier to set <see cref="Identifier"/>
         /// </summary>
         private readonly Guid identifier;
+        /// <summary>
+        /// <inheritdoc/>
+        /// Override for <see cref="ExecuteProcessClientScript"/>
+        /// </summary>
         public override Guid Identifier => identifier;
 
         /// <summary>
