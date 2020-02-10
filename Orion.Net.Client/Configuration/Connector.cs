@@ -104,7 +104,7 @@ namespace Orion.Net.Client.Configuration
              var hubName = platformUri.EndsWith("/") ? "orionhub" : "/" + "orionhub";
 
             hubConnection = new HubConnectionBuilder()
-                                        .WithUrl(platformUri + "orionhub")
+                                        .WithUrl(platformUri + hubName)
                                         .Build();
 
             hubConnection.On("AskCommands", async () =>
