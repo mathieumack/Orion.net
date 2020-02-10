@@ -101,10 +101,10 @@ namespace Orion.Net.Client.Configuration
         /// <returns><see cref="commands"/> when the the Hub send "AskCommands"</returns>
         public async Task Connect(string platformUri, string environmentLabel, string supportID)
         {
-             var platFormUri = platformUri.EndsWith("/") ? platformUri : platformUri + "/";
+             var hubName = platformUri.EndsWith("/") ? "orionhub" : "/" + "orionhub";
 
             hubConnection = new HubConnectionBuilder()
-                                        .WithUrl(platFormUri + "orionhub")
+                                        .WithUrl(platformUri + "orionhub")
                                         .Build();
 
             hubConnection.On("AskCommands", async () =>
