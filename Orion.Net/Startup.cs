@@ -5,7 +5,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Orion.Net.Hubs;
-using System;
 
 namespace Orion.Net
 {
@@ -31,7 +30,7 @@ namespace Orion.Net
             services.AddControllersWithViews();
             services.AddRazorPages();
 
-            services.AddSignalR().AddAzureSignalR(Environment.GetEnvironmentVariable("signalr"));
+            services.AddSignalR().AddAzureSignalR(Configuration["signalr"]);
             services.AddApplicationInsightsTelemetry();
         }
 

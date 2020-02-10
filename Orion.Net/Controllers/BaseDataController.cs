@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Orion.Net.Core.Interfaces;
 using StackExchange.Redis;
 using System;
@@ -25,12 +26,11 @@ namespace Orion.Net.Controllers
         /// <summary>
         /// Constructor of <see cref="BaseDataController{T}"/> with the instantiation of the connection to Redis server <see cref="lazyConnection"/> and the database interface <see cref="cacheRedis"/>
         /// </summary>
-        public BaseDataController()
+        public BaseDataController(IConfiguration configuration)
         {
             lazyConnection = new Lazy<ConnectionMultiplexer>(() =>
             {
-                string cacheConnection = Environment.GetEnvironmentVariable("redis");
-                return ConnectionMultiplexer.Connect(cacheConnection);
+                return ConnectionMultiplexer.Connect(configuration["redis"]);
             });
 
             cacheRedis = lazyConnection.Value.GetDatabase(asyncState:true);
