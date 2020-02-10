@@ -17,8 +17,9 @@ namespace Orion.Net.Client.Configuration
     {
         /// <summary>
         /// Client Connection to the hub
+        /// Internal for test
         /// </summary>
-        private HubConnection hubConnection;
+        internal HubConnection hubConnection;
         /// <summary>
         /// Path to the Hub
         /// </summary>
