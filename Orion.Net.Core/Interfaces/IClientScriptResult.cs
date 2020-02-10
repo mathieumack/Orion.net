@@ -22,7 +22,7 @@ namespace Orion.Net.Core.Interfaces
         /// <summary>
         /// Internal method used by Script layer
         /// </summary>
-        /// <returns>Serialize Json HttpContent</returns>
+        /// <returns>HttpContent of this object</returns>
         internal abstract HttpContent GenerateDataContent();
     }
 }

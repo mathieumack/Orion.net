@@ -71,7 +71,7 @@ namespace Orion.Net.Client.Scripts
         /// Execute parameters
         /// </summary>
         /// <param name="parameters"></param>
-        /// <returns></returns>
+        /// <return></return>
         internal async Task Start(string parameters)
         {
             // Manage start script :

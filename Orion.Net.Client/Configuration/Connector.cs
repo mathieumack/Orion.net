@@ -33,6 +33,10 @@ namespace Orion.Net.Client.Configuration
         /// List of <see cref="BaseClientScript"/>, each one corresponding to a executable command
         /// </summary>
         /// <remarks><see cref="commands"/> is empty by default, to add command, the Client App calls <see cref="AddCommandService{T}(T)"/></remarks>
+        /// <summary>
+        /// List of <see cref="BaseClientScript"/>, each one corresponding to a executable command
+        /// </summary>
+        /// <remarks><see cref="commands"/> is empty by default, to add command, the Client App calls <see cref="AddCommandService{T}(T)"/></remarks>
         private readonly List<BaseClientScript> commands = new List<BaseClientScript>();
         /// <summary>
         /// Identifier of the Client Application
@@ -102,7 +106,7 @@ namespace Orion.Net.Client.Configuration
         /// <returns><see cref="commands"/> when the the Hub send "AskCommands"</returns>
         public async Task Connect(string platformUri, string environmentLabel, string supportID)
         {
-            //TO DO : connection to Azure SignalR Service
+            this.platformUri = platformUri.EndsWith("/") ? platformUri : platformUri + "/";
 
             var platFormUri = platformUri.EndsWith("/") ? platformUri : platformUri + "/";
 
