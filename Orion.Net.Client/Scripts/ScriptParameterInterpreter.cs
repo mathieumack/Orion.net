@@ -12,13 +12,14 @@ namespace Orion.Net.Client.Scripts
         /// RegexPattern use to search parameter's name and their value in a string
         /// </summary>
         /// <example>-parameter parameterValue</example>"
-        private const string RegexPattern = @"(-([a-zA-Z]+) ""([a-zA-Z0-9áàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ\\:\.\-_ \/]+)"")+";
+        private const string RegexPattern = @"(-([a-zA-Z]+) ""([a-zA-Z0-9\\:\. \/]+)"")+";
 
         /// <summary>
         /// Extract parameters from a string to a parameter results list
         /// </summary>
         /// <param name="parameters"></param>
-        /// <returns></returns>
+        /// <returns>List of <see cref="ScriptParameterInterpreterResult"/></returns>
+        /// <remarks>Return an empty list if parameters is null or no matches are found</remarks>
         public static List<ScriptParameterInterpreterResult> ExtractParams(this string parameters)
         {
             var result = new List<ScriptParameterInterpreterResult>();

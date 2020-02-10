@@ -17,12 +17,12 @@ namespace Orion.Net.Core.Interfaces
         /// <summary>
         /// Type of the result
         /// </summary>
-        public abstract ClientScriptResultType ResultType { get; set; } 
+        public abstract ClientScriptResultType ResultType { get; set; }
 
         /// <summary>
         /// Internal method used by Script layer
         /// </summary>
-        /// <returns>Serialize Json HttpContent</returns>
+        /// <returns>HttpContent of this object</returns>
         internal abstract HttpContent GenerateDataContent();
     }
 }

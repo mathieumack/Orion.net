@@ -155,7 +155,19 @@
     function GuidFour() {
         return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
     }
-    var jsClientId = (GuidFour() + "-" + GuidFour() + "-" + GuidFour() + "-" + GuidFour()).toLowerCase();;
+    //SupportID in cookie : to secure
+    var jsClientId = getOrSetCookie();
+    function getOrSetCookie() {
+        var ca = document.cookie.split(';');
+        for (var i = 0; i < ca.length; i++) {
+            if (ca[i].slice(0, 10) == "supportId=") {
+                return ca[i].slice(10, ca[i].length);
+            }
+        }
+        var guid = (GuidFour() + "-" + GuidFour() + "-" + GuidFour() + "-" + GuidFour()).toLowerCase();
+        document.cookie = "supportId=" + guid + "; expires = 60 * 60 * 24";
+        return guid;
+    }
 
     var commandRetryAppId, commandRetryTitle, commandRetryParam;
 

@@ -17,7 +17,7 @@ namespace Orion.Net.Core.Interfaces
         /// Unique identifier of the script
         /// </summary>
         Guid Identifier { get; }
-        
+
         /// <summary>
         /// Execute the script on the client side
         /// </summary>
