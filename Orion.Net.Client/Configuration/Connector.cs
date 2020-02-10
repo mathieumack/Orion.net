@@ -24,18 +24,15 @@ namespace Orion.Net.Client.Configuration
         /// </summary>
         private string platformUri;
         /// <summary>
-        /// List of <see cref="BaseClientScript"/>, each one corresponding to a executable command
-        /// </summary>
-        /// <remarks><see cref="commands"/> is empty by default, to add command, the Client App calls <see cref="AddCommandService{T}(T)"/></remarks>
-        private readonly List<BaseClientScript> commands = new List<BaseClientScript>();
-        /// <summary>
         /// Identifier of the Client Application
         /// </summary>
         /// <remarks>Use for connection purpose on the Hub</remarks>
         private readonly string appId;
         /// <summary>
-        /// Change private readonly to internal for unit test
+        /// List of <see cref="BaseClientScript"/>, each one corresponding to a executable command
         /// </summary>
+        /// <remarks><see cref="commands"/> is empty by default, to add command, the Client App calls <see cref="AddCommandService{T}(T)"/></remarks>
+        /// Change private readonly to internal for unit test
         internal List<BaseClientScript> commands = new List<BaseClientScript>();
 
         /// <summary>
