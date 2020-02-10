@@ -29,6 +29,8 @@ namespace Orion.Net.Client.Configuration
         /// Client Connection to the hub
         /// </summary>
         private HubConnection hubConnection;
+
+
         /// <summary>
         /// List of <see cref="BaseClientScript"/>, each one corresponding to a executable command
         /// </summary>
@@ -106,8 +108,6 @@ namespace Orion.Net.Client.Configuration
         /// <returns><see cref="commands"/> when the the Hub send "AskCommands"</returns>
         public async Task Connect(string platformUri, string environmentLabel, string supportID)
         {
-            this.platformUri = platformUri.EndsWith("/") ? platformUri : platformUri + "/";
-
             var platFormUri = platformUri.EndsWith("/") ? platformUri : platformUri + "/";
 
             hubConnection = new HubConnectionBuilder()
