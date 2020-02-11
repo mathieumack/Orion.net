@@ -15,8 +15,6 @@ namespace Orion.Net
 {
     public class Startup
     {
-        private const string yes = "yes";
-
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -34,34 +32,32 @@ namespace Orion.Net
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            #region AAD Authentification
-            if (Configuration["Configuration:AuthentificationAAD"] == yes)
-            {
-                //For AAD : get secret values from Key vault for the configuration in appsettings.json
-                Configuration["AzureAd:TenantId"] = Configuration["AADTenantId"];
-                Configuration["AzureAd:ClientId"] = Configuration["AADClientId"];
-                services.AddAuthentication(AzureADDefaults.AuthenticationScheme)
-                        .AddAzureAD(options => Configuration.Bind("AzureAd", options));
+            #region Authentification with Azure Active Directory
+            //Comment this region to disable the authentification
 
-                services.AddMvc(options =>
+            //For AAD : get secret values from Key vault for the configuration in appsettings.json
+            Configuration["AzureAd:TenantId"] = Configuration["AADTenantId"];
+            Configuration["AzureAd:ClientId"] = Configuration["AADClientId"];
+
+            services.AddAuthentication(AzureADDefaults.AuthenticationScheme)
+                .AddAzureAD(options => Configuration.Bind("AzureAd", options));
+
+            services.AddMvc(options =>
                 {
                     var policy = new AuthorizationPolicyBuilder()
                                     .RequireAuthenticatedUser()
                                     .Build();
                     options.Filters.Add(new AuthorizeFilter(policy));
                 }).SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
-            }
             #endregion
-            if (Configuration["Configuration:SignalRAzure"] == yes)
-            {
-                services.AddSignalR().AddAzureSignalR(Configuration["signalr"]);
-            }
-            else
-            {
-                services.AddSignalR();
-            }
 
-            Configuration["profiles:Orion.Net:environmentVariables:redis"] = (Configuration["Configuration:RedisAzure"] == yes) ? Configuration["redis"] : "https://localhost:6379/";
+            #region SignalR
+            //SignalR Azure Service
+            services.AddSignalR().AddAzureSignalR(Configuration["signalr"]);
+
+            //SignalR without Azure service
+            //services.AddSignalR();
+            #endregion
 
             services.AddControllersWithViews();
             services.AddRazorPages();
@@ -85,10 +81,10 @@ namespace Orion.Net
             app.UseStaticFiles();
             app.UseCookiePolicy();
 
-            if (Configuration["Configuration:AuthentificationAAD"] == yes)
-            {
-                app.UseAuthentication();
-            }
+            #region Authentification
+            //Comment to disable Authentification
+            app.UseAuthentication();
+            #endregion
 
             app.UseRouting();
 

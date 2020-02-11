@@ -17,6 +17,7 @@ namespace Orion.Net
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
+            #region Key Vault
             .ConfigureAppConfiguration((ctx, builder) =>
             {
                 var keyVaultEndpoint = "https://orionnetkeyvault.vault.azure.net/";
@@ -30,6 +31,7 @@ namespace Orion.Net
                         keyVaultEndpoint, keyVaultClient, new DefaultKeyVaultSecretManager());
                 }
             })
+            #endregion
             .UseStartup<Startup>();
     }
 }
