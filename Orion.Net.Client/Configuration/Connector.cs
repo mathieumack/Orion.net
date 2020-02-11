@@ -53,8 +53,7 @@ namespace Orion.Net.Client.Configuration
             appId = Guid.NewGuid().ToString();
             lazyConnection = new Lazy<ConnectionMultiplexer>(() =>
             {
-                string cacheConnection = "key";
-                return ConnectionMultiplexer.Connect(cacheConnection);
+                return ConnectionMultiplexer.Connect("key");
             });
 
             cacheRedis = lazyConnection.Value.GetDatabase(asyncState: true);

@@ -32,8 +32,8 @@ namespace Orion.Net
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            #region Authentification with Azure Active Directory
             //Comment this region to disable the authentification
+            #region Authentification with Azure Active Directory
 
             //For AAD : get secret values from Key vault for the configuration in appsettings.json
             Configuration["AzureAd:TenantId"] = Configuration["AADTenantId"];
@@ -62,8 +62,10 @@ namespace Orion.Net
             services.AddControllersWithViews();
             services.AddRazorPages();
 
+            #region Insights
             Configuration["ApplicationInsights:InstrumentationKey"] = Configuration["Insights"];
             services.AddApplicationInsightsTelemetry();
+            #endregion
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -81,8 +83,8 @@ namespace Orion.Net
             app.UseStaticFiles();
             app.UseCookiePolicy();
 
+            //Comment this region to disable Authentification
             #region Authentification
-            //Comment to disable Authentification
             app.UseAuthentication();
             #endregion
 
