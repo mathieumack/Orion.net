@@ -6,7 +6,6 @@ using Orion.Net.Core.Scripts;
 using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -54,7 +53,7 @@ namespace Orion.Net.Client.Configuration
             appId = Guid.NewGuid().ToString();
             lazyConnection = new Lazy<ConnectionMultiplexer>(() =>
             {
-                string cacheConnection = ConfigurationManager.AppSettings["RedisConnection"].ToString();
+                string cacheConnection = "key";
                 return ConnectionMultiplexer.Connect(cacheConnection);
             });
 
@@ -108,10 +107,10 @@ namespace Orion.Net.Client.Configuration
         /// <returns><see cref="commands"/> when the the Hub send "AskCommands"</returns>
         public async Task Connect(string platformUri, string environmentLabel, string supportID)
         {
-            var platFormUri = platformUri.EndsWith("/") ? platformUri : platformUri + "/";
+            var hubOrion = platformUri.EndsWith("/") ? "orionhub" : "/" + "orionhub";
 
             hubConnection = new HubConnectionBuilder()
-                                        .WithUrl(platFormUri + "/orionhub")
+                                        .WithUrl(platformUri + hubOrion)
                                         .Build();
 
             hubConnection.On("AskCommands", async () =>

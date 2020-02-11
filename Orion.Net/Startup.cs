@@ -15,15 +15,14 @@ namespace Orion.Net
 {
     public class Startup
     {
+        private const string yes = "yes";
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-            choiceConfiguration = Configuration["ChoiceConfiguration"];
         }
 
         public IConfiguration Configuration { get; }
-
-        private string choiceConfiguration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -36,7 +35,7 @@ namespace Orion.Net
             });
 
             #region AAD Authentification
-            if (choiceConfiguration == "AAD")
+            if (Configuration["Configuration:AuthentificationAAD"] == yes)
             {
                 //For AAD : get secret values from Key vault for the configuration in appsettings.json
                 Configuration["AzureAd:TenantId"] = Configuration["AADTenantId"];
@@ -51,18 +50,21 @@ namespace Orion.Net
                                     .Build();
                     options.Filters.Add(new AuthorizeFilter(policy));
                 }).SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
-                services.AddSignalR().AddAzureSignalR(Configuration["signalr"]);
             }
             #endregion
+            if (Configuration["Configuration:SignalRAzure"] == yes)
+            {
+                services.AddSignalR().AddAzureSignalR(Configuration["signalr"]);
+            }
+            else
+            {
+                services.AddSignalR();
+            }
+
+            Configuration["profiles:Orion.Net:environmentVariables:redis"] = (Configuration["Configuration:RedisAzure"] == yes) ? Configuration["redis"] : "https://localhost:6379/";
 
             services.AddControllersWithViews();
             services.AddRazorPages();
-
-            if (choiceConfiguration != "AAD")
-            {
-                services.AddSignalR();
-                Configuration["profiles:Orion.Net:environmentVariables:redis"] = "https://localhost:6379/";
-            }
 
             Configuration["ApplicationInsights:InstrumentationKey"] = Configuration["Insights"];
             services.AddApplicationInsightsTelemetry();
@@ -74,8 +76,6 @@ namespace Orion.Net
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-
-                app.UseAuthentication(); //AAD
             }
             else
             {
@@ -84,6 +84,11 @@ namespace Orion.Net
 
             app.UseStaticFiles();
             app.UseCookiePolicy();
+
+            if (Configuration["Configuration:AuthentificationAAD"] == yes)
+            {
+                app.UseAuthentication();
+            }
 
             app.UseRouting();
 

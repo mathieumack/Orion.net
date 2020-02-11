@@ -30,7 +30,7 @@ namespace Orion.Net.Controllers
         {
             lazyConnection = new Lazy<ConnectionMultiplexer>(() =>
             {
-                return ConnectionMultiplexer.Connect(configuration["redis"]);
+                return ConnectionMultiplexer.Connect(configuration["profiles:Orion.Net:environmentVariables:redis"]);
             });
 
             cacheRedis = lazyConnection.Value.GetDatabase(asyncState:true);
