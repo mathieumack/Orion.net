@@ -6,7 +6,10 @@ using System.Diagnostics;
 
 namespace Orion.Net.Controllers
 {
-    public class HomeController : Controller, IDisposable
+    /// <summary>
+    /// Controller of the pages and its content
+    /// </summary>
+    public class HomeController : Controller
     {
         public IActionResult Index()
         {

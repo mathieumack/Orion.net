@@ -6,6 +6,10 @@ using StackExchange.Redis;
 
 namespace Orion.Net.Controllers
 {
+    /// <summary>
+    /// Platform API local
+    /// </summary>
+    /// <typeparam name="T"> Client Script Result</typeparam>
     [ApiController]
     public class BaseDataController<T> : Controller where T : ClientScriptResult, new()
     {
