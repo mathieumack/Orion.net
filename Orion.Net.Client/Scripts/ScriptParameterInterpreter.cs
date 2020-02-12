@@ -19,7 +19,7 @@ namespace Orion.Net.Client.Scripts
         /// </summary>
         /// <param name="parameters"></param>
         /// <returns>List of <see cref="ScriptParameterInterpreterResult"/></returns>
-        /// <remarks>Return an empty list if parameters is null or no matches are found</remarks>
+        /// <remarks>The list returned will be empty if no parameter matches</remarks>
         public static List<ScriptParameterInterpreterResult> ExtractParams(this string parameters)
         {
             var result = new List<ScriptParameterInterpreterResult>();
