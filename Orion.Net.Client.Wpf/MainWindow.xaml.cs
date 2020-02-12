@@ -20,8 +20,7 @@ namespace Orion.Net.Client.Wpf
             App.careCenterConnector.AddCommandService(new ExecuteProcessClientScript(App.careCenterConnector));
             App.careCenterConnector.AddCommandService(new SendImageContentClientScript(App.careCenterConnector));
 
-            await App.careCenterConnector.Connect("https://orionnet20200206091914.azurewebsites.net", MyName.Text, SupportID.Text);
+            await App.careCenterConnector.Connect("https://<name>.azurewebsites.net", MyName.Text, SupportID.Text);
         }
-
     }
 }
