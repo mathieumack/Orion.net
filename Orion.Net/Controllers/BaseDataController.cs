@@ -1,11 +1,13 @@
-﻿using System;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Orion.Net.Core.Interfaces;
 using StackExchange.Redis;
+using System;
+using System.Collections.Generic;
 
 namespace Orion.Net.Controllers
 {
+
     /// <summary>
     /// Platform API local
     /// </summary>
@@ -42,14 +44,15 @@ namespace Orion.Net.Controllers
             lazyConnection.Value.Dispose();
         }
 
+
         // GET api/<controller>/5
         [HttpGet("{id}")]
-        public string Get(Guid id)
+        public string Get(string id)
         {
-            if (cacheRedis.KeyExists(id.ToString()))
+            if (cacheRedis.KeyExists(id))
             {
-                var result = cacheRedis.StringGet(id.ToString());
-                cacheRedis.KeyDelete(id.ToString());
+                var result = cacheRedis.StringGet(id);
+                cacheRedis.KeyDelete(id);
                 return result.ToString();
             }
 

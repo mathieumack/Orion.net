@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.SignalR.Client;
-using Newtonsoft.Json;
 using Orion.Net.Client.Scripts;
 using Orion.Net.Core.Interfaces;
 using Orion.Net.Core.Scripts;
@@ -7,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Orion.Net.Client.Configuration
@@ -18,13 +16,13 @@ namespace Orion.Net.Client.Configuration
     public class Connector : IAsyncDisposable
     {
         /// <summary>
-        /// Uri of the Platform
-        /// </summary>
-        private string platformUri;
-        /// <summary>
         /// Client Connection to the hub
         /// </summary>
         private HubConnection hubConnection;
+        /// <summary>
+        /// Path to the Hub
+        /// </summary>
+        private string platformUri;
         /// <summary>
         /// List of <see cref="BaseClientScript"/>, each one corresponding to a executable command
         /// </summary>
@@ -39,7 +37,8 @@ namespace Orion.Net.Client.Configuration
         /// <summary>
         /// Constructor with instantiation of the GUID of <see cref="appId"/>
         /// </summary>
-        public Connector() { 
+        public Connector()
+        {
             appId = Guid.NewGuid().ToString();
         }
 
@@ -82,10 +81,11 @@ namespace Orion.Net.Client.Configuration
         /// <returns><see cref="commands"/> when the the Hub send "AskCommands"</returns>
         public async Task Connect(string platformUri, string environmentLabel, string supportID)
         {
-             this.platformUri = platformUri.EndsWith("/") ? platformUri : platformUri + "/";
+            this.platformUri = platformUri.EndsWith("/") ? platformUri : platformUri + "/";
 
             hubConnection = new HubConnectionBuilder()
                                         .WithUrl(this.platformUri + "orionhub")
+                                        .WithAutomaticReconnect()
                                         .Build();
 
             hubConnection.On("AskCommands", async () =>
@@ -122,7 +122,7 @@ namespace Orion.Net.Client.Configuration
         }
 
         /// <summary>
-        /// Send a result object to the server Redis and notify the hub the result was send with parameters to recuperate it
+        /// Send a result object to the platform API and notify the hub the result was send with parameters to recuperate it
         /// </summary>
         /// <typeparam name="T"><see cref="ClientScriptResult"/></typeparam>
         /// <param name="result">result object</param>
@@ -130,17 +130,15 @@ namespace Orion.Net.Client.Configuration
         {
             // Send result object to the correct uri :
             var dataUri = string.Empty;
-            HttpContent content = null;
+            HttpContent content = result.GenerateDataContent();
 
             switch (result.ResultType)
             {
                 case ClientScriptResultType.ConsoleLog:
                     dataUri = platformUri + "api/v1/StringResultData";
-                    content = new StringContent(JsonConvert.SerializeObject(result), Encoding.UTF8, "application/json");
                     break;
                 case ClientScriptResultType.Image:
                     dataUri = platformUri + "api/v1/ImageResultData";
-                    content = new StringContent(JsonConvert.SerializeObject(result), Encoding.UTF8, "application/json");
                     break;
                 default:
                     return;
