@@ -19,19 +19,28 @@ namespace Orion.Net.Controllers
         {
             ViewData["Message"] = "Your application description page.";
 
-            return View();
+            return View(new UserProfileModel()
+            {
+                Name = User.Identity.Name,
+            });
         }
 
         public IActionResult Contact()
         {
             ViewData["Message"] = "Your contact page.";
 
-            return View();
+            return View(new UserProfileModel()
+            {
+                Name = User.Identity.Name,
+            });
         }
 
         public IActionResult Privacy()
         {
-            return View();
+            return View(new UserProfileModel()
+            {
+                Name = User.Identity.Name,
+            });
         }
 
         public IActionResult Orion()
