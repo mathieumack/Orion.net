@@ -3,11 +3,11 @@ using Newtonsoft.Json;
 using Orion.Net.Client.Scripts;
 using Orion.Net.Core.Interfaces;
 using Orion.Net.Core.Scripts;
-using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
+using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Orion.Net.Client.Configuration
@@ -18,13 +18,9 @@ namespace Orion.Net.Client.Configuration
     public class Connector : IAsyncDisposable
     {
         /// <summary>
-        /// Lazy Connection to Redis Server
+        /// Uri of the Platform
         /// </summary>
-        internal Lazy<ConnectionMultiplexer> lazyConnection;
-        /// <summary>
-        /// Interface for Redis Server with the methods
-        /// </summary>
-        internal IDatabase cacheRedis;
+        private string platformUri;
         /// <summary>
         /// Client Connection to the hub
         /// </summary>
@@ -41,25 +37,10 @@ namespace Orion.Net.Client.Configuration
         private readonly string appId;
 
         /// <summary>
-        /// Constructor with instantiation of the GUID of <see cref="appId"/>, the connection to Redis server <see cref="lazyConnection"/> and the interface of the server <see cref="cacheRedis"/>
+        /// Constructor with instantiation of the GUID of <see cref="appId"/>
         /// </summary>
         public Connector() { 
             appId = Guid.NewGuid().ToString();
-            lazyConnection = new Lazy<ConnectionMultiplexer>(() =>
-            {
-                string cacheConnection = ConfigurationManager.AppSettings["RedisConnection"].ToString();
-                return ConnectionMultiplexer.Connect(cacheConnection);
-            });
-
-            cacheRedis = lazyConnection.Value.GetDatabase(asyncState: true);
-        }
-
-        /// <summary>
-        /// Destructor to close the connection to Redis server
-        /// </summary>
-        ~Connector()
-        {
-            lazyConnection.Value.Dispose();
         }
 
         /// <summary>
@@ -101,10 +82,10 @@ namespace Orion.Net.Client.Configuration
         /// <returns><see cref="commands"/> when the the Hub send "AskCommands"</returns>
         public async Task Connect(string platformUri, string environmentLabel, string supportID)
         {
-             var hubName = platformUri.EndsWith("/") ? "orionhub" : "/" + "orionhub";
+             this.platformUri = platformUri.EndsWith("/") ? platformUri : platformUri + "/";
 
             hubConnection = new HubConnectionBuilder()
-                                        .WithUrl(platformUri + hubName)
+                                        .WithUrl(this.platformUri + "orionhub")
                                         .Build();
 
             hubConnection.On("AskCommands", async () =>
@@ -147,11 +128,28 @@ namespace Orion.Net.Client.Configuration
         /// <param name="result">result object</param>
         internal async Task SendResultCommand<T>(T result) where T : ClientScriptResult
         {
-            var content = JsonConvert.SerializeObject(result);
+            // Send result object to the correct uri :
+            var dataUri = string.Empty;
+            HttpContent content = null;
 
-            // Save value if key doesn't exist already
-            if (!cacheRedis.KeyExists(result.ResultIdentifier.ToString()))
-                cacheRedis.StringSet(result.ResultIdentifier.ToString(), content, TimeSpan.FromDays(1));
+            switch (result.ResultType)
+            {
+                case ClientScriptResultType.ConsoleLog:
+                    dataUri = platformUri + "api/v1/StringResultData";
+                    content = new StringContent(JsonConvert.SerializeObject(result), Encoding.UTF8, "application/json");
+                    break;
+                case ClientScriptResultType.Image:
+                    dataUri = platformUri + "api/v1/ImageResultData";
+                    content = new StringContent(JsonConvert.SerializeObject(result), Encoding.UTF8, "application/json");
+                    break;
+                default:
+                    return;
+            }
+
+            using (var client = new HttpClient())
+            {
+                await client.PostAsync(dataUri, content);
+            }
 
             // Notify server client that a result has been sent :
             await hubConnection.InvokeAsync("ResultCommandSent", appId, result.ResultIdentifier, result.ResultType);

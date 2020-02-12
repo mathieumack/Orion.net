@@ -49,15 +49,6 @@ namespace Orion.Net
             services.AddRazorPages();
 
             services.AddSignalR();
-            //services.AddStackExchangeRedisCache(options =>
-            //{
-            //    options.Configuration = Configuration["redis"];
-            //    options.ConfigurationOptions = new ConfigurationOptions()
-            //    {
-            //        ConnectRetry = 3,
-            //        ReconnectRetryPolicy = new LinearRetry(1500)
-            //    };
-            //});
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -85,8 +76,6 @@ namespace Orion.Net
                 endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapHub<OrionHub>("/orionhub");
             });
-
-            app.UseNodeModules();
         }
     }
 }

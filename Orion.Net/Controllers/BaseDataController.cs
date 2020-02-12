@@ -31,7 +31,6 @@ namespace Orion.Net.Controllers
             {
                 return ConnectionMultiplexer.Connect("key");
             });
-
             cacheRedis = lazyConnection.Value.GetDatabase(asyncState: true);
         }
 

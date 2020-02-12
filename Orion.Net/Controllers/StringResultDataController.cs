@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using Orion.Net.Core.Results;
 using System;
 
@@ -18,8 +19,8 @@ namespace Orion.Net.Controllers
         /// <summary>
         /// Return SupportId of the user
         /// </summary>
-        /// <returns>Guid SupportId</returns>
-        /// <remarks>If the support doesn't exist, save and return a new one</remarks>
+        /// <returns>Guid SupportId in String</returns>
+        /// <remarks>If the key doesn't exist, save and return a new one</remarks>
         public string Get()
         {
             if (cacheRedis.KeyExists("supportId" + User.Identity.Name))

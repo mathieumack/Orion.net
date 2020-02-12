@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Orion.Net.Models;
-using StackExchange.Redis;
-using System;
 using System.Diagnostics;
 
 namespace Orion.Net.Controllers
