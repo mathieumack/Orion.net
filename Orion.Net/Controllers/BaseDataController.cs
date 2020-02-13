@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Orion.Net.Core.Interfaces;
 using StackExchange.Redis;
@@ -59,6 +60,7 @@ namespace Orion.Net.Controllers
             return "Key Redis doesn't exist";
         }
 
+        [AllowAnonymous]
         // POST api/<controller>
         [HttpPost]
         public void Post([FromBody]T model)
