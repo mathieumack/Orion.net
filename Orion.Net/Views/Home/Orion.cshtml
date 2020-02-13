@@ -107,6 +107,7 @@
         </div>
     </div>
 </script>
+
 <script type="text/x-kendo-template" id="connectedUserCardTemplate">
     <div class="col-xl-3 col-md-6 mb-4" appId="#:appId#" onclick="loadClient('#:appId#')">
         <div class="card border-left-success shadow h-100 py-2">
@@ -121,16 +122,20 @@
         </div>
     </div>
 </script>
+
 <script type="text/javascript">
+
     function saveCommand(appId, title, param) {
         commandRetryAppId = appId;
         commandRetryTitle = title;
         commandRetryParam = param.replace(/\\/g, '\\\\');  //Double the \ or js ignore it
     }
+
     function sendCommand(appId) {
         var dropdownlist = $("input[identifier = 'detailElement_commands_" + appId + "']").data("kendoDropDownList");
         sendRetryCommand(appId, dropdownlist.text(), $("input[identifier='detailElement_commands_params_" + appId + "']").val());
     }
+
     function sendRetryCommand(appId, title, param) {
         saveCommand(appId, title, param);
         connection.invoke("SendCommandToClient",
@@ -150,7 +155,9 @@
         $("#addResults_" + commandRetryAppId).prepend(html);
     }
 </script>
+
 <script type="text/javascript">
+
     var commandRetryAppId, commandRetryTitle, commandRetryParam;
 
     var connectedUserCardTemplate = kendo.template($("#connectedUserCardTemplate").html());
@@ -201,6 +208,7 @@
             });
         }
     }
+
     function loadAvailableCommands(appId, commands) {
         // create DropDownList from input HTML element
         $("input[identifier = 'detailElement_commands_" + appId + "']").kendoDropDownList({
@@ -210,6 +218,7 @@
             index: 0
         });
     }
+
     function displayResult(appId, resultId, type) {
         var uri = "/api/v1/";
         var html;
@@ -241,5 +250,6 @@
         }
     }
 </script>
+
 @section scripts {
 }

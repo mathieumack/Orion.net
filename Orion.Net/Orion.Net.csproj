@@ -6,12 +6,7 @@
     <DockerfileContext>.</DockerfileContext>
     <AssemblyName>Orion.Net</AssemblyName>
     <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
-    <ApplicationInsightsResourceId>/subscriptions/6d7f0160-c7df-4b6a-a5c9-13819ab44f89/resourcegroups/Orion.Net/providers/microsoft.insights/components/Orion.Net</ApplicationInsightsResourceId>
   </PropertyGroup>
-
-  <ItemGroup>
-    <_ContentIncludedByDefault Remove="Connected Services\Application Insights\ConnectedService.json" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.12.1" />
@@ -26,7 +21,6 @@
     <PackageReference Include="Microsoft.Azure.SignalR" Version="1.2.3" />
     <PackageReference Include="Microsoft.Extensions.Configuration.AzureKeyVault" Version="3.1.1" />
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.1.1" />
-    <PackageReference Include="OdeToCode.UseNodeModules" Version="3.0.0" />
     <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="3.7.4">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -34,7 +28,6 @@
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.9.10" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.1" />
     <PackageReference Include="StackExchange.Redis" Version="2.0.601" />
-    <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.7.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -44,7 +37,4 @@
   <ItemGroup>
     <WCFMetadata Include="Connected Services" />
   </ItemGroup>
-
-  <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
-
 </Project>

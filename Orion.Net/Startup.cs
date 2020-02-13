@@ -49,22 +49,27 @@ namespace Orion.Net
                                     .Build();
                     options.Filters.Add(new AuthorizeFilter(policy));
                 }).SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+
             #endregion
 
             #region SignalR
+
             //SignalR Azure Service
             services.AddSignalR().AddAzureSignalR(Configuration["signalr"]);
 
             //SignalR without Azure service
             //services.AddSignalR();
+
             #endregion
 
             services.AddControllersWithViews();
             services.AddRazorPages();
 
             #region Insights
+
             Configuration["ApplicationInsights:InstrumentationKey"] = Configuration["Insights"];
             services.AddApplicationInsightsTelemetry();
+
             #endregion
         }
 
@@ -85,7 +90,9 @@ namespace Orion.Net
 
             //Comment this region to disable Authentification
             #region Authentification
+
             app.UseAuthentication();
+
             #endregion
 
             app.UseRouting();
