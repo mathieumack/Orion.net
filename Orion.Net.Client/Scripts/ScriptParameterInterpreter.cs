@@ -37,11 +37,6 @@ namespace Orion.Net.Client.Scripts
                         ParameterValue = match.Groups[3].Value
                     });
                 }
-                else
-                {
-                    // Error to be managed :
-                    
-                }
             }
 
             return result;

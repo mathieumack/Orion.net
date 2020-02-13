@@ -121,7 +121,9 @@
         </div>
     </div>
 </script>
+
 <script type="text/javascript">
+
     function saveCommand(appId, title, param) {
         commandRetryAppId = appId;
         commandRetryTitle = title;
@@ -141,7 +143,7 @@
             }).catch(function (err) {
                 return console.error(err.toString());
             });
-        html = displayCommandSent({
+        var html = displayCommandSent({
             Color: "success",
             CommandRetryAppId: commandRetryAppId,
             CommandRetryTitle: commandRetryTitle,
@@ -150,8 +152,10 @@
         $("#addResults_" + commandRetryAppId).prepend(html);
     }
 </script>
+
 <script type="text/javascript">
-    var commandRetryAppId, commandRetryTitle, commandRetryParam;
+
+    var commandRetryAppIp, commandRetryTitle, commandRetryParam;
 
     var connectedUserCardTemplate = kendo.template($("#connectedUserCardTemplate").html());
     var connectedUserDetailTemplate = kendo.template($("#connectedUserDetailTemplate").html());
@@ -164,12 +168,13 @@
         .build();
 
     //ID Support
-    window.onload = function () {
+    function connectionStart() {
         $.get("/api/v1/StringResultData", function (data) {
             document.getElementById('displaySupportId').innerText = "Support ID : " + data;
             connection.invoke("StartSupportGroupe", data);
         });
     }
+    window.onload = connectionStart();
 
     connection.on("NewClient", function (detail) {
         tabStrip.append(connectedUserCardTemplate(detail));
@@ -185,10 +190,10 @@
     }).catch(function (err) {
         return console.error(err.toString());
     });
-    connection.onclose(function (){
+    connection.onclose(function () {
         //Try to reconnect
         setTimeout(() => start(), 5000);
-        connection.invoke("StartSupportGroupe", jsClientId);
+        window.onload = connectionStart();
     });
 
     function loadClient(appID) {
@@ -206,6 +211,7 @@
             });
         }
     }
+
     function loadAvailableCommands(appId, commands) {
         // create DropDownList from input HTML element
         $("input[identifier = 'detailElement_commands_" + appId + "']").kendoDropDownList({
@@ -215,6 +221,7 @@
             index: 0
         });
     }
+
     function displayResult(appId, resultId, type) {
         var uri = "/api/v1/";
         var html;
@@ -245,23 +252,42 @@
             case 4:
                 uri += "FileResultData/" + resultId;
                 $.get(uri, function (data) {
-                    //Create element a for download data as blob
-                    var download = document.createElement('a');
-                    var blob = new Blob([dataToArrayBuffer(data.fileAsByteArray)], { type: data.fileMime });
-                    download.href = window.URL.createObjectURL(blob);
-                    download.setAttribute('download', data.fileName);
-
-                    if (document.createEvent) {
-                        var event = document.createEvent('MouseEvents');
-                        event.initEvent('click', true, true);
-                        download.dispatchEvent(event);
+                    if (data == "Key API doesn't exist")
+                    {
+                        html = displayResultsStringTemplate({
+                            Content: "ExportFile error : " + data,
+                            Color: "primary"
+                        });
+                        $("#addResults_" + appId).prepend(html);
                     }
-                    else { download.click(); }
+                    else
+                    {
+                        deserialized = JSON.parse(data);
+                        //Create element a for download data as blob
+                        var download = document.createElement('a');
+                        var blob = new Blob([dataToArrayBuffer(deserialized.FileAsByteArray)], { type: deserialized.FileMime });
+                        download.href = window.URL.createObjectURL(blob);
+                        download.setAttribute('download', deserialized.FileName);
+
+                        if (document.createEvent) {
+                            var event = document.createEvent('MouseEvents');
+                            event.initEvent('click', true, true);
+                            download.dispatchEvent(event);
+                        }
+                        else { download.click(); }
+                    }
+                }).catch(function (err) {
+                    html = displayResultsStringTemplate({
+                        Content: "Error while Export File \n" + err,
+                        Color: "primary"
+                    });
+                    $("#addResults_" + appId).prepend(html);
                 });
                 break;
             default: break;
         }
     }
+
     //Transform flux data to Array Buffer for file type
     function dataToArrayBuffer(data) {
         var binaryString = window.atob(data);

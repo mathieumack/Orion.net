@@ -3,7 +3,6 @@ using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.StaticFiles;
 using Orion.Net.Client.Configuration;
 using Orion.Net.Core.Interfaces;
 using Orion.Net.Core.Results;
@@ -144,6 +143,8 @@ namespace Orion.Net.Client.Scripts
         /// <exception cref="Exception">The conversion can fail and a message will be send</exception>
         protected async Task SendFileContent(string pathFile)
         {
+            MimeTypeDictionary mimeTypeDictionary = new MimeTypeDictionary();
+
             if (!File.Exists(pathFile))
             {
                 await SendStringContent("File not found.");
@@ -152,17 +153,13 @@ namespace Orion.Net.Client.Scripts
 
             try
             {
-                //Get the file's mime or a default one
-                new FileExtensionContentTypeProvider().TryGetContentType(pathFile, out string mime);
-                mime = mime ?? "application/octet-stream";
-
                 //Create result content
                 var result = new FileContentResult()
                 {
                     ResultIdentifier = Guid.NewGuid(),
                     FileAsByteArray = File.ReadAllBytes(pathFile),
                     FileName = pathFile.Substring(pathFile.LastIndexOf('\\') + 1, pathFile.Length - pathFile.LastIndexOf('\\') - 1),
-                    Mime = mime
+                    Mime = mimeTypeDictionary.GetMime(pathFile.Substring(pathFile.LastIndexOf('.')))
                 };
 
                 // Send result content to server :
@@ -175,5 +172,6 @@ namespace Orion.Net.Client.Scripts
         }
 
         #endregion
+
     }
 }

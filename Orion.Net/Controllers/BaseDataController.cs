@@ -32,7 +32,7 @@ namespace Orion.Net.Controllers
         {
             lazyConnection = new Lazy<ConnectionMultiplexer>(() =>
             {
-                return ConnectionMultiplexer.Connect("key");
+                return ConnectionMultiplexer.Connect("keyRedis");
             });
             cacheRedis = lazyConnection.Value.GetDatabase(asyncState: true);
         }
@@ -57,7 +57,7 @@ namespace Orion.Net.Controllers
                 return result.ToString();
             }
 
-            return "Key Redis doesn't exist";
+            return "Key API doesn't exist";
         }
 
         [AllowAnonymous]
