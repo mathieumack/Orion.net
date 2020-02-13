@@ -20,6 +20,7 @@ namespace Orion.Net.Controllers
         /// <param name="configuration"></param>
         public StringResultDataController(IConfiguration configuration) : base(configuration)
         {
+
         }
 
         // GET api/v1/StringResultData

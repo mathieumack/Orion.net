@@ -17,6 +17,7 @@ namespace Orion.Net.Controllers
         /// <param name="configuration"></param>
         public ImageResultDataController(IConfiguration configuration) : base(configuration)
         {
+
         }
     }
 }
