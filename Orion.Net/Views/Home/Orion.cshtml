@@ -235,9 +235,8 @@
             case 2:
                 uri += "StringResultData/" + resultId;
                 $.get(uri, function (data) {
-                    deserialized = JSON.parse(data);
                     html = displayResultsStringTemplate({
-                        Content: deserialized.ConsoleContent,
+                        Content: data.consoleContent,
                         Color: "primary"
                     });
                     $("#addResults_" + appId).prepend(html);
@@ -246,10 +245,9 @@
             case 3:
                 uri += "ImageResultData/" + resultId;
                 $.get(uri, function (data) {
-                    deserialized = JSON.parse(data);
                     html = displayResultsImageTemplate({
-                        Content: (deserialized.ImageAsByteArray),
-                        Color: "warning"
+                        Content: (data.imageAsByteArray),
+                        Color: "warning",
                     });
                     $("#addResults_" + appId).prepend(html);
                 });

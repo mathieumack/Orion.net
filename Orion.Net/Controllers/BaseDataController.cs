@@ -1,9 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Orion.Net.Core.Interfaces;
-using StackExchange.Redis;
 using System;
-using System.Configuration;
+using System.Collections.Generic;
 
 namespace Orion.Net.Controllers
 {
@@ -14,48 +13,32 @@ namespace Orion.Net.Controllers
     [ApiController]
     public class BaseDataController<T> : Controller where T : ClientScriptResult, new()
     {
-        /// <summary>
-        /// Lazy connection to Redis server
-        /// </summary>
-        internal Lazy<ConnectionMultiplexer> lazyConnection;
-        /// <summary>
-        /// Interface to Redis database for the access to the methods
-        /// </summary>
-        internal IDatabase cacheRedis;
-
-        /// <summary>
-        /// Constructor of <see cref="BaseDataController{T}"/> with the instantiation of the connection to Redis server <see cref="lazyConnection"/> and the database interface <see cref="cacheRedis"/>
-        /// </summary>
-        public BaseDataController(IConfiguration configuration)
-        {
-            lazyConnection = new Lazy<ConnectionMultiplexer>(() =>
-            {
-                return ConnectionMultiplexer.Connect(configuration["redis"]);
-            });
-
-            cacheRedis = lazyConnection.Value.GetDatabase(asyncState:true);
-        }
-
-        /// <summary>
-        /// Destructor to dispose the connection to redis server
-        /// </summary>
-        ~BaseDataController()
-        {
-            lazyConnection.Value.Dispose();
-        }
+        // Temporary cache management for tests only.
+        // TODO : replace with a  distributed cache management system
+        public static Dictionary<Guid, object> CacheManager = new Dictionary<Guid, object>();
 
         // GET api/<controller>/5
         [HttpGet("{id}")]
-        public string Get(Guid id)
+        public T Get(Guid id)
         {
-            if (cacheRedis.KeyExists(id.ToString()))
+            if (CacheManager.ContainsKey(id))
             {
-                var result = cacheRedis.StringGet(id.ToString());
-                cacheRedis.KeyDelete(id.ToString());
-                return result.ToString();
+                var result = CacheManager[id];
+                CacheManager.Remove(id);
+                return result as T;
             }
 
-            return "{\"ConsoleContent\" : \"Error from Api Get\"}";
+            return new T();
+        }
+
+        [AllowAnonymous]
+        // POST api/<controller>
+        [HttpPost]
+        public void Post([FromBody]T model)
+        {
+            // Save value in cache
+            if (!CacheManager.ContainsKey(model.ResultIdentifier))
+                CacheManager.Add(model.ResultIdentifier, model);
         }
     }
 }

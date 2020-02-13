@@ -1,12 +1,11 @@
 ﻿using Microsoft.AspNetCore.SignalR.Client;
-using Newtonsoft.Json;
 using Orion.Net.Client.Scripts;
 using Orion.Net.Core.Interfaces;
 using Orion.Net.Core.Scripts;
-using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace Orion.Net.Client.Configuration
@@ -17,23 +16,14 @@ namespace Orion.Net.Client.Configuration
     public class Connector : IAsyncDisposable
     {
         /// <summary>
-        /// Lazy Connection to Redis Server
+        /// Platform's Uri
         /// </summary>
-        internal Lazy<ConnectionMultiplexer> lazyConnection;
-        /// <summary>
-        /// Interface for Redis Server with the methods
-        /// </summary>
-        internal IDatabase cacheRedis;
+        private string platformUri;
         /// <summary>
         /// Client Connection to the hub
         /// </summary>
         private HubConnection hubConnection;
 
-
-        /// <summary>
-        /// List of <see cref="BaseClientScript"/>, each one corresponding to a executable command
-        /// </summary>
-        /// <remarks><see cref="commands"/> is empty by default, to add command, the Client App calls <see cref="AddCommandService{T}(T)"/></remarks>
         /// <summary>
         /// List of <see cref="BaseClientScript"/>, each one corresponding to a executable command
         /// </summary>
@@ -46,25 +36,11 @@ namespace Orion.Net.Client.Configuration
         private readonly string appId;
 
         /// <summary>
-        /// Constructor with instantiation of the GUID of <see cref="appId"/>, the connection to Redis server <see cref="lazyConnection"/> and the interface of the server <see cref="cacheRedis"/>
+        /// Constructor with instantiation of the GUID of <see cref="appId"/>
         /// </summary>
         public Connector()
         {
             appId = Guid.NewGuid().ToString();
-            lazyConnection = new Lazy<ConnectionMultiplexer>(() =>
-            {
-                return ConnectionMultiplexer.Connect("key");
-            });
-
-            cacheRedis = lazyConnection.Value.GetDatabase(asyncState: true);
-        }
-
-        /// <summary>
-        /// Destructor to close the connection to Redis server
-        /// </summary>
-        ~Connector()
-        {
-            lazyConnection.Value.Dispose();
         }
 
         /// <summary>
@@ -106,10 +82,10 @@ namespace Orion.Net.Client.Configuration
         /// <returns><see cref="commands"/> when the the Hub send "AskCommands"</returns>
         public async Task Connect(string platformUri, string environmentLabel, string supportID)
         {
-            var hubOrion = platformUri.EndsWith("/") ? "orionhub" : "/" + "orionhub";
+            this.platformUri = platformUri.EndsWith("/") ? platformUri : platformUri + "/";
 
             hubConnection = new HubConnectionBuilder()
-                                        .WithUrl(platformUri + hubOrion)
+                                        .WithUrl(this.platformUri + "orionhub")
                                         .Build();
 
             hubConnection.On("AskCommands", async () =>
@@ -146,17 +122,32 @@ namespace Orion.Net.Client.Configuration
         }
 
         /// <summary>
-        /// Send a result object to the server Redis and notify the hub the result was send with parameters to recuperate it
+        /// Send a result object to the platform API and notify the hub the result was send with parameters to recuperate it
         /// </summary>
         /// <typeparam name="T"><see cref="ClientScriptResult"/></typeparam>
         /// <param name="result">result object</param>
         internal async Task SendResultCommand<T>(T result) where T : ClientScriptResult
         {
-            var content = JsonConvert.SerializeObject(result);
+            // Send result object to the correct uri :
+            var dataUri = string.Empty;
+            HttpContent content = result.GenerateDataContent();
 
-            // Save value if key doesn't exist already
-            if (!cacheRedis.KeyExists(result.ResultIdentifier.ToString()))
-                cacheRedis.StringSet(result.ResultIdentifier.ToString(), content, TimeSpan.FromDays(1));
+            switch (result.ResultType)
+            {
+                case ClientScriptResultType.ConsoleLog:
+                    dataUri = platformUri + "api/v1/StringResultData";
+                    break;
+                case ClientScriptResultType.Image:
+                    dataUri = platformUri + "api/v1/ImageResultData";
+                    break;
+                default:
+                    return;
+            }
+
+            using (var client = new HttpClient())
+            {
+                await client.PostAsync(dataUri, content);
+            }
 
             // Notify server client that a result has been sent :
             await hubConnection.InvokeAsync("ResultCommandSent", appId, result.ResultIdentifier, result.ResultType);
