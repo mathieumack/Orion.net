@@ -1,12 +1,12 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.SignalR.Client;
+using Orion.Net.Client.Scripts;
+using Orion.Net.Core.Interfaces;
+using Orion.Net.Core.Scripts;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.SignalR.Client;
-using Orion.Net.Client.Scripts;
-using Orion.Net.Core.Interfaces;
-using Orion.Net.Core.Scripts;
 
 namespace Orion.Net.Client.Configuration
 {
@@ -39,8 +39,9 @@ namespace Orion.Net.Client.Configuration
         /// <summary>
         /// Constructor with instantiation of the GUID of <see cref="appId"/>
         /// </summary>
-        public Connector() { 
-            appId = Guid.NewGuid().ToString(); 
+        public Connector()
+        {
+            appId = Guid.NewGuid().ToString();
         }
 
         /// <summary>
@@ -57,6 +58,7 @@ namespace Orion.Net.Client.Configuration
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="command"></param>
+        /// <exception cref="ArgumentNullException"> if the command is null</exception>
         public void AddCommandService<T>(T command) where T : BaseClientScript
         {
             if (command == null)
@@ -84,7 +86,8 @@ namespace Orion.Net.Client.Configuration
             this.platformUri = platformUri.EndsWith("/") ? platformUri : platformUri + "/";
 
             hubConnection = new HubConnectionBuilder()
-                                        .WithUrl(platformUri + "orionhub")
+                                        .WithUrl(this.platformUri + "orionhub")
+                                        .WithAutomaticReconnect()
                                         .Build();
 
             hubConnection.On("AskCommands", async () =>
