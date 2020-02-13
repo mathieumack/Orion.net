@@ -86,6 +86,7 @@ namespace Orion.Net.Client.Configuration
 
             hubConnection = new HubConnectionBuilder()
                                         .WithUrl(this.platformUri + "orionhub")
+                                        .WithAutomaticReconnect()
                                         .Build();
 
             hubConnection.On("AskCommands", async () =>
