@@ -76,8 +76,6 @@ namespace Orion.Net
                 endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapHub<OrionHub>("/orionhub");
             });
-
-            app.UseNodeModules();
         }
     }
 }
