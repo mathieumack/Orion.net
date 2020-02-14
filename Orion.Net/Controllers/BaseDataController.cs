@@ -1,10 +1,9 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Orion.Net.Core.Interfaces;
 using StackExchange.Redis;
-using System;
-using System.Collections.Generic;
 
 namespace Orion.Net.Controllers
 {
@@ -16,6 +15,7 @@ namespace Orion.Net.Controllers
     [ApiController]
     public class BaseDataController<T> : Controller where T : ClientScriptResult, new()
     {
+        static protected string SupportID { get; set; }
         /// <summary>
         /// Lazy connection to Redis server
         /// </summary>
@@ -65,8 +65,10 @@ namespace Orion.Net.Controllers
         [HttpPost]
         public void Post([FromBody]T model)
         {
+            var request = Request;
+            bool verification = request.Headers.ContainsKey("Authorization") ? (request.Headers["Authorization"] ==SupportID) : false;
             // Save value in cache
-            if (!cacheRedis.KeyExists(model.ResultIdentifier.ToString()))
+            if (!cacheRedis.KeyExists(model.ResultIdentifier.ToString()) && verification)
                 cacheRedis.StringSet(model.ResultIdentifier.ToString(), JsonConvert.SerializeObject(model), TimeSpan.FromDays(1));
         }
     }

@@ -33,6 +33,11 @@ namespace Orion.Net.Client.Configuration
         /// </summary>
         /// <remarks>Use for connection purpose on the Hub</remarks>
         private readonly string appId;
+        /// <summary>
+        /// Identifier of the Support
+        /// </summary>
+        /// <remarks>Use for secure post API</remarks>
+        private string supportId;
 
         /// <summary>
         /// Constructor with instantiation of the GUID of <see cref="appId"/>
@@ -81,6 +86,7 @@ namespace Orion.Net.Client.Configuration
         /// <returns><see cref="commands"/> when the the Hub send "AskCommands"</returns>
         public async Task Connect(string platformUri, string environmentLabel, string supportID)
         {
+            this.supportId = supportID;
             this.platformUri = platformUri.EndsWith("/") ? platformUri : platformUri + "/";
 
             hubConnection = new HubConnectionBuilder()
@@ -146,6 +152,7 @@ namespace Orion.Net.Client.Configuration
 
             using (var client = new HttpClient())
             {
+                client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", supportId);
                 await client.PostAsync(dataUri, content);
             }
 

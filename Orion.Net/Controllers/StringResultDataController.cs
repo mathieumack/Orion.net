@@ -26,11 +26,14 @@ namespace Orion.Net.Controllers
             if (cacheRedis.KeyExists("supportId" + User.Identity.Name))
             {
                 var result = cacheRedis.StringGet("supportId" + User.Identity.Name);
+                SupportID = result;
                 return result.ToString();
             }
             else
             {
                 string guid = Guid.NewGuid().ToString();
+                SupportID = guid;
+               SupportID = SupportID;
                 cacheRedis.StringSet("supportId" + User.Identity.Name, guid, TimeSpan.FromDays(1));
                 return guid;
             }

@@ -10,5 +10,6 @@ namespace Orion.Net.Controllers
     [Route("api/v1/ImageResultData")]
     public class ImageResultDataController : BaseDataController<ImageContentResult>
     {
+
     }
 }
