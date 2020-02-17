@@ -23,27 +23,7 @@ namespace Orion.Net.Controllers
         /// <remarks>If the key doesn't exist, save and return a new one</remarks>
         public string Get()
         {
-            if(useRedisCacheManagement)
-            {
-                string result = Guid.NewGuid().ToString();
-                if (cacheRedis.KeyExists("supportId" + User.Identity.Name))
-                {
-                    result = cacheRedis.StringGet("supportId" + User.Identity.Name).ToString();
-                }
-                else
-                {
-                    cacheRedis.StringSet("supportId" + User.Identity.Name, result, TimeSpan.FromDays(1));
-                }
-                return result;
-            }
-            else
-            {
-                if (!CacheManager.ContainsKey(Guid.Empty))
-                {
-                    CacheManager[Guid.Empty] = Guid.NewGuid();
-                }
-                return CacheManager[Guid.Empty].ToString();
-            }
+            return CacheData.GetSupportId("supportId" + User.Identity.Name);
         }
     }
 }
