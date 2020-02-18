@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Orion.Net.Core.Results;
+using Orion.Net.Interface;
 
 namespace Orion.Net.Controllers
 {
@@ -10,5 +11,9 @@ namespace Orion.Net.Controllers
     [Route("api/v1/ImageResultData")]
     public class ImageResultDataController : BaseDataController<ImageContentResult>
     {
+        public ImageResultDataController(ILocalCache cache) : base(cache)
+        {
+            CacheData = cache;
+        }
     }
 }

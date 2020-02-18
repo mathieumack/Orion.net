@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using Orion.Net.CacheManagement;
 using Orion.Net.Core.Interfaces;
 using Orion.Net.Interface;
 
@@ -17,14 +16,18 @@ namespace Orion.Net.Controllers
     public class BaseDataController<T> : Controller where T : ClientScriptResult, new()
     {
         /// <summary>
-        /// Cache Management of the API
+        /// Cache Management of the API, two types possible:
         /// <list type="table">
-        /// <item><see cref="LocalCache"/> is for a internal cache memory</item>
-        /// <item><see cref="RedisCache"/> is for external cache memory with Redis</item>
+        /// <item><see cref="LocalCache"/> for a internal cache memory</item>
+        /// <item><see cref="RedisCache"/> for external cache memory with Redis</item>
         /// </list>
         /// </summary>
-        /// <remarks>Change <see cref="LocalCache"/> to <see cref="RedisCache"/> and vice versa depending you need</remarks>
-        protected ICacheManagement CacheData = new LocalCache();
+        public ICacheManagement CacheData;
+
+        public BaseDataController(ILocalCache cache)
+        {
+            CacheData = cache;
+        }
 
         // GET api/<controller>/5
         [HttpGet("{id}")]

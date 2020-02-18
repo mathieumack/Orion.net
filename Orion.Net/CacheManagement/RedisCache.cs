@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Orion.Net.Interface;
 using StackExchange.Redis;
 
@@ -11,12 +8,13 @@ namespace Orion.Net.CacheManagement
     /// Redis Cache management
     /// </summary>
     /// <remarks>Work with both local Redis and Azure Cache for Redis</remarks>
-    public class RedisCache : ICacheManagement
+    public class RedisCache : IRedisCache
     {
         /// <summary>
         /// Lazy connection to Redis server
         /// </summary>
         internal Lazy<ConnectionMultiplexer> lazyConnection;
+
         /// <summary>
         /// Interface to Redis database for the access to the methods
         /// </summary>

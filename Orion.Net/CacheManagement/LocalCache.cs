@@ -7,7 +7,7 @@ namespace Orion.Net.CacheManagement
     /// <summary>
     /// LocalCache management
     /// </summary>
-    public class LocalCache : ICacheManagement
+    public class LocalCache : ILocalCache
     {
         /// <summary>
         /// Local Cache Management

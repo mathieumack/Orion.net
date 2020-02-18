@@ -14,21 +14,20 @@ namespace Orion.Net.Interface
         /// <param name="key">SupportId=userId</param>
         /// <returns>Guid in string</returns>
         /// <remarks>Save up to one day</remarks>
-        public string GetSupportId(string key);
+        string GetSupportId(string key);
 
         /// <summary>
         /// Return the value at the key or an error message if the key doesn't exist
         /// </summary>
         /// <param name="key">Identifier key</param>
         /// <returns>Value in string</returns>
-        public string GetValue(Guid key);
+        string GetValue(Guid key);
 
         /// <summary>
         /// Set the value at the key or do nothing if the key already exists
         /// </summary>
         /// <param name="key">Identifier key</param>
         /// <param name="value">Value in string</param>
-        public void SetValue(Guid key, string value);
-
+        void SetValue(Guid key, string value);
     }
 }
