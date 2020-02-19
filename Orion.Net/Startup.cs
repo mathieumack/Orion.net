@@ -9,7 +9,9 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Orion.Net.CacheManagement;
 using Orion.Net.Hubs;
+using Orion.Net.Interface;
 
 namespace Orion.Net
 {
@@ -49,6 +51,8 @@ namespace Orion.Net
             services.AddRazorPages();
 
             services.AddSignalR();
+
+            services.AddSingleton(typeof(ICacheManagement), typeof(LocalCache));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

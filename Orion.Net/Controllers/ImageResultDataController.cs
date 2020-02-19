@@ -11,9 +11,9 @@ namespace Orion.Net.Controllers
     [Route("api/v1/ImageResultData")]
     public class ImageResultDataController : BaseDataController<ImageContentResult>
     {
-        public ImageResultDataController(ILocalCache cache) : base(cache)
+        public ImageResultDataController(ICacheManagement cache) : base(cache)
         {
-            CacheData = cache;
+
         }
     }
 }

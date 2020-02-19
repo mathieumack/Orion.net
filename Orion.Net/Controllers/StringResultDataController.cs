@@ -15,9 +15,9 @@ namespace Orion.Net.Controllers
     [Route("api/v1/StringResultData")]
     public class StringResultDataController : BaseDataController<StringContentResult>
     {
-        public StringResultDataController(ILocalCache cache) : base(cache)
+        public StringResultDataController(ICacheManagement cache) : base(cache)
         {
-            CacheData = cache;
+
         }
 
         // GET api/v1/StringResultData

@@ -24,7 +24,7 @@ namespace Orion.Net.Controllers
         /// </summary>
         public ICacheManagement CacheData;
 
-        public BaseDataController(ILocalCache cache)
+        public BaseDataController(ICacheManagement cache)
         {
             CacheData = cache;
         }
