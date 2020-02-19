@@ -7,7 +7,7 @@ using StackExchange.Redis;
 
 namespace Orion.Net.Controllers
 {
-
+    [Authorize]
     /// <summary>
     /// Platform API local
     /// </summary>
@@ -60,15 +60,14 @@ namespace Orion.Net.Controllers
             return "Key Redis doesn't exist";
         }
 
-        [AllowAnonymous]
+     //   [AllowAnonymous]
+        [Authorize(Policy = "PostAPI")]
         // POST api/<controller>
         [HttpPost]
         public void Post([FromBody]T model)
         {
-            var request = Request;
-            bool verification = request.Headers.ContainsKey("Authorization") ? (request.Headers["Authorization"] ==SupportID) : false;
             // Save value in cache
-            if (!cacheRedis.KeyExists(model.ResultIdentifier.ToString()) && verification)
+            if (!cacheRedis.KeyExists(model.ResultIdentifier.ToString()))
                 cacheRedis.StringSet(model.ResultIdentifier.ToString(), JsonConvert.SerializeObject(model), TimeSpan.FromDays(1));
         }
     }

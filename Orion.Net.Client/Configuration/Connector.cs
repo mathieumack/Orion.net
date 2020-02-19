@@ -6,6 +6,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Security.Principal;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Orion.Net.Client.Configuration
@@ -19,20 +21,24 @@ namespace Orion.Net.Client.Configuration
         /// Client Connection to the hub
         /// </summary>
         private HubConnection hubConnection;
+
         /// <summary>
         /// Path to the Hub
         /// </summary>
         private string platformUri;
+
         /// <summary>
         /// List of <see cref="BaseClientScript"/>, each one corresponding to a executable command
         /// </summary>
         /// <remarks><see cref="commands"/> is empty by default, to add command, the Client App calls <see cref="AddCommandService{T}(T)"/></remarks>
         private readonly List<BaseClientScript> commands = new List<BaseClientScript>();
+
         /// <summary>
         /// Identifier of the Client Application
         /// </summary>
         /// <remarks>Use for connection purpose on the Hub</remarks>
         private readonly string appId;
+
         /// <summary>
         /// Identifier of the Support
         /// </summary>

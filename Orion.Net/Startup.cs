@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Orion.Net.Authorization;
+using Orion.Net.Controllers;
 using Orion.Net.Hubs;
 
 namespace Orion.Net
@@ -49,6 +51,16 @@ namespace Orion.Net
             services.AddRazorPages();
 
             services.AddSignalR();
+
+            //For Authorization
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("PostAPI", policy =>
+                    policy.Requirements.Add(new PostApiVerification()));
+            });
+
+            services.AddHttpContextAccessor();
+            //To this point
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -70,6 +82,8 @@ namespace Orion.Net
             app.UseAuthentication();
 
             app.UseRouting();
+
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

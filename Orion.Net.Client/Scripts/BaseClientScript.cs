@@ -20,20 +20,24 @@ namespace Orion.Net.Client.Scripts
         /// Inherited from <see cref="IClientScript"/>
         /// </summary>
         public abstract string Title { get; }
+
         /// <summary>
         /// <inheritdoc/>
         /// Inherited from <see cref="IClientScript"/>
         /// </summary>
         public abstract Guid Identifier { get; }
+
         /// <summary>
         /// List of <see cref="ScriptParameter"/> for the command
         /// </summary>
         protected List<ScriptParameter> AvailableParameters { get; } = new List<ScriptParameter>();
+
         /// <summary>
         /// <inheritdoc/>
         /// Inherited from <see cref="IClientScript"/>
         /// </summary>
         public abstract Task Execute(string parameters);
+
         /// <summary>
         /// Client Connector to the Hub
         /// </summary>
