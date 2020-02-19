@@ -15,11 +15,11 @@ namespace Orion.Net.Controllers
     [ApiController]
     public class BaseDataController<T> : Controller where T : ClientScriptResult, new()
     {
-        static protected string SupportID { get; set; }
         /// <summary>
         /// Lazy connection to Redis server
         /// </summary>
         internal Lazy<ConnectionMultiplexer> lazyConnection;
+
         /// <summary>
         /// Interface to Redis database for the access to the methods
         /// </summary>
