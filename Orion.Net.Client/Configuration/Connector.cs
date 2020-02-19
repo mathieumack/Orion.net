@@ -1,12 +1,12 @@
-﻿using Microsoft.AspNetCore.SignalR.Client;
-using Orion.Net.Client.Scripts;
-using Orion.Net.Core.Interfaces;
-using Orion.Net.Core.Scripts;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.SignalR.Client;
+using Orion.Net.Client.Scripts;
+using Orion.Net.Core.Interfaces;
+using Orion.Net.Core.Scripts;
 
 namespace Orion.Net.Client.Configuration
 {
@@ -16,13 +16,14 @@ namespace Orion.Net.Client.Configuration
     public class Connector : IAsyncDisposable
     {
         /// <summary>
+        /// Platform's Uri
+        /// </summary>
+        private string platformUri;
+        /// <summary>
         /// Client Connection to the hub
         /// </summary>
         private HubConnection hubConnection;
-        /// <summary>
-        /// Path to the Hub
-        /// </summary>
-        private string platformUri;
+
         /// <summary>
         /// List of <see cref="BaseClientScript"/>, each one corresponding to a executable command
         /// </summary>
