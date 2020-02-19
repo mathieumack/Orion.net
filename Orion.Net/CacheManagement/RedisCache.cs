@@ -8,7 +8,7 @@ namespace Orion.Net.CacheManagement
     /// Redis Cache management
     /// </summary>
     /// <remarks>Work with both local Redis and Azure Cache for Redis</remarks>
-    public class RedisCache : IRedisCache
+    public class RedisCache : ICacheManagement
     {
         /// <summary>
         /// Lazy connection to Redis server
