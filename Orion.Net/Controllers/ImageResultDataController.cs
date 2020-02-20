@@ -11,6 +11,10 @@ namespace Orion.Net.Controllers
     [Route("api/v1/ImageResultData")]
     public class ImageResultDataController : BaseDataController<ImageContentResult>
     {
+        /// <summary>
+        /// Constructor from <see cref="BaseDataController{T}"/> to initiate <see cref="CacheData"/>
+        /// </summary>
+        /// <param name="cache"><see cref="ICacheManagement"/> for <see cref="CacheData"/></param>
         public ImageResultDataController(ICacheManagement cache) : base(cache)
         {
 

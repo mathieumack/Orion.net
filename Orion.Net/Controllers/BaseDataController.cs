@@ -1,7 +1,6 @@
 ﻿using System;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Orion.Net.Core.Interfaces;
 using Orion.Net.Interface;

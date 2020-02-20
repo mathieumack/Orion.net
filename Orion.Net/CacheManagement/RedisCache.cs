@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.Extensions.Configuration;
 using Orion.Net.Interface;
 using StackExchange.Redis;
 
@@ -23,11 +24,11 @@ namespace Orion.Net.CacheManagement
         /// <summary>
         /// Constructor of <see cref="RedisCache"/> with the instantiation of the connection to Redis server <see cref="lazyConnection"/> and the database interface <see cref="cacheRedis"/>
         /// </summary>
-        public RedisCache()
+        public RedisCache(IConfiguration configuration)
         {
             lazyConnection = new Lazy<ConnectionMultiplexer>(() =>
             {
-                return ConnectionMultiplexer.Connect("key");
+                return ConnectionMultiplexer.Connect(configuration["redis"]);
             });
             cacheRedis = lazyConnection.Value.GetDatabase(asyncState: true);
         }

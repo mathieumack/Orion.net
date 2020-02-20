@@ -64,6 +64,13 @@ namespace Orion.Net
 
             #endregion
 
+            #region CacheManagement
+
+            //Switch between LocalCache and RedisCache in function of your need
+            services.AddSingleton(typeof(ICacheManagement), typeof(RedisCache));
+
+            #endregion
+
             services.AddControllersWithViews();
             services.AddRazorPages();
 
