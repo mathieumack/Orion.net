@@ -23,6 +23,5 @@ namespace Orion.Net.Client.Wpf
 
             await App.careCenterConnector.Connect("https://localhost:44359/", MyName.Text, SupportID.Text);
         }
-
     }
 }

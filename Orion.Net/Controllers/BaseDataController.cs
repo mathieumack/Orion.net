@@ -1,10 +1,10 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Orion.Net.Core.Interfaces;
 using StackExchange.Redis;
-using System;
-using System.Collections.Generic;
 
 namespace Orion.Net.Controllers
 {
@@ -28,11 +28,11 @@ namespace Orion.Net.Controllers
         /// <summary>
         /// Constructor of <see cref="BaseDataController{T}"/> with the instantiation of the connection to Redis server <see cref="lazyConnection"/> and the database interface <see cref="cacheRedis"/>
         /// </summary>
-        public BaseDataController()
+        public BaseDataController(IConfiguration configuration)
         {
             lazyConnection = new Lazy<ConnectionMultiplexer>(() =>
             {
-                return ConnectionMultiplexer.Connect("keyRedis");
+                return ConnectionMultiplexer.Connect(configuration["redis"]);
             });
             cacheRedis = lazyConnection.Value.GetDatabase(asyncState: true);
         }
@@ -45,7 +45,11 @@ namespace Orion.Net.Controllers
             lazyConnection.Value.Dispose();
         }
 
-
+        /// <summary>
+        /// Get specific value from <see cref="cacheRedis"/>
+        /// </summary>
+        /// <param name="id">Key for the cache</param>
+        /// <returns>Value in the cache or an error message</returns>
         // GET api/<controller>/5
         [HttpGet("{id}")]
         public string Get(string id)
@@ -60,6 +64,10 @@ namespace Orion.Net.Controllers
             return "Key API doesn't exist";
         }
 
+        /// <summary>
+        /// Post value in <see cref="cacheRedis"/> at a specific key for 1 day
+        /// </summary>
+        /// <param name="model">ResultContentScript</param>
         [AllowAnonymous]
         // POST api/<controller>
         [HttpPost]
