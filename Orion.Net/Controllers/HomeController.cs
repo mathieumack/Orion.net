@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Diagnostics;
+using Microsoft.AspNetCore.Mvc;
 using Orion.Net.Models;
-using System.Diagnostics;
 
 namespace Orion.Net.Controllers
 {

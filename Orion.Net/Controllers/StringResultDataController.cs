@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Orion.Net.Core.Results;
 using Orion.Net.Interfaces;
 
@@ -14,12 +15,22 @@ namespace Orion.Net.Controllers
     [Route("api/v1/StringResultData")]
     public class StringResultDataController : BaseDataController<StringContentResult>, IStringResultDataController
     {
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <param name="configuration"></param>
+        public StringResultDataController(IConfiguration configuration) : base(configuration)
+        {
+
+        }
+
         // GET api/v1/StringResultData
         [HttpGet()]
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
         /// <returns>Guid SupportId in String</returns>
+        /// <remarks>If the key doesn't exist, create, save and return a new one</remarks>
         public string Get()
         {
             if (cacheRedis.KeyExists("supportId" + User.Identity.Name))
