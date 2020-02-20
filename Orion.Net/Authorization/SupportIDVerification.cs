@@ -2,7 +2,7 @@
 
 namespace Orion.Net.Authorization
 {
-    public class PostApiVerification : IAuthorizationRequirement
+    public class SupportIDVerification : IAuthorizationRequirement
     {
 
     }

@@ -19,6 +19,7 @@ namespace Orion.Net.Client.Configuration
         /// Platform's Uri
         /// </summary>
         private string platformUri;
+
         /// <summary>
         /// Client Connection to the hub
         /// </summary>

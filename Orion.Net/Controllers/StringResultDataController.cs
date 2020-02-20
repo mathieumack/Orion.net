@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Orion.Net.Core.Results;
@@ -24,13 +25,11 @@ namespace Orion.Net.Controllers
 
         }
 
-        // GET api/v1/StringResultData
-        [HttpGet()]
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        /// <returns>Guid SupportId in String</returns>
-        /// <remarks>If the key doesn't exist, create, save and return a new one</remarks>
+        // GET api/v1/StringResultData
+        [HttpGet()]
         public string Get()
         {
             if (cacheRedis.KeyExists("supportId" + User.Identity.Name))

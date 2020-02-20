@@ -5,19 +5,19 @@ using Orion.Net.Interfaces;
 
 namespace Orion.Net.Authorization
 {
-    public class PostApiVerificationHandler : AuthorizationHandler<PostApiVerification>
+    public class SupportIDVerificationHandler : AuthorizationHandler<SupportIDVerification>
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
 
         private readonly IStringResultDataController _controller;
 
-        public PostApiVerificationHandler(IHttpContextAccessor httpContextAccessor, IStringResultDataController controller)
+        public SupportIDVerificationHandler(IHttpContextAccessor httpContextAccessor, IStringResultDataController controller)
         {
             _httpContextAccessor = httpContextAccessor;
             _controller = controller;
         }
 
-        protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, PostApiVerification requirement)
+        protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, SupportIDVerification requirement)
         {
             var supportID = _controller.Get();
             HttpContext httpContext = _httpContextAccessor.HttpContext;

@@ -34,8 +34,8 @@ namespace Orion.Net
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            //Comment this region to disable the authentification
-            #region Authentification with Azure Active Directory
+            //Comment this region to disable the Authentication/Authorization
+            #region Authentication with Azure Active Directory
 
             //For AAD : get secret values from Key vault for the configuration in appsettings.json
             Configuration["AzureAd:TenantId"] = Configuration["AADTenantId"];
@@ -43,6 +43,16 @@ namespace Orion.Net
 
             services.AddAuthentication(AzureADDefaults.AuthenticationScheme)
                 .AddAzureAD(options => Configuration.Bind("AzureAd", options));
+
+            //For Authorization
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("SupportID", policy =>
+                    policy.Requirements.Add(new SupportIDVerification()));
+            });
+
+            services.AddHttpContextAccessor();
+            //To this point
 
             services.AddMvc(options =>
                 {
@@ -67,15 +77,12 @@ namespace Orion.Net
             services.AddControllersWithViews();
             services.AddRazorPages();
 
-            //For Authorization
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy("PostAPI", policy =>
-                    policy.Requirements.Add(new PostApiVerification()));
-            });
+            #region Insights
 
-            services.AddHttpContextAccessor();
-            //To this point
+            Configuration["ApplicationInsights:InstrumentationKey"] = Configuration["Insights"];
+            services.AddApplicationInsightsTelemetry();
+
+            #endregion
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -93,8 +100,8 @@ namespace Orion.Net
             app.UseStaticFiles();
             app.UseCookiePolicy();
 
-            //Comment this region to disable Authentification
-            #region Authentification
+            //Comment this region to disable Authentication
+            #region Authentication
 
             app.UseAuthentication();
 
@@ -102,7 +109,12 @@ namespace Orion.Net
 
             app.UseRouting();
 
+            //Comment this region to disable Authorization
+            #region Authorization
+
             app.UseAuthorization();
+
+            #endregion
 
             app.UseEndpoints(endpoints =>
             {

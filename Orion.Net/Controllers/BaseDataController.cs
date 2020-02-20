@@ -8,7 +8,6 @@ using StackExchange.Redis;
 
 namespace Orion.Net.Controllers
 {
-    [Authorize]
     /// <summary>
     /// Platform API local
     /// </summary>
@@ -65,8 +64,8 @@ namespace Orion.Net.Controllers
             return "Key Redis doesn't exist";
         }
 
-     //   [AllowAnonymous]
-        [Authorize(Policy = "PostAPI")]
+        //[Authorize(Policy = "SupportID")]
+        [AllowAnonymous]
         // POST api/<controller>
         [HttpPost]
         public void Post([FromBody]T model)
