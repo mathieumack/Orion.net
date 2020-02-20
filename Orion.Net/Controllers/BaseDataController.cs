@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Orion.Net.Core.Interfaces;
+using Orion.Net.Interfaces;
 using StackExchange.Redis;
 
 namespace Orion.Net.Controllers
@@ -25,11 +26,14 @@ namespace Orion.Net.Controllers
         /// </summary>
         internal IDatabase cacheRedis;
 
+        protected IConfiguration configuration;
+
         /// <summary>
         /// Constructor of <see cref="BaseDataController{T}"/> with the instantiation of the connection to Redis server <see cref="lazyConnection"/> and the database interface <see cref="cacheRedis"/>
         /// </summary>
         public BaseDataController(IConfiguration configuration)
         {
+            this.configuration = configuration;
             lazyConnection = new Lazy<ConnectionMultiplexer>(() =>
             {
                 return ConnectionMultiplexer.Connect(configuration["redis"]);

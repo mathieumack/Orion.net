@@ -32,17 +32,13 @@ namespace Orion.Net.Controllers
         [HttpGet()]
         public string Get()
         {
-            if (cacheRedis.KeyExists("supportId" + User.Identity.Name))
-            {
-                var result = cacheRedis.StringGet("supportId" + User.Identity.Name);
-                return result.ToString();
-            }
-            else
-            {
-                string guid = Guid.NewGuid().ToString();
-                cacheRedis.StringSet("supportId" + User.Identity.Name, guid, TimeSpan.FromDays(1));
-                return guid;
-            }
+            string result = cacheRedis.KeyExists("supportId" + User.Identity.Name) ? cacheRedis.StringGet("supportId" + User.Identity.Name).ToString() : Guid.NewGuid().ToString();
+
+            //Save supportID in cache and app
+            cacheRedis.StringSet("supportId" + User.Identity.Name, result, TimeSpan.FromDays(1));
+            configuration["SupportID"] = result;
+
+            return result;
         }
     }
 }

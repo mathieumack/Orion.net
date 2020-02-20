@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using Orion.Net.Interfaces;
 
 namespace Orion.Net.Authorization
@@ -9,17 +10,16 @@ namespace Orion.Net.Authorization
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        private readonly IStringResultDataController _controller;
+        private readonly string supportID;
 
-        public SupportIDVerificationHandler(IHttpContextAccessor httpContextAccessor, IStringResultDataController controller)
+        public SupportIDVerificationHandler(IHttpContextAccessor httpContextAccessor, IConfiguration configuration)
         {
             _httpContextAccessor = httpContextAccessor;
-            _controller = controller;
+            supportID = configuration["SupportID"];
         }
 
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, SupportIDVerification requirement)
         {
-            var supportID = _controller.Get();
             HttpContext httpContext = _httpContextAccessor.HttpContext;
 
             var request = httpContext.Request;
