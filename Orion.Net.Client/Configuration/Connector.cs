@@ -29,6 +29,7 @@ namespace Orion.Net.Client.Configuration
         /// </summary>
         /// <remarks><see cref="commands"/> is empty by default, to add command, the Client App calls <see cref="AddCommandService{T}(T)"/></remarks>
         private readonly List<BaseClientScript> commands = new List<BaseClientScript>();
+
         /// <summary>
         /// Identifier of the Client Application
         /// </summary>

@@ -11,12 +11,13 @@ namespace Orion.Net.Scripts.Common.Diagnostics
     /// <inheritdoc/>
     /// <para>Export file from the client's computer</para>
     /// </summary>
+    /// <remarks>Command in the navigator = -filePath "path/to/file" </remarks>
     public class ExportFileClientScript : BaseClientScript
     {
         /// <summary>
         /// Argument's Name of <see cref="ExportFileClientScript"/>
         /// </summary>
-        private const string argsParam = "args";
+        private const string param = "filePath";
 
         /// <summary>
         /// Constructor of <see cref="ExportFileClientScript"/> with the Client Connector
@@ -28,11 +29,11 @@ namespace Orion.Net.Scripts.Common.Diagnostics
             identifier = Guid.NewGuid();
             AvailableParameters.Add(new ScriptParameter()
             {
-                Name = "exportFile"
+                Name = param
             });
             AvailableParameters.Add(new ScriptParameter()
             {
-                Name = argsParam
+                Name = "args"
             });
         }
 
@@ -64,15 +65,15 @@ namespace Orion.Net.Scripts.Common.Diagnostics
                 return;
             }
 
-            var arguments = paramItems.FirstOrDefault(e => e.ParameterName == argsParam);
+            var parameter = paramItems.FirstOrDefault(e => e.ParameterName == param);
 
             try
             {
-                if (arguments == null)
-                    await SendStringContent("No path file entered in " + argsParam);
+                if (parameter == null)
+                    await SendStringContent("No path file entered in " + parameter);
                 else
                 {
-                    await SendFileContent(arguments.ParameterValue);
+                    await SendFileContent(parameter.ParameterValue);
                 }
 
             }

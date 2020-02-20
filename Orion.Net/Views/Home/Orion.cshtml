@@ -233,22 +233,38 @@
             case 2:
                 uri += "StringResultData/" + resultId;
                 $.get(uri, function (data) {
-                    deserialized = JSON.parse(data);
-                    html = displayResultsStringTemplate({
-                        Content: deserialized.ConsoleContent,
-                        Color: "primary"
-                    });
+                    if (data == "Key API doesn't exist") {
+                        html = displayResultsStringTemplate({
+                            Content: "Error API Get : " + data,
+                            Color: "primary"
+                        });
+                    }
+                    else {
+                        deserialized = JSON.parse(data);
+                        html = displayResultsStringTemplate({
+                            Content: deserialized.ConsoleContent,
+                            Color: "primary"
+                        });
+                    }
                     $("#addResults_" + appId).prepend(html);
                 });
                 break;
             case 3:
                 uri += "ImageResultData/" + resultId;
                 $.get(uri, function (data) {
-                    deserialized = JSON.parse(data);
-                    html = displayResultsImageTemplate({
-                        Content: (deserialized.ImageAsByteArray),
-                        Color: "warning"
-                    });
+                    if (data == "Key API doesn't exist") {
+                        html = displayResultsStringTemplate({
+                            Content: "Error API Get : " + data,
+                            Color: "primary"
+                        });
+                    }
+                    else {
+                        deserialized = JSON.parse(data);
+                        html = displayResultsImageTemplate({
+                            Content: (deserialized.ImageAsByteArray),
+                            Color: "warning"
+                        });
+                    }
                     $("#addResults_" + appId).prepend(html);
                 });
                 break;
@@ -258,7 +274,7 @@
                     if (data == "Key API doesn't exist")
                     {
                         html = displayResultsStringTemplate({
-                            Content: "ExportFile error : " + data,
+                            Content: "Error API Get : " + data,
                             Color: "primary"
                         });
                         $("#addResults_" + appId).prepend(html);
