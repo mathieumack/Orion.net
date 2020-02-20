@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Orion.Net.Core.Interfaces;
 using Orion.Net.Interface;
@@ -29,6 +30,11 @@ namespace Orion.Net.Controllers
             CacheData = cache;
         }
 
+        /// <summary>
+        /// Get specific value from <see cref="cacheRedis"/>
+        /// </summary>
+        /// <param name="id">Key for the cache</param>
+        /// <returns>Value in the cache or an error message</returns>
         // GET api/<controller>/5
         [HttpGet("{id}")]
         public string Get(Guid id)

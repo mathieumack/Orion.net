@@ -26,7 +26,7 @@ namespace Orion.Net.Controllers
         /// Return SupportId of the user
         /// </summary>
         /// <returns>Guid SupportId in String</returns>
-        /// <remarks>If the key doesn't exist, save and return a new one</remarks>
+        /// <remarks>If the key doesn't exist, create, save and return a new one</remarks>
         public string Get()
         {
             return CacheData.GetSupportId("supportId" + User.Identity.Name);
