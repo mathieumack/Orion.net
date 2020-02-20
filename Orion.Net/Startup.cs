@@ -32,23 +32,45 @@ namespace Orion.Net
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            //For AAD
+            //Comment this region to disable the authentification
+            #region Authentification with Azure Active Directory
+
+            //For AAD : get secret values from Key vault for the configuration in appsettings.json
+            Configuration["AzureAd:TenantId"] = Configuration["AADTenantId"];
+            Configuration["AzureAd:ClientId"] = Configuration["AADClientId"];
+
             services.AddAuthentication(AzureADDefaults.AuthenticationScheme)
-                    .AddAzureAD(options => Configuration.Bind("AzureAd", options));
+                .AddAzureAD(options => Configuration.Bind("AzureAd", options));
 
             services.AddMvc(options =>
-            {
-                var policy = new AuthorizationPolicyBuilder()
-                                .RequireAuthenticatedUser()
-                                .Build();
-                options.Filters.Add(new AuthorizeFilter(policy));
-            }).SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
-            //To this point
+                {
+                    var policy = new AuthorizationPolicyBuilder()
+                                    .RequireAuthenticatedUser()
+                                    .Build();
+                    options.Filters.Add(new AuthorizeFilter(policy));
+                }).SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+
+            #endregion
+
+            #region SignalR
+
+            //SignalR Azure Service
+            services.AddSignalR().AddAzureSignalR(Configuration["signalr"]);
+
+            //SignalR without Azure service
+            //services.AddSignalR();
+
+            #endregion
 
             services.AddControllersWithViews();
             services.AddRazorPages();
 
-            services.AddSignalR();
+            #region Insights
+
+            Configuration["ApplicationInsights:InstrumentationKey"] = Configuration["Insights"];
+            services.AddApplicationInsightsTelemetry();
+
+            #endregion
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -66,8 +88,12 @@ namespace Orion.Net
             app.UseStaticFiles();
             app.UseCookiePolicy();
 
-            //AAD
+            //Comment this region to disable Authentification
+            #region Authentification
+
             app.UseAuthentication();
+
+            #endregion
 
             app.UseRouting();
 
