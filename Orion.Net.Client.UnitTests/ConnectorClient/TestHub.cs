@@ -76,10 +76,9 @@ namespace Orion.Net.Client.Configuration
         /// <param name="resultIdentifier"></param>
         /// <param name="resultType"></param>
         /// <returns></returns>
-        public async Task<bool> ResultCommandSent(string appId, Guid resultIdentifier, int resultType)
+        public async Task ResultCommandSent(string appId, Guid resultIdentifier, int resultType)
         {
             await Clients.Client(clientConnection).SendAsync("TestCompleted", true);
-            return true;
         }
     }
 }
