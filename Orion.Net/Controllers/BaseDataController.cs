@@ -61,7 +61,7 @@ namespace Orion.Net.Controllers
                 return result.ToString();
             }
 
-            return "Key Redis doesn't exist";
+            return "Key API doesn't exist";
         }
 
         /// <summary>
