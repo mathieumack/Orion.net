@@ -9,7 +9,7 @@ namespace Orion.Net.Interface
     public interface ICacheManagement
     {
         /// <summary>
-        /// Return Guid of the supportId or create a new one
+        /// Return Guid of the supportId
         /// </summary>
         /// <param name="key">SupportId=userId</param>
         /// <returns>Guid in string</returns>
@@ -29,5 +29,11 @@ namespace Orion.Net.Interface
         /// <param name="key">Identifier key</param>
         /// <param name="value">Value in string</param>
         void SetValue(Guid key, string value);
+
+        /// <summary>
+        /// Set the value at the key or do nothing if the key already exists
+        /// </summary>
+        /// <param name="key">Identifier Key</param>
+        void SetSupportId(string key);
     }
 }

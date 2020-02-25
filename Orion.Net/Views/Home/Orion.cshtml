@@ -4,7 +4,7 @@
 
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
     <h1 class="h3 mb-2 text-gray-800">Orion.net</h1>
-    <h1 class="h3 mb-2 text-gray-800" id="displaySupportId"></h1>
+    <h1 class="h3 mb-2 text-gray-800" id="SupportId"></h1>
 </div>
 
 <div class="row">
@@ -172,10 +172,7 @@
 
     //ID Support
     function connectionStart() {
-        $.get("/api/v1/StringResultData", function (data) {
-            document.getElementById('displaySupportId').innerText = "Support ID : " + data;
-            connection.invoke("StartSupportGroupe", data);
-        });
+        connection.invoke("StartSupportGroupe", @Model.SupportID);
     }
     window.onload = connectionStart();
 
@@ -196,7 +193,7 @@
     connection.onclose(function () {
         //Try to reconnect
         setTimeout(() => start(), 5000);
-        window.onload = connectionStart();
+        connectionStart();
     });
 
     function loadClient(appID) {

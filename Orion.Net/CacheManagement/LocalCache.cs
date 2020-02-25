@@ -21,8 +21,7 @@ namespace Orion.Net.CacheManagement
         /// <returns>SupportId in string</returns>
         public string GetSupportId(string key)
         {
-            CacheManager[Guid.Empty] = CacheManager.ContainsKey(Guid.Empty) ? CacheManager[Guid.Empty] : Guid.NewGuid();
-            return CacheManager[Guid.Empty].ToString();
+            return CacheManager.ContainsKey(Guid.Parse(key)) ? CacheManager[Guid.Parse(key)].ToString() : "SupportId doesn't exist";
         }
 
         /// <summary>
@@ -40,6 +39,16 @@ namespace Orion.Net.CacheManagement
             }
 
             return "Key doesn't exist";
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <param name="key">identifier key</param>
+        public void SetSupportId(string key)
+        {
+            if (!CacheManager.ContainsKey(Guid.Parse(key)))
+                CacheManager.Add(Guid.Parse(key), "true");
         }
 
         /// <summary>

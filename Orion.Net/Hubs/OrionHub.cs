@@ -42,9 +42,9 @@ namespace Orion.Net.Hubs
         /// </summary>
         /// <param name="supportId">Identifier of Support</param>
         /// <returns></returns>
-        public async Task StartSupportGroupe(string supportId)
+        public async Task StartSupportGroupe(Guid supportId)
         {
-            await Groups.AddToGroupAsync(Context.ConnectionId, supportId);
+            await Groups.AddToGroupAsync(Context.ConnectionId, supportId.ToString());
         }
 
         #endregion

@@ -48,9 +48,7 @@ namespace Orion.Net.CacheManagement
         /// <returns>SupportId in string</returns>
         public string GetSupportId(string key)
         {
-            string result = cacheRedis.KeyExists(key) ? cacheRedis.StringGet(key).ToString() : Guid.NewGuid().ToString();
-            cacheRedis.StringSet(key, result, TimeSpan.FromDays(1));
-            return result;
+            return cacheRedis.KeyExists(key) ? cacheRedis.StringGet(key).ToString() : "SupportId doesn't exist";
         }
 
         /// <summary>
@@ -67,6 +65,16 @@ namespace Orion.Net.CacheManagement
                 return result.ToString();
             }
             return "Key doesn't exist";
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <param name="key">Identifier Key</param>
+        public void SetSupportId(string key)
+        {
+            if (!cacheRedis.KeyExists(key))
+                cacheRedis.StringSet(key, "true", TimeSpan.FromDays(1));
         }
 
         /// <summary>
