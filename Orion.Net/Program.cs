@@ -21,7 +21,7 @@ namespace Orion.Net
             //Key Vault Configuration
             .ConfigureAppConfiguration((ctx, builder) =>
             {
-                var keyVaultEndpoint = "https://<KeyVaultName>.vault.azure.net/";
+                var keyVaultEndpoint = "https://orionnetkeyvault.vault.azure.net/";
                 if (!string.IsNullOrEmpty(keyVaultEndpoint))
                 {
                     var azureServiceTokenProvider = new AzureServiceTokenProvider();

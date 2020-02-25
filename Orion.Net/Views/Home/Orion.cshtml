@@ -172,7 +172,8 @@
 
     //ID Support
     window.onload = function () {
-        $.get("/api/v1/StringResultData", function (data) {
+        alert(this.document.getElementById('UserName').innerText)
+        $.get("https://localhost:44359/api/v1/StringResultData/" + this.document.getElementById('UserName').innerText, function (data) {
             document.getElementById('displaySupportId').innerText = "Support ID : " + data;
             connection.invoke("StartSupportGroupe", data);
         });
@@ -220,7 +221,7 @@
     }
 
     function displayResult(appId, resultId, type) {
-        var uri = "/api/v1/";
+        var uri = "https://localhost:44359/api/v1/";
         var html;
 
         switch (type) {

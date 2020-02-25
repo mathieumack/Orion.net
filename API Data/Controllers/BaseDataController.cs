@@ -1,13 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Orion.Net.Core.Interfaces;
-using Orion.Net.Interfaces;
 using StackExchange.Redis;
 
-namespace Orion.Net.Controllers
+namespace API_Data.Controllers
 {
     /// <summary>
     /// Platform API local
@@ -36,7 +36,8 @@ namespace Orion.Net.Controllers
             this.configuration = configuration;
             lazyConnection = new Lazy<ConnectionMultiplexer>(() =>
             {
-                return ConnectionMultiplexer.Connect(configuration["redis"]);
+                //configuration["redis"]
+                return ConnectionMultiplexer.Connect("orion.redis.cache.windows.net:6380,password=fyRrPbWUSwkm2lMmtx1SccZmdwbeYNYO+Gb5N6nw2Go=,ssl=True,abortConnect=False");
             });
             cacheRedis = lazyConnection.Value.GetDatabase(asyncState: true);
         }
@@ -49,6 +50,7 @@ namespace Orion.Net.Controllers
             lazyConnection.Value.Dispose();
         }
 
+        [AllowAnonymous]
         /// <summary>
         /// Get specific value from <see cref="cacheRedis"/>
         /// </summary>
@@ -58,18 +60,29 @@ namespace Orion.Net.Controllers
         [HttpGet("{id}")]
         public string Get(string id)
         {
-            if (cacheRedis.KeyExists(id))
+            if (id.Contains('@'))
             {
-                var result = cacheRedis.StringGet(id);
-                cacheRedis.KeyDelete(id);
-                return result.ToString();
-            }
+                string result = cacheRedis.KeyExists(id) ? cacheRedis.StringGet(id).ToString() : Guid.NewGuid().ToString();
 
-            return "Key Redis doesn't exist";
+                //Save supportID in cache and app
+                cacheRedis.StringSet(id, result, TimeSpan.FromDays(1));
+                //configuration["SupportID"] = result;
+
+                return result;
+            }
+            else
+            {
+                if (cacheRedis.KeyExists(id))
+                {
+                    var result = cacheRedis.StringGet(id);
+                    cacheRedis.KeyDelete(id);
+                    return result.ToString();
+                }
+                return "Key Redis doesn't exist";
+            }
         }
 
-        //[Authorize(Policy = "SupportID")]
-        [AllowAnonymous]
+        [Authorize(Policy = "SupportID")]
         // POST api/<controller>
         [HttpPost]
         public void Post([FromBody]T model)

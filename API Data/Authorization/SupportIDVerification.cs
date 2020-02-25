@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 
-namespace Orion.Net.Authorization
+namespace API_Data.Authorization
 {
     public class SupportIDVerification : IAuthorizationRequirement
     {

@@ -9,8 +9,6 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Orion.Net.Authorization;
-using Orion.Net.Controllers;
 using Orion.Net.Hubs;
 
 namespace Orion.Net
@@ -43,16 +41,6 @@ namespace Orion.Net
 
             services.AddAuthentication(AzureADDefaults.AuthenticationScheme)
                 .AddAzureAD(options => Configuration.Bind("AzureAd", options));
-
-            //For Authorization
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy("SupportID", policy =>
-                    policy.Requirements.Add(new SupportIDVerification()));
-            });
-
-            services.AddHttpContextAccessor();
-            //To this point
 
             services.AddMvc(options =>
                 {
@@ -108,13 +96,6 @@ namespace Orion.Net
             #endregion
 
             app.UseRouting();
-
-            //Comment this region to disable Authorization
-            #region Authorization
-
-            app.UseAuthorization();
-
-            #endregion
 
             app.UseEndpoints(endpoints =>
             {

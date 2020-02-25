@@ -1,10 +1,8 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
-using Orion.Net.Interfaces;
 
-namespace Orion.Net.Authorization
+namespace API_Data.Authorization
 {
     public class SupportIDVerificationHandler : AuthorizationHandler<SupportIDVerification>
     {
@@ -12,10 +10,9 @@ namespace Orion.Net.Authorization
 
         private readonly string supportID;
 
-        public SupportIDVerificationHandler(IHttpContextAccessor httpContextAccessor, IConfiguration configuration)
+        public SupportIDVerificationHandler(IHttpContextAccessor httpContextAccessor)
         {
             _httpContextAccessor = httpContextAccessor;
-            supportID = configuration["SupportID"];
         }
 
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, SupportIDVerification requirement)
@@ -28,7 +25,7 @@ namespace Orion.Net.Authorization
 
             if (verification)
                 context.Succeed(requirement);
-          
+
             return Task.CompletedTask;
         }
     }
