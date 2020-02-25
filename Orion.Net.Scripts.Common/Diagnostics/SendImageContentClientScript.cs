@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Orion.Net.Client.Configuration;
@@ -58,10 +58,9 @@ namespace Orion.Net.Scripts.Common.Diagnostics
                 return;
             }
 
-            var parameter = paramItems.FirstOrDefault(e => e.ParameterName == filePathParam);
-
             try
             {
+                var parameter = paramItems.FirstOrDefault(e => e.ParameterName == filePathParam);
                 await SendImageContent(parameter.ParameterValue);
             }
             catch (Exception ex)
