@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Orion.Net.Models;
 
@@ -47,6 +48,7 @@ namespace Orion.Net.Controllers
             return View(new UserProfileModel()
             {
                 Name = User.Identity.Name,
+                SupportID = Guid.NewGuid().ToString(),
             });
         }
 

@@ -4,7 +4,7 @@
 
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
     <h1 class="h3 mb-2 text-gray-800">Orion.net</h1>
-    <h1 class="h3 mb-2 text-gray-800" id="SupportId"></h1>
+    <h1 class="h3 mb-2 text-gray-800" id="SupportId">@Model.SupportID</h1>
 </div>
 
 <div class="row">
@@ -157,7 +157,6 @@
 </script>
 
 <script type="text/javascript">
-
     var commandRetryAppIp, commandRetryTitle, commandRetryParam;
 
     var connectedUserCardTemplate = kendo.template($("#connectedUserCardTemplate").html());
@@ -170,12 +169,6 @@
         .withUrl("/orionhub")
         .build();
 
-    //ID Support
-    function connectionStart() {
-        connection.invoke("StartSupportGroupe", @Model.SupportID);
-    }
-    window.onload = connectionStart();
-
     connection.on("NewClient", function (detail) {
         tabStrip.append(connectedUserCardTemplate(detail));
     });
@@ -187,13 +180,14 @@
         displayResult(appId, resultId, resultType);
     });
     connection.start().then(function () {
+        connection.invoke("StartSupportGroupe", "@Model.SupportID");
     }).catch(function (err) {
         return console.error(err.toString());
     });
     connection.onclose(function () {
         //Try to reconnect
         setTimeout(() => start(), 5000);
-        connectionStart();
+        connection.invoke("StartSupportGroupe", "@Model.SupportID");
     });
 
     function loadClient(appID) {

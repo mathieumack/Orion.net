@@ -22,7 +22,7 @@ namespace Orion.Net.Controllers
         /// <item><see cref="RedisCache"/> for external cache memory with Redis</item>
         /// </list>
         /// </summary>
-        public ICacheManagement CacheData;
+        protected readonly ICacheManagement CacheData;
 
         public BaseDataController(ICacheManagement cache)
         {
@@ -30,7 +30,7 @@ namespace Orion.Net.Controllers
         }
 
         /// <summary>
-        /// Get specific value from <see cref="cacheRedis"/>
+        /// Get specific value from <see cref="CacheData"/>
         /// </summary>
         /// <param name="id">Key for the cache</param>
         /// <returns>Value in the cache or an error message</returns>
