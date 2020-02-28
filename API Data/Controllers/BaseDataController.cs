@@ -8,7 +8,7 @@ using StackExchange.Redis;
 
 namespace API_Data.Controllers
 {
-    [Authorize]
+    [Authorize(Policy = "SupportID")]
     /// <summary>
     /// Platform API local
     /// </summary>
@@ -50,7 +50,6 @@ namespace API_Data.Controllers
             lazyConnection.Value.Dispose();
         }
 
-        [AllowAnonymous]
         /// <summary>
         /// Get specific value from <see cref="cacheRedis"/>
         /// </summary>
@@ -70,7 +69,6 @@ namespace API_Data.Controllers
             return "Key API doesn't exist";
         }
 
-        [Authorize(Policy = "SupportID")]
         // POST api/<controller>
         [HttpPost]
         public void Post([FromBody]T model)

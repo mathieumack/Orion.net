@@ -139,7 +139,7 @@ namespace Orion.Net.Client.Configuration
         internal async Task SendResultCommand<T>(T result) where T : ClientScriptResult
         {
             // Send result object to the correct uri :
-            var dataUri = "https://localhost:44359/";
+            var dataUri = "https://localhost:44361/";
             HttpContent content = result.GenerateDataContent();
 
             switch (result.ResultType)

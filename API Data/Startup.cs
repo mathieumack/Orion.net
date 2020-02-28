@@ -16,12 +16,25 @@ namespace API_Data
 
         public IConfiguration Configuration { get; }
 
+        readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
 
             //For Authorization
+            services.AddCors(options =>
+            {
+                options.AddPolicy(MyAllowSpecificOrigins,
+                builder =>
+                {
+                    builder.AllowAnyOrigin()
+                            .AllowAnyHeader()
+                            .AllowAnyMethod();
+                });
+            });
+
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("SupportID", policy =>
@@ -40,11 +53,21 @@ namespace API_Data
                 app.UseDeveloperExceptionPage();
             }
 
+            #region Authorization
+
+            app.UseCors(MyAllowSpecificOrigins);
+
+            #endregion
+
             app.UseHttpsRedirection();
 
             app.UseRouting();
 
+            #region Authorization
+
             app.UseAuthorization();
+
+#endregion
 
             app.UseEndpoints(endpoints =>
             {
