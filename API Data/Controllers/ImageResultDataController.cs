@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Orion.Net.Core.Results;
 
-namespace Orion.Net.Controllers
+namespace API_Data.Controllers
 {
     /// <summary>
     /// <inheritdoc/>

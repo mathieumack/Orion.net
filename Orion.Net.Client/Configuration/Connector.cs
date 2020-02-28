@@ -19,6 +19,7 @@ namespace Orion.Net.Client.Configuration
         /// Platform's Uri
         /// </summary>
         private string platformUri;
+
         /// <summary>
         /// Client Connection to the hub
         /// </summary>
@@ -35,6 +36,12 @@ namespace Orion.Net.Client.Configuration
         /// </summary>
         /// <remarks>Use for connection purpose on the Hub</remarks>
         private readonly string appId;
+
+        /// <summary>
+        /// Identifier of the Support
+        /// </summary>
+        /// <remarks>Use for secure post API</remarks>
+        private string supportId;
 
         /// <summary>
         /// Constructor with instantiation of the GUID of <see cref="appId"/>
@@ -83,6 +90,7 @@ namespace Orion.Net.Client.Configuration
         /// <returns><see cref="commands"/> when the the Hub send "AskCommands"</returns>
         public async Task Connect(string platformUri, string environmentLabel, string supportID)
         {
+            this.supportId = supportID;
             this.platformUri = platformUri.EndsWith("/") ? platformUri : platformUri + "/";
 
             hubConnection = new HubConnectionBuilder()
@@ -131,16 +139,16 @@ namespace Orion.Net.Client.Configuration
         internal async Task SendResultCommand<T>(T result) where T : ClientScriptResult
         {
             // Send result object to the correct uri :
-            var dataUri = string.Empty;
+            var dataUri = "https://localhost:44361/";
             HttpContent content = result.GenerateDataContent();
 
             switch (result.ResultType)
             {
                 case ClientScriptResultType.ConsoleLog:
-                    dataUri = platformUri + "api/v1/StringResultData";
+                    dataUri += "api/v1/StringResultData";
                     break;
                 case ClientScriptResultType.Image:
-                    dataUri = platformUri + "api/v1/ImageResultData";
+                    dataUri +=  "api/v1/ImageResultData";
                     break;
                 case ClientScriptResultType.File:
                     dataUri = platformUri + "api/v1/FileResultData";
@@ -151,6 +159,8 @@ namespace Orion.Net.Client.Configuration
 
             using (var client = new HttpClient())
             {
+                client.DefaultRequestHeaders.TryAddWithoutValidation("Key", "KeyClient");
+                client.DefaultRequestHeaders.TryAddWithoutValidation("Value", "keyclient");
                 await client.PostAsync(dataUri, content);
             }
 

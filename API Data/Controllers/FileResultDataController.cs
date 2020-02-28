@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Orion.Net.Core.Results;
 using FileContentResult = Orion.Net.Core.Results.FileContentResult;
 
-namespace Orion.Net.Controllers
+namespace API_Data.Controllers
 {
     /// <summary>
     /// <inheritdoc/>

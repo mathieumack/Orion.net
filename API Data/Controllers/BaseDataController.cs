@@ -6,9 +6,9 @@ using Newtonsoft.Json;
 using Orion.Net.Core.Interfaces;
 using StackExchange.Redis;
 
-namespace Orion.Net.Controllers
+namespace API_Data.Controllers
 {
-
+    [Authorize(Policy = "SupportID")]
     /// <summary>
     /// Platform API local
     /// </summary>
@@ -20,19 +20,24 @@ namespace Orion.Net.Controllers
         /// Lazy connection to Redis server
         /// </summary>
         internal Lazy<ConnectionMultiplexer> lazyConnection;
+
         /// <summary>
         /// Interface to Redis database for the access to the methods
         /// </summary>
         internal IDatabase cacheRedis;
+
+        protected IConfiguration configuration;
 
         /// <summary>
         /// Constructor of <see cref="BaseDataController{T}"/> with the instantiation of the connection to Redis server <see cref="lazyConnection"/> and the database interface <see cref="cacheRedis"/>
         /// </summary>
         public BaseDataController(IConfiguration configuration)
         {
+            this.configuration = configuration;
             lazyConnection = new Lazy<ConnectionMultiplexer>(() =>
             {
-                return ConnectionMultiplexer.Connect(configuration["redis"]);
+                //configuration["redis"]
+                return ConnectionMultiplexer.Connect("orion.redis.cache.windows.net:6380,password=fyRrPbWUSwkm2lMmtx1SccZmdwbeYNYO+Gb5N6nw2Go=,ssl=True,abortConnect=False");
             });
             cacheRedis = lazyConnection.Value.GetDatabase(asyncState: true);
         }
@@ -64,11 +69,6 @@ namespace Orion.Net.Controllers
             return "Key API doesn't exist";
         }
 
-        /// <summary>
-        /// Post value in <see cref="cacheRedis"/> at a specific key for 1 day
-        /// </summary>
-        /// <param name="model">ResultContentScript</param>
-        [AllowAnonymous]
         // POST api/<controller>
         [HttpPost]
         public void Post([FromBody]T model)

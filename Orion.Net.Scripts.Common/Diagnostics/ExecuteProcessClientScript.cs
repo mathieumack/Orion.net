@@ -18,10 +18,12 @@ namespace Orion.Net.Scripts.Common.Diagnostics
         /// Title of the parameter
         /// </summary>
         private const string filePathParam = "filePath";
+
         /// <summary>
         /// Title of the arguments
         /// </summary>
         private const string argsParam = "args";
+
         /// <summary>
         /// Constructor with the Client connector base on <see cref="BaseClientScript"/>
         /// </summary>
@@ -45,10 +47,12 @@ namespace Orion.Net.Scripts.Common.Diagnostics
         /// <para>Override for <see cref="ExecuteProcessClientScript"/></para>
         /// </summary>
         public override string Title => "Execute process";
+
         /// <summary>
         /// Private identifier to set <see cref="Identifier"/>
         /// </summary>
         private readonly Guid identifier;
+
         /// <summary>
         /// <inheritdoc/>
         /// Override for <see cref="ExecuteProcessClientScript"/>

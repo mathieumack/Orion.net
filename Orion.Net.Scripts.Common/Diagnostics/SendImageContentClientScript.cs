@@ -17,6 +17,7 @@ namespace Orion.Net.Scripts.Common.Diagnostics
         /// Parameter's Name of <see cref="SendImageContentClientScript"/>
         /// </summary>
         private const string filePathParam = "filePath";
+
         /// <summary>
         /// Constructor of <see cref="SendImageContentClientScript"/> with the Client connector
         /// </summary>
@@ -35,10 +36,12 @@ namespace Orion.Net.Scripts.Common.Diagnostics
         /// <inheritdoc/>
         /// </summary>
         public override string Title => "Send Image";
+
         /// <summary>
         /// Private identifier to set <see cref="Identifier"/>
         /// </summary>
         private readonly Guid identifier;
+
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
