@@ -7,7 +7,7 @@
   "ExtendedData": {
     "PublishEnvironmentProperties": {
       "KeyVaultName": [
-        "orionnetkeyvault"
+        "<KeyVaultName>"
       ]
     }
   }

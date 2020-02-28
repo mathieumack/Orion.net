@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -9,6 +8,7 @@ using StackExchange.Redis;
 
 namespace API_Data.Controllers
 {
+    [Authorize]
     /// <summary>
     /// Platform API local
     /// </summary>

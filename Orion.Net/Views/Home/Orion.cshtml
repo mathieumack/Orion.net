@@ -4,7 +4,7 @@
 
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
     <h1 class="h3 mb-2 text-gray-800">Orion.net</h1>
-    <h1 class="h3 mb-2 text-gray-800" id="displaySupportId"></h1>
+    <h1 class="h3 mb-2 text-gray-800" id="displaySupportId">@Model.SupportID</h1>
 </div>
 
 <div class="row">
@@ -170,15 +170,6 @@
         .withUrl("/orionhub")
         .build();
 
-    //ID Support
-    window.onload = function () {
-        alert(this.document.getElementById('UserName').innerText)
-        $.get("https://localhost:44359/api/v1/StringResultData/" + this.document.getElementById('UserName').innerText, function (data) {
-            document.getElementById('displaySupportId').innerText = "Support ID : " + data;
-            connection.invoke("StartSupportGroupe", data);
-        });
-    }
-
     connection.on("NewClient", function (detail) {
         tabStrip.append(connectedUserCardTemplate(detail));
     });
@@ -190,6 +181,7 @@
         displayResult(appId, resultId, resultType);
     });
     connection.start().then(function () {
+        connection.invoke("StartSupportGroupe", "@Model.SupportID")
     }).catch(function (err) {
         return console.error(err.toString());
     });
@@ -221,13 +213,16 @@
     }
 
     function displayResult(appId, resultId, type) {
-        var uri = "https://localhost:44359/api/v1/";
+        //API's URI
+        var uri = "https://localhost:44361/api/v1/";
         var html;
+        //Headers for API's Authentification
+        var headers = '{ "Key" : "' + "@Model.Key" +'", "Value" : "'+ "@Model.Value" +'" }';
 
         switch (type) {
             case 2:
                 uri += "StringResultData/" + resultId;
-                $.get(uri, function (data) {
+                $.get(uri, headers, function (data) {
                     deserialized = JSON.parse(data);
                     html = displayResultsStringTemplate({
                         Content: deserialized.ConsoleContent,
@@ -238,7 +233,7 @@
                 break;
             case 3:
                 uri += "ImageResultData/" + resultId;
-                $.get(uri, function (data) {
+                $.get(uri, headers, function (data) {
                     deserialized = JSON.parse(data);
                     html = displayResultsImageTemplate({
                         Content: (deserialized.ImageAsByteArray),

@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 
 namespace API_Data.Authorization
 {
@@ -8,11 +9,11 @@ namespace API_Data.Authorization
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        private readonly string supportID;
+        private readonly IConfiguration _configuration;
 
-        public SupportIDVerificationHandler(IHttpContextAccessor httpContextAccessor)
+        public SupportIDVerificationHandler(IHttpContextAccessor httpContextAccessor, IConfiguration configuration)
         {
-            _httpContextAccessor = httpContextAccessor;
+            _configuration = configuration;
         }
 
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, SupportIDVerification requirement)
@@ -21,12 +22,23 @@ namespace API_Data.Authorization
 
             var request = httpContext.Request;
 
-            bool verification = request.Headers.ContainsKey("Authorization") ? (request.Headers["Authorization"] == supportID) : false;
+            if (CheckKeyValue(request))
+            {
+                var key = request.Headers["Key"];
+                var value = request.Headers["Value"];
 
-            if (verification)
-                context.Succeed(requirement);
+                if (_configuration[key] == value)
+                    context.Succeed(requirement);
+            }
 
             return Task.CompletedTask;
+        }
+
+        private bool CheckKeyValue(HttpRequest request)
+        {
+            var keyExist = request.Headers.ContainsKey("Key");
+            var valueExist = request.Headers.ContainsKey("Value");
+            return (keyExist && valueExist);
         }
     }
 }

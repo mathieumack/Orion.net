@@ -64,13 +64,6 @@ namespace Orion.Net
 
             services.AddControllersWithViews();
             services.AddRazorPages();
-
-            #region Insights
-
-            Configuration["ApplicationInsights:InstrumentationKey"] = Configuration["Insights"];
-            services.AddApplicationInsightsTelemetry();
-
-            #endregion
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

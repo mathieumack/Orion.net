@@ -156,7 +156,8 @@ namespace Orion.Net.Client.Configuration
 
             using (var client = new HttpClient())
             {
-                client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", supportId);
+                client.DefaultRequestHeaders.TryAddWithoutValidation("Key", "KeyClient");
+                client.DefaultRequestHeaders.TryAddWithoutValidation("Value", "keyclient");
                 await client.PostAsync(dataUri, content);
             }
 

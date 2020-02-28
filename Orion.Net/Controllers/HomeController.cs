@@ -1,5 +1,7 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Orion.Net.Models;
 
 namespace Orion.Net.Controllers
@@ -9,6 +11,28 @@ namespace Orion.Net.Controllers
     /// </summary>
     public class HomeController : Controller
     {
+        /// <summary>
+        /// Key of Authorization API
+        /// <para>Needed for connection to API</para>
+        /// </summary>
+        private string keyAPI { get; }
+
+        /// <summary>
+        /// Value of Authorization API
+        /// <para>Needed for connection to API</para>
+        /// </summary>
+        private string valueAPI { get; }
+
+        /// <summary>
+        /// Constructor of <see cref="HomeController"/> to get configuration's parameter for the API Authorization
+        /// </summary>
+        /// <param name="configuration"></param>
+        public HomeController(IConfiguration configuration)
+        {
+            keyAPI = configuration["AuthorizationAPI:Key"];
+            valueAPI = configuration["AuthorizationAPI:Value"];
+        }
+
         public IActionResult Index()
         {
             return RedirectToAction("Orion");
@@ -47,6 +71,11 @@ namespace Orion.Net.Controllers
             return View(new UserProfileModel()
             {
                 Name = User.Identity.Name,
+                SupportID = Guid.NewGuid().ToString(),
+
+                //Authorization Key and Value for API
+                Key = keyAPI,
+                Value = valueAPI
             });
         }
 
