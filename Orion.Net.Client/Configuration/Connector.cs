@@ -150,6 +150,9 @@ namespace Orion.Net.Client.Configuration
                 case ClientScriptResultType.Image:
                     dataUri +=  "api/v1/ImageResultData";
                     break;
+                case ClientScriptResultType.File:
+                    dataUri = platformUri + "api/v1/FileResultData";
+                    break;
                 default:
                     return;
             }

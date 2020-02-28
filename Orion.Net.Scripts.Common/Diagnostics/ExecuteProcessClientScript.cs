@@ -70,16 +70,14 @@ namespace Orion.Net.Scripts.Common.Diagnostics
             var paramItems = await LoadParameters(parameters);
 
             if (paramItems.Count == 0)
-            {
                 return;
-            }
 
             var parameter = paramItems.FirstOrDefault(e => e.ParameterName == filePathParam);
             var arguments = paramItems.FirstOrDefault(e => e.ParameterName == argsParam);
 
-            if(parameter == null)
+            if (parameter == null)
             {
-                await SendStringContent("Error : Parameter" + filePathParam + "is missing.");
+                await SendStringContent("Error : Parameter " + filePathParam + " is missing.");
                 return;
             }
 

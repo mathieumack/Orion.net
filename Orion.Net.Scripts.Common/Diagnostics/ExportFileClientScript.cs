@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Orion.Net.Client.Configuration;
@@ -9,34 +9,38 @@ namespace Orion.Net.Scripts.Common.Diagnostics
 {
     /// <summary>
     /// <inheritdoc/>
-    /// <para>Send Image from the client computer to be display</para>
+    /// <para>Export file from the client's computer</para>
     /// </summary>
-    public class SendImageContentClientScript : BaseClientScript
+    /// <remarks>Command in the navigator = -filePath "path/to/file" </remarks>
+    public class ExportFileClientScript : BaseClientScript
     {
         /// <summary>
-        /// Parameter's Name of <see cref="SendImageContentClientScript"/>
+        /// Argument's Name of <see cref="ExportFileClientScript"/>
         /// </summary>
-        private const string filePathParam = "filePath";
+        private const string param = "filePath";
 
         /// <summary>
-        /// Constructor of <see cref="SendImageContentClientScript"/> with the Client connector
+        /// Constructor of <see cref="ExportFileClientScript"/> with the Client Connector
         /// </summary>
-        /// <param name="connector">Client connector</param>
-        public SendImageContentClientScript(Connector connector)
+        /// <param name="connector"></param>
+        public ExportFileClientScript(Connector connector)
             : base(connector)
         {
             identifier = Guid.NewGuid();
             AvailableParameters.Add(new ScriptParameter()
             {
-                Name = filePathParam
+                Name = param
+            });
+            AvailableParameters.Add(new ScriptParameter()
+            {
+                Name = "args"
             });
         }
 
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public override string Title => "Send Image";
-
+        public override string Title => "Export File";
         /// <summary>
         /// Private identifier to set <see cref="Identifier"/>
         /// </summary>
@@ -51,7 +55,7 @@ namespace Orion.Net.Scripts.Common.Diagnostics
         /// <inheritdoc/>
         /// </summary>
         /// <param name="parameters"></param>
-        /// <exception cref="Exception">Fail to execute command, send back an error message</exception>
+        /// <exception cref="Exception">Fail to execute the command, send back an error message</exception>
         public override async Task Execute(string parameters)
         {
             var paramItems = await LoadParameters(parameters);
@@ -61,10 +65,17 @@ namespace Orion.Net.Scripts.Common.Diagnostics
                 return;
             }
 
+            var parameter = paramItems.FirstOrDefault(e => e.ParameterName == param);
+
             try
             {
-                var parameter = paramItems.FirstOrDefault(e => e.ParameterName == filePathParam);
-                await SendImageContent(parameter.ParameterValue);
+                if (parameter == null)
+                    await SendStringContent("No path file entered in " + parameter);
+                else
+                {
+                    await SendFileContent(parameter.ParameterValue);
+                }
+
             }
             catch (Exception ex)
             {

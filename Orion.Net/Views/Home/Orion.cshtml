@@ -79,7 +79,7 @@
         <div class="card-body">
             <div class="demo-section k-content">
                 <div class="font-weight-bold mb-4">
-                    Détail de l'élément
+                    Element Details
                 </div>
                 <div class="row">
                     <div class="col col-md-2">
@@ -99,7 +99,7 @@
                 </div>
                 <hr class="k-hr" />
                 <div class="font-weight-bold">
-                    Historique des résultats
+                    Results History
                 </div>
                 <div id="addResults_#:appId#">
                 </div>
@@ -146,7 +146,7 @@
             }).catch(function (err) {
                 return console.error(err.toString());
             });
-        html = displayCommandSent({
+        var html = displayCommandSent({
             Color: "success",
             CommandRetryAppId: commandRetryAppId,
             CommandRetryTitle: commandRetryTitle,
@@ -158,7 +158,7 @@
 
 <script type="text/javascript">
 
-    var commandRetryAppId, commandRetryTitle, commandRetryParam;
+    var commandRetryAppIp, commandRetryTitle, commandRetryParam;
 
     var connectedUserCardTemplate = kendo.template($("#connectedUserCardTemplate").html());
     var connectedUserDetailTemplate = kendo.template($("#connectedUserDetailTemplate").html());
@@ -181,9 +181,14 @@
         displayResult(appId, resultId, resultType);
     });
     connection.start().then(function () {
-        connection.invoke("StartSupportGroupe", "@Model.SupportID")
+        connection.invoke("StartSupportGroupe", "@Model.SupportID");
     }).catch(function (err) {
         return console.error(err.toString());
+    });
+    connection.onclose(function () {
+        //Try to reconnect
+        setTimeout(() => start(), 5000);
+        connection.invoke("StartSupportGroupe", "@Model.SupportID");
     });
 
     function loadClient(appID) {
@@ -223,27 +228,88 @@
             case 2:
                 uri += "StringResultData/" + resultId;
                 $.get(uri, headers, function (data) {
-                    deserialized = JSON.parse(data);
-                    html = displayResultsStringTemplate({
-                        Content: deserialized.ConsoleContent,
-                        Color: "primary"
-                    });
+                    if (data == "Key API doesn't exist") {
+                        html = displayResultsStringTemplate({
+                            Content: "Error API Get : " + data,
+                            Color: "primary"
+                        });
+                    }
+                    else {
+                        deserialized = JSON.parse(data);
+                        html = displayResultsStringTemplate({
+                            Content: deserialized.ConsoleContent,
+                            Color: "primary"
+                        });
+                    }
                     $("#addResults_" + appId).prepend(html);
                 });
                 break;
             case 3:
                 uri += "ImageResultData/" + resultId;
                 $.get(uri, headers, function (data) {
-                    deserialized = JSON.parse(data);
-                    html = displayResultsImageTemplate({
-                        Content: (deserialized.ImageAsByteArray),
-                        Color: "warning"
+                    if (data == "Key API doesn't exist") {
+                        html = displayResultsStringTemplate({
+                            Content: "Error API Get : " + data,
+                            Color: "primary"
+                        });
+                    }
+                    else {
+                        deserialized = JSON.parse(data);
+                        html = displayResultsImageTemplate({
+                            Content: (deserialized.ImageAsByteArray),
+                            Color: "warning"
+                        });
+                    }
+                    $("#addResults_" + appId).prepend(html);
+                });
+                break;
+            case 4:
+                uri += "FileResultData/" + resultId;
+                $.get(uri, headers, function (data) {
+                    if (data == "Key API doesn't exist")
+                    {
+                        html = displayResultsStringTemplate({
+                            Content: "Error API Get : " + data,
+                            Color: "primary"
+                        });
+                        $("#addResults_" + appId).prepend(html);
+                    }
+                    else
+                    {
+                        deserialized = JSON.parse(data);
+                        //Create element a for download data as blob
+                        var download = document.createElement('a');
+                        var blob = new Blob([dataToArrayBuffer(deserialized.FileAsByteArray)], { type: deserialized.FileMime });
+                        download.href = window.URL.createObjectURL(blob);
+                        download.setAttribute('download', deserialized.FileName);
+
+                        if (document.createEvent) {
+                            var event = document.createEvent('MouseEvents');
+                            event.initEvent('click', true, true);
+                            download.dispatchEvent(event);
+                        }
+                        else { download.click(); }
+                    }
+                }).catch(function (err) {
+                    html = displayResultsStringTemplate({
+                        Content: "Error while Export File \n" + err,
+                        Color: "primary"
                     });
                     $("#addResults_" + appId).prepend(html);
                 });
                 break;
             default: break;
         }
+    }
+
+    //Transform flux data to Array Buffer for file type
+    function dataToArrayBuffer(data) {
+        var binaryString = window.atob(data);
+        var bytes = new Uint8Array(binaryString.length);
+        for (var i = 0; i < binaryString.length; i++) {
+            bytes[i] = binaryString.charCodeAt(i);
+        }
+        return bytes;
     }
 </script>
 

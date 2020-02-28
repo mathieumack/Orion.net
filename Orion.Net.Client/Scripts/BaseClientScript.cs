@@ -55,7 +55,7 @@ namespace Orion.Net.Client.Scripts
 
             if (!paramItems.Any(e => AvailableParameters.Any(a => a.Name == e.ParameterName)))
             {
-                await SendStringContent("parameter invalid.");
+                await SendStringContent("Parameter invalid.");
                 return new List<ScriptParameterInterpreterResult>();
             }
 
@@ -114,10 +114,9 @@ namespace Orion.Net.Client.Scripts
         /// <exception cref="Exception">The conversion can fail and a message will be send</exception>
         protected async Task SendImageContent(string pathImage)
         {
-            //Check if path is valid and file exists
-            if (string.IsNullOrWhiteSpace(pathImage) || !File.Exists(pathImage))
+            if (!File.Exists(pathImage))
             {
-                await SendStringContent("File not found or not accessible");
+                await SendStringContent("File not found.");
                 return;
             }
 
@@ -135,10 +134,48 @@ namespace Orion.Net.Client.Scripts
             }
             catch(Exception ex)
             {
-                await this.SendStringContent("An error has occured : " + ex);
+                await SendStringContent("An error has occured : " + ex);
+            }
+        }
+
+        /// <summary>
+        /// Check path and file, get the the file's mime
+        /// Create and send a new file content with file from path save as byte array
+        /// </summary>
+        /// <param name="pathFile">Path of the file</param>
+        /// <return></return>
+        /// <exception cref="Exception">The conversion can fail and a message will be send</exception>
+        protected async Task SendFileContent(string pathFile)
+        {
+            MimeTypeDictionary mimeTypeDictionary = new MimeTypeDictionary();
+
+            if (!File.Exists(pathFile))
+            {
+                await SendStringContent("File not found.");
+                return;
+            }
+
+            try
+            {
+                //Create result content
+                var result = new FileContentResult()
+                {
+                    ResultIdentifier = Guid.NewGuid(),
+                    FileAsByteArray = File.ReadAllBytes(pathFile),
+                    FileName = pathFile.Substring(pathFile.LastIndexOf('\\') + 1, pathFile.Length - pathFile.LastIndexOf('\\') - 1),
+                    Mime = mimeTypeDictionary.GetMime(pathFile.Substring(pathFile.LastIndexOf('.')))
+                };
+
+                // Send result content to server :
+                await connector.SendResultCommand(result);
+            }
+            catch (Exception ex)
+            {
+                await SendStringContent("An error occured : " + ex);
             }
         }
 
         #endregion
+
     }
 }

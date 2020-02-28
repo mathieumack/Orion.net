@@ -60,26 +60,14 @@ namespace API_Data.Controllers
         [HttpGet("{id}")]
         public string Get(string id)
         {
-            if (id.Contains('@'))
+            if (cacheRedis.KeyExists(id))
             {
-                string result = cacheRedis.KeyExists(id) ? cacheRedis.StringGet(id).ToString() : Guid.NewGuid().ToString();
-
-                //Save supportID in cache and app
-                cacheRedis.StringSet(id, result, TimeSpan.FromDays(1));
-                //configuration["SupportID"] = result;
-
-                return result;
+                var result = cacheRedis.StringGet(id);
+                cacheRedis.KeyDelete(id);
+                return result.ToString();
             }
-            else
-            {
-                if (cacheRedis.KeyExists(id))
-                {
-                    var result = cacheRedis.StringGet(id);
-                    cacheRedis.KeyDelete(id);
-                    return result.ToString();
-                }
-                return "Key Redis doesn't exist";
-            }
+
+            return "Key API doesn't exist";
         }
 
         [Authorize(Policy = "SupportID")]

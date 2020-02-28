@@ -58,7 +58,7 @@ namespace Orion.Net.Hubs
         /// <returns></returns>
         public async Task SendCommandToClient(ExecuteScriptCommand scriptCommand)
         {
-            await Clients.Group(scriptCommand.AppId).SendAsync("ExecuteCommand", scriptCommand.CommandTitle, scriptCommand.CommandParam);
+            await Clients.OthersInGroup(scriptCommand.AppId).SendAsync("ExecuteCommand", scriptCommand.CommandTitle, scriptCommand.CommandParam);
         }
 
         /// <summary>
