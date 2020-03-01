@@ -1,10 +1,9 @@
 ﻿using System;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Orion.Net.Core.Interfaces;
-using StackExchange.Redis;
+using Orion.Net.Interface;
 
 namespace Orion.Net.Controllers
 {
@@ -17,65 +16,37 @@ namespace Orion.Net.Controllers
     public class BaseDataController<T> : Controller where T : ClientScriptResult, new()
     {
         /// <summary>
-        /// Lazy connection to Redis server
+        /// Cache Management of the API, two types possible:
+        /// <list type="table">
+        /// <item><see cref="LocalCache"/> for a internal cache memory</item>
+        /// <item><see cref="RedisCache"/> for external cache memory with Redis</item>
+        /// </list>
         /// </summary>
-        internal Lazy<ConnectionMultiplexer> lazyConnection;
-        /// <summary>
-        /// Interface to Redis database for the access to the methods
-        /// </summary>
-        internal IDatabase cacheRedis;
+        protected readonly ICacheManagement CacheData;
 
-        /// <summary>
-        /// Constructor of <see cref="BaseDataController{T}"/> with the instantiation of the connection to Redis server <see cref="lazyConnection"/> and the database interface <see cref="cacheRedis"/>
-        /// </summary>
-        public BaseDataController(IConfiguration configuration)
+        public BaseDataController(ICacheManagement cache)
         {
-            lazyConnection = new Lazy<ConnectionMultiplexer>(() =>
-            {
-                return ConnectionMultiplexer.Connect(configuration["redis"]);
-            });
-            cacheRedis = lazyConnection.Value.GetDatabase(asyncState: true);
+            CacheData = cache;
         }
 
         /// <summary>
-        /// Destructor to dispose the connection to redis server
-        /// </summary>
-        ~BaseDataController()
-        {
-            lazyConnection.Value.Dispose();
-        }
-
-        /// <summary>
-        /// Get specific value from <see cref="cacheRedis"/>
+        /// Get specific value from <see cref="CacheData"/>
         /// </summary>
         /// <param name="id">Key for the cache</param>
         /// <returns>Value in the cache or an error message</returns>
         // GET api/<controller>/5
         [HttpGet("{id}")]
-        public string Get(string id)
+        public string Get(Guid id)
         {
-            if (cacheRedis.KeyExists(id))
-            {
-                var result = cacheRedis.StringGet(id);
-                cacheRedis.KeyDelete(id);
-                return result.ToString();
-            }
-
-            return "Key API doesn't exist";
+            return CacheData.GetValue(id);
         }
 
-        /// <summary>
-        /// Post value in <see cref="cacheRedis"/> at a specific key for 1 day
-        /// </summary>
-        /// <param name="model">ResultContentScript</param>
         [AllowAnonymous]
         // POST api/<controller>
         [HttpPost]
         public void Post([FromBody]T model)
         {
-            // Save value in cache
-            if (!cacheRedis.KeyExists(model.ResultIdentifier.ToString()))
-                cacheRedis.StringSet(model.ResultIdentifier.ToString(), JsonConvert.SerializeObject(model), TimeSpan.FromDays(1));
+            CacheData.SetValue(model.ResultIdentifier, JsonConvert.SerializeObject(model));
         }
     }
 }

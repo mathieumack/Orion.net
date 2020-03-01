@@ -9,7 +9,9 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Orion.Net.CacheManagement;
 using Orion.Net.Hubs;
+using Orion.Net.Interface;
 
 namespace Orion.Net
 {
@@ -59,6 +61,13 @@ namespace Orion.Net
 
             //SignalR without Azure service
             //services.AddSignalR();
+
+            #endregion
+
+            #region CacheManagement
+
+            //Switch between LocalCache and RedisCache in function of your need
+            services.AddSingleton(typeof(ICacheManagement), typeof(RedisCache));
 
             #endregion
 
