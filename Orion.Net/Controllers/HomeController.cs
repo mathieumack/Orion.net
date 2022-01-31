@@ -21,7 +21,7 @@ namespace Orion.Net.Controllers
 
             return View(new UserProfileModel()
             {
-                Name = User.Identity.Name,
+                Name = "The best one",
             });
         }
 
@@ -31,7 +31,7 @@ namespace Orion.Net.Controllers
 
             return View(new UserProfileModel()
             {
-                Name = User.Identity.Name,
+                Name = "The best one",
             });
         }
 
@@ -39,7 +39,7 @@ namespace Orion.Net.Controllers
         {
             return View(new UserProfileModel()
             {
-                Name = User.Identity.Name,
+                Name = "The best one",
             });
         }
 
@@ -47,7 +47,7 @@ namespace Orion.Net.Controllers
         {
             return View(new UserProfileModel()
             {
-                Name = User.Identity.Name,
+                Name = "The best one",
                 SupportID = Guid.NewGuid().ToString(),
             });
         }

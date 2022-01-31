@@ -19,19 +19,19 @@ namespace Orion.Net
             WebHost.CreateDefaultBuilder(args)
 
             //Key Vault Configuration
-            .ConfigureAppConfiguration((ctx, builder) =>
-            {
-                var keyVaultEndpoint = "https://<KeyVaultName>.vault.azure.net/";
-                if (!string.IsNullOrEmpty(keyVaultEndpoint))
-                {
-                    var azureServiceTokenProvider = new AzureServiceTokenProvider();
-                    var keyVaultClient = new KeyVaultClient(
-                        new KeyVaultClient.AuthenticationCallback(
-                            azureServiceTokenProvider.KeyVaultTokenCallback));
-                    builder.AddAzureKeyVault(
-                        keyVaultEndpoint, keyVaultClient, new DefaultKeyVaultSecretManager());
-                }
-            })
+            //.ConfigureAppConfiguration((ctx, builder) =>
+            //{
+            //    var keyVaultEndpoint = "https://<KeyVaultName>.vault.azure.net/";
+            //    if (!string.IsNullOrEmpty(keyVaultEndpoint))
+            //    {
+            //        var azureServiceTokenProvider = new AzureServiceTokenProvider();
+            //        var keyVaultClient = new KeyVaultClient(
+            //            new KeyVaultClient.AuthenticationCallback(
+            //                azureServiceTokenProvider.KeyVaultTokenCallback));
+            //        builder.AddAzureKeyVault(
+            //            keyVaultEndpoint, keyVaultClient, new DefaultKeyVaultSecretManager());
+            //    }
+            //})
             //
 
             .UseStartup<Startup>();

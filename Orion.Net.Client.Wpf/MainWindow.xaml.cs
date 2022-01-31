@@ -17,11 +17,15 @@ namespace Orion.Net.Client.Wpf
         private async void connectToServer_Click(object sender, RoutedEventArgs e)
         {
             App.careCenterConnector = new Connector();
-            App.careCenterConnector.AddCommandService(new ExecuteProcessClientScript(App.careCenterConnector));
-            App.careCenterConnector.AddCommandService(new SendImageContentClientScript(App.careCenterConnector));
-            App.careCenterConnector.AddCommandService(new ExportFileClientScript(App.careCenterConnector));
 
-            await App.careCenterConnector.Connect("https://localhost:44359/", MyName.Text, SupportID.Text);
+            if(EnableProcess.IsChecked.HasValue && EnableProcess.IsChecked.Value)
+                App.careCenterConnector.AddCommandService(new ExecuteProcessClientScript(App.careCenterConnector));
+            if (EnableSendImage.IsChecked.HasValue && EnableSendImage.IsChecked.Value)
+                App.careCenterConnector.AddCommandService(new SendImageContentClientScript(App.careCenterConnector));
+            if (EnableSendFile.IsChecked.HasValue && EnableSendFile.IsChecked.Value)
+                App.careCenterConnector.AddCommandService(new ExportFileClientScript(App.careCenterConnector));
+
+            await App.careCenterConnector.Connect(ServeurUri.Text, MyName.Text, SupportID.Text);
         }
     }
 }

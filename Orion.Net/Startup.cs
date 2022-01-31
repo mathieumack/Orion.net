@@ -38,18 +38,18 @@ namespace Orion.Net
             #region Authentification with Azure Active Directory
 
             //For AAD : get secret values from Key vault for the configuration in appsettings.json
-            Configuration["AzureAd:TenantId"] = Configuration["AADTenantId"];
-            Configuration["AzureAd:ClientId"] = Configuration["AADClientId"];
+            //Configuration["AzureAd:TenantId"] = Configuration["AADTenantId"];
+            //Configuration["AzureAd:ClientId"] = Configuration["AADClientId"];
 
-            services.AddAuthentication(AzureADDefaults.AuthenticationScheme)
-                .AddAzureAD(options => Configuration.Bind("AzureAd", options));
+            services.AddAuthentication(AzureADDefaults.AuthenticationScheme);
+            //    .AddAzureAD(options => Configuration.Bind("AzureAd", options));
 
             services.AddMvc(options =>
                 {
-                    var policy = new AuthorizationPolicyBuilder()
-                                    .RequireAuthenticatedUser()
-                                    .Build();
-                    options.Filters.Add(new AuthorizeFilter(policy));
+                    //var policy = new AuthorizationPolicyBuilder()
+                    //                .RequireAuthenticatedUser()
+                    //                .Build();
+                    //options.Filters.Add(new AuthorizeFilter(policy));
                 }).SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
 
             #endregion
@@ -57,17 +57,17 @@ namespace Orion.Net
             #region SignalR
 
             //SignalR Azure Service
-            services.AddSignalR().AddAzureSignalR(Configuration["signalr"]);
+            //services.AddSignalR().AddAzureSignalR(Configuration["signalr"]);
 
             //SignalR without Azure service
-            //services.AddSignalR();
+            services.AddSignalR();
 
             #endregion
 
             #region CacheManagement
 
             //Switch between LocalCache and RedisCache in function of your need
-            services.AddSingleton(typeof(ICacheManagement), typeof(RedisCache));
+            services.AddSingleton(typeof(ICacheManagement), typeof(LocalCache));
 
             #endregion
 
@@ -76,7 +76,7 @@ namespace Orion.Net
 
             #region Insights
 
-            Configuration["ApplicationInsights:InstrumentationKey"] = Configuration["Insights"];
+            //Configuration["ApplicationInsights:InstrumentationKey"] = Configuration["Insights"];
             services.AddApplicationInsightsTelemetry();
 
             #endregion
@@ -100,7 +100,7 @@ namespace Orion.Net
             //Comment this region to disable Authentification
             #region Authentification
 
-            app.UseAuthentication();
+            //app.UseAuthentication();
 
             #endregion
 

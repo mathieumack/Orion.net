@@ -8,8 +8,16 @@
         Title="MainWindow" Height="450" Width="800">
     <StackPanel>
         <Label Margin="20,0,20,0">User Name</Label>
-        <TextBox Name="MyName" Margin="20,0,20,0"></TextBox>
-        <Label Margin="20,0,20,0">Support ID</Label>
+        <TextBox Name="MyName" Margin="20,0,20,0" Text="Matcho men"></TextBox>
+        <Label Margin="20,0,20,0">Enable process script ?</Label>
+        <CheckBox Name="EnableProcess" Margin="20,0,20,0"></CheckBox>
+        <Label Margin="20,0,20,0">Enable send image?</Label>
+        <CheckBox Name="EnableSendImage" Margin="20,0,20,0"></CheckBox>
+        <Label Margin="20,0,20,0">Enable export file ?</Label>
+        <CheckBox Name="EnableSendFile" Margin="20,0,20,0"></CheckBox>
+        <Label Margin="20,20,20,0">Serveur URI :</Label>
+        <TextBox Name="ServeurUri" Margin="20,0,20,0" Text="http://localhost:59951/"></TextBox>
+        <Label Margin="20,0,20,0">Support ID :</Label>
         <TextBox Name="SupportID" Margin="20,0,20,20"></TextBox>
         <Button Content="Connect" Margin="20,0,20,0" Name="connectToServer" Click="connectToServer_Click"></Button>
     </StackPanel>
